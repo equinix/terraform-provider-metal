@@ -104,9 +104,7 @@ func resourceMetalDeviceNetworkTypeRead(d *schema.ResourceData, meta interface{}
 		devNType = "hybrid-bonded"
 	}
 
-	d.Set("type", devNType)
-
-	return nil
+	return d.Set("type", devNType)
 }
 
 func resourceMetalDeviceNetworkTypeUpdate(d *schema.ResourceData, meta interface{}) error {

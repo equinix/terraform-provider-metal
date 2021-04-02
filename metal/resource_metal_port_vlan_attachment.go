@@ -185,10 +185,12 @@ func resourceMetalPortVlanAttachmentRead(d *schema.ResourceData, meta interface{
 	if !vlanFound {
 		d.SetId("")
 	}
-	d.Set("port_id", portID)
-	d.Set("vlan_id", vlanID)
-	d.Set("native", vlanNative)
-	return nil
+
+	return setMap(d, map[string]interface{}{
+		"port_id": portID,
+		"vlan_id": vlanID,
+		"native":  vlanNative,
+	})
 }
 
 func resourceMetalPortVlanAttachmentUpdate(d *schema.ResourceData, meta interface{}) error {
