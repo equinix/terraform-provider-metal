@@ -16,9 +16,10 @@ modify, and delete devices.
 
 ## Example Usage
 
-Create a device and add it to cool_project
 
 ```hcl
+# Create a device
+
 resource "metal_device" "web1" {
   hostname         = "tf.coreos2"
   plan             = "c3.small.x86"
@@ -29,9 +30,10 @@ resource "metal_device" "web1" {
 }
 ```
 
-Same as above, but boot via iPXE initially, using the Ignition Provider for provisioning
 
 ```hcl
+# Create device via iPXE boot, using the Ignition Provider for provisioning
+
 resource "metal_device" "pxe1" {
   hostname         = "tf.coreos2-pxe"
   plan             = "c3.small.x86"
@@ -45,9 +47,10 @@ resource "metal_device" "pxe1" {
 }
 ```
 
-Create a device without a public IP address in facility ny5, with only a /30 private IPv4 subnet (4 IP addresses)
 
 ```hcl
+# Create a device without public IP address in facility ny5, with only a /30 private IPv4 subnet (4 IP addresses)
+
 resource "metal_device" "web1" {
   hostname         = "tf.coreos2"
   plan             = "c3.small.x86"
@@ -62,9 +65,10 @@ resource "metal_device" "web1" {
 }
 ```
 
-Deploy device on next-available reserved hardware and do custom partitioning.
 
 ```hcl
+# Deploy device on next-available reserved hardware and do custom partitioning.
+
 resource "metal_device" "web1" {
   hostname                = "tftest"
   plan                    = "c3.small.x86"
