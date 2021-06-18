@@ -23,7 +23,7 @@ If you only want to change the `metal_device` resource specfication from facilit
 
 For example, given following configuration of a device deployed in the `sv15` facility:
 
-```hcl-terraform
+```terraform
 resource "metal_device" "node" {
   project_id       = local.project_id
   facilities       = ["sv15"]
@@ -37,7 +37,7 @@ resource "metal_device" "node" {
 .. you can remove `faclities` and add `metro`, changing the configuration to:
 
 
-```hcl-terraform
+```terraform
 resource "metal_device" "node" {
   project_id       = local.project_id
   metro            = "sv"
@@ -65,3 +65,4 @@ $ terraform state show metal_device.node | grep metro
 ```
 
 You should then set the existing metro in your Terraform templates.
+

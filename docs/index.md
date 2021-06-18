@@ -12,11 +12,9 @@ description: |-
 The Equinix Metal (`metal`) provider is used to interact with the resources supported by [Equinix Metal](https://metal.equinix.com/).
 The provider needs to be configured with the proper credentials before it can be used.
 
-Use the navigation to the left to read about the available resources.
-
 ## Example Usage
 
-```hcl
+```terraform
 terraform {
   required_providers {
     metal = {
@@ -60,13 +58,12 @@ resource "metal_device" "web1" {
 }
 ```
 
-## Argument Reference
+Instead of configuring the auth token in the provider block, you can just export it in `METAL_AUTH_TOKEN` environment variable.
 
-The following arguments are supported:
+## Schema
 
-* `auth_token` - (Required) This is your Equinix Metal API Auth token. This can
-  also be specified with the `METAL_AUTH_TOKEN` environment variable.
+### Optional
 
-  Use of the legacy `PACKET_AUTH_TOKEN` environment variable is deprecated.
-* `max_retries` - Maximum number of retries in case of network failure.
-* `max_retry_wait_seconds` - Maximum time to wait in case of network failure.
+- **auth_token** (String) The API auth key for API operations.
+- **max_retries** (Number)
+- **max_retry_wait_seconds** (Number)
