@@ -10,10 +10,6 @@ description: |-
 Provides an Equinix Metal device resource. This can be used to create,
 modify, and delete devices.
 
-~> **Note:** All arguments including the `root_password` and `user_data` will be stored in
- the raw state as plain-text.
-[Read more about sensitive data in state](/docs/state/sensitive-data.html).
-
 ## Example Usage
 
 
