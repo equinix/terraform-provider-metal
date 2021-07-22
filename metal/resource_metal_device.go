@@ -441,11 +441,7 @@ func resourceMetalDeviceCreate(d *schema.ResourceData, meta interface{}) error {
 		hostname = v.(string)
 	} else if v, ok := d.GetOk("hostname_prefix"); ok {
 		hostname = resource.PrefixedUniqueId(v.(string))
-	} else {
-		hostname = resource.UniqueId()
-	}
-	d.Set("hostname", hostname)
-
+	} // else, leave it up to metal to pick a hostname
 	log.Printf("[DEBUG] Device create: %s", hostname)
 
 	createRequest := &packngo.DeviceCreateRequest{
@@ -550,6 +546,8 @@ func resourceMetalDeviceCreate(d *schema.ResourceData, meta interface{}) error {
 		return retErr
 	}
 
+	// Pick the hostname validated by metal
+	d.Set("hostname", newDevice.Hostname)
 	d.SetId(newDevice.ID)
 
 	if err = waitForActiveDevice(d, meta); err != nil {

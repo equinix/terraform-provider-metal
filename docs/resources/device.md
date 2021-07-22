@@ -135,7 +135,7 @@ EOS
 
 The following arguments are supported:
 
-* `hostname` - (Optional, ForceNew) The device name. Conflicts with `hostname_prefix`.
+* `hostname` - (Optional, ForceNew) The device name. If not set, Equinix will pick the ID. Conflicts with `hostname_prefix`.
 * `hostname_prefix` - (Optional, ForceNew) The device name with a 26 character random suffix. Conflicts with `hostname`.
 * `project_id` - (Required) The ID of the project in which to create the device
 * `operating_system` - (Required) The operating system slug. To find the slug, or visit [Operating Systems API docs](https://metal.equinix.com/developers/api/operatingsystems), set your API auth token in the top of the page and see JSON from the API response.
