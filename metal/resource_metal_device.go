@@ -50,6 +50,7 @@ func resourceMetalDevice() *schema.Resource {
 				Type:          schema.TypeString,
 				Description:   "The device name",
 				Optional:      true,
+				ForceNew:      true,
 				Computed:      true,
 				ConflictsWith: []string{"hostname_prefix"},
 			},
@@ -58,6 +59,7 @@ func resourceMetalDevice() *schema.Resource {
 				Type:          schema.TypeString,
 				Description:   "The device name",
 				Optional:      true,
+				ForceNew:      true,
 				ConflictsWith: []string{"hostname"},
 			},
 
