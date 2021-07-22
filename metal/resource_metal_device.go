@@ -689,10 +689,6 @@ func resourceMetalDeviceUpdate(d *schema.ResourceData, meta interface{}) error {
 		dCustomData := d.Get("custom_data").(string)
 		ur.CustomData = &dCustomData
 	}
-	if d.HasChange("hostname") {
-		dHostname := d.Get("hostname").(string)
-		ur.Hostname = &dHostname
-	}
 	if d.HasChange("tags") {
 		ts := d.Get("tags")
 		sts := []string{}
