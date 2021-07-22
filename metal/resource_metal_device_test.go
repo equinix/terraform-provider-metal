@@ -138,6 +138,40 @@ func TestAccMetalDevice_Basic(t *testing.T) {
 	})
 }
 
+func TestAccMetalDevice_HostnamePrefix(t *testing.T) {
+	var device packngo.Device
+	rs := acctest.RandString(10)
+	r := "metal_device.test"
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:     func() { testAccPreCheck(t) },
+		Providers:    testAccProviders,
+		CheckDestroy: testAccCheckMetalDeviceDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccCheckMetalDeviceConfig_hostname_prefix(rs),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckMetalDeviceExists(r, &device),
+					testAccCheckMetalDeviceNetwork(r),
+					// The hostname is computed when using a prefix
+					resource.TestMatchResourceAttr(
+						r, "hostname", regexp.MustCompile("^tfacc-prefix-device")),
+					resource.TestCheckResourceAttr(
+						r, "network_type", "layer3"),
+					resource.TestCheckResourceAttr(
+						r, "ipxe_script_url", ""),
+					resource.TestCheckResourceAttr(
+						r, "always_pxe", "false"),
+					resource.TestCheckResourceAttrSet(
+						r, "root_password"),
+					resource.TestCheckResourceAttrPair(
+						r, "deployed_facility", r, "facilities.0"),
+				),
+			},
+		},
+	})
+}
+
 func TestAccMetalDevice_Metro(t *testing.T) {
 	var device packngo.Device
 	rs := acctest.RandString(10)
@@ -565,6 +599,22 @@ resource "metal_project" "test" {
 
 resource "metal_device" "test" {
   hostname         = "tfacc-test-device"
+  plan             = "t1.small.x86"
+  facilities       = ["sjc1"]
+  operating_system = "ubuntu_16_04"
+  billing_cycle    = "hourly"
+  project_id       = "${metal_project.test.id}"
+}`, projSuffix)
+}
+
+func testAccCheckMetalDeviceConfig_hostname_prefix(projSuffix string) string {
+	return fmt.Sprintf(`
+resource "metal_project" "test" {
+    name = "tfacc-device-%s"
+}
+
+resource "metal_device" "test" {
+  hostname_prefix  = "tfacc-prefix-device"
   plan             = "t1.small.x86"
   facilities       = ["sjc1"]
   operating_system = "ubuntu_16_04"

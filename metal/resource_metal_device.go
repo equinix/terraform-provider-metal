@@ -14,6 +14,7 @@ import (
 
 	"github.com/hashicorp/errwrap"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/customdiff"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -46,9 +47,18 @@ func resourceMetalDevice() *schema.Resource {
 			},
 
 			"hostname": {
-				Type:        schema.TypeString,
-				Description: "The device name",
-				Required:    true,
+				Type:          schema.TypeString,
+				Description:   "The device name",
+				Optional:      true,
+				Computed:      true,
+				ConflictsWith: []string{"hostname_prefix"},
+			},
+
+			"hostname_prefix": {
+				Type:          schema.TypeString,
+				Description:   "The device name",
+				Optional:      true,
+				ConflictsWith: []string{"hostname"},
 			},
 
 			"description": {
@@ -422,8 +432,20 @@ func resourceMetalDeviceCreate(d *schema.ResourceData, meta interface{}) error {
 		addressTypesSlice = getNewIPAddressSlice(arr)
 	}
 
+	var hostname string
+	if v, ok := d.GetOk("hostname"); ok {
+		hostname = v.(string)
+	} else if v, ok := d.GetOk("hostname_prefix"); ok {
+		hostname = resource.PrefixedUniqueId(v.(string))
+	} else {
+		hostname = resource.UniqueId()
+	}
+	d.Set("hostname", hostname)
+
+	log.Printf("[DEBUG] Device create: %s", hostname)
+
 	createRequest := &packngo.DeviceCreateRequest{
-		Hostname:     d.Get("hostname").(string),
+		Hostname:     hostname,
 		Plan:         d.Get("plan").(string),
 		IPAddresses:  addressTypesSlice,
 		OS:           d.Get("operating_system").(string),
