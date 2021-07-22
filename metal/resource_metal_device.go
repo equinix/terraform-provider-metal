@@ -53,6 +53,7 @@ func resourceMetalDevice() *schema.Resource {
 				ForceNew:      true,
 				Computed:      true,
 				ConflictsWith: []string{"hostname_prefix"},
+				ValidateFunc:  validation.StringLenBetween(0, 63),
 			},
 
 			"hostname_prefix": {
@@ -61,6 +62,7 @@ func resourceMetalDevice() *schema.Resource {
 				Optional:      true,
 				ForceNew:      true,
 				ConflictsWith: []string{"hostname"},
+				ValidateFunc:  validation.StringLenBetween(0, 63-resource.UniqueIDSuffixLength),
 			},
 
 			"description": {
