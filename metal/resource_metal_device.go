@@ -58,7 +58,7 @@ func resourceMetalDevice() *schema.Resource {
 
 			"hostname_prefix": {
 				Type:          schema.TypeString,
-				Description:   "The device name with a 26 character random suffix",
+				Description:   "The device name with a 20 character random suffix",
 				Optional:      true,
 				ForceNew:      true,
 				ConflictsWith: []string{"hostname"},
