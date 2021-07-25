@@ -136,7 +136,7 @@ EOS
 The following arguments are supported:
 
 * `hostname` - (Optional, ForceNew) The device name. If not set, Equinix will pick the ID. Conflicts with `hostname_prefix`.
-* `hostname_prefix` - (Optional, ForceNew) The device name with a 26 character random suffix. Conflicts with `hostname`.
+* `hostname_prefix` - (Optional, ForceNew) The device name with a 20 character random suffix. Conflicts with `hostname`.
 * `project_id` - (Required) The ID of the project in which to create the device
 * `operating_system` - (Required) The operating system slug. To find the slug, or visit [Operating Systems API docs](https://metal.equinix.com/developers/api/operatingsystems), set your API auth token in the top of the page and see JSON from the API response.
 * `facilities` - List of facility codes with deployment preferences. Equinix Metal API will go through the list and will deploy your device to first facility with free capacity. List items must be facility codes or `any` (a wildcard). To find the facility code, visit [Facilities API docs](https://metal.equinix.com/developers/api/facilities/), set your API auth token in the top of the page and see JSON from the API response. Conflicts with `metro`.
