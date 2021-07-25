@@ -24,7 +24,7 @@ func TestPrefixedUniqueId(t *testing.T) {
 		}
 
 		if !strings.HasPrefix(id, prefix) {
-			t.Fatalf("Unique ID didn't have terraform- prefix! %s", id)
+			t.Fatalf("Unique ID didn't have %s prefix! %s", prefix, id)
 		}
 
 		suffix := strings.TrimPrefix(id, prefix)
