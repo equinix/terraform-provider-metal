@@ -25,8 +25,9 @@ resource "metal_device" "test" {
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
+  termination_time = "%s"
 }
-`, name)
+`, name, testDeviceTerminationTime())
 }
 
 func testAccCheckMetalPortVlanAttachmentConfig_L2Bonded_2(name string) string {
@@ -110,8 +111,9 @@ resource "metal_device" "test" {
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
+  termination_time = "%s"
 }
-`, name)
+`, name, testDeviceTerminationTime())
 }
 
 func testAccCheckMetalPortVlanAttachmentConfig_L2Individual_2(name string) string {
@@ -197,7 +199,8 @@ resource "metal_device" "test" {
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
-}`, name)
+  termination_time = "%s"
+}`, name, testDeviceTerminationTime())
 }
 
 func testAccCheckMetalPortVlanAttachmentConfig_Hybrid_2(name string) string {
@@ -267,7 +270,8 @@ resource "metal_device" "test" {
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = metal_project.test.id
-}`, name)
+  termination_time = "%s"
+}`, name, testDeviceTerminationTime())
 }
 
 func testAccCheckMetalPortVlanAttachmentConfig_HybridMultipleVlans_2(name string) string {
@@ -381,7 +385,8 @@ resource "metal_device" "test" {
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
-}`, name)
+  termination_time = "%s"
+}`, name, testDeviceTerminationTime())
 }
 
 func testAccCheckMetalPortVlanAttachmentConfig_L2Native_2(name string) string {

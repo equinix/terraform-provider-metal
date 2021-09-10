@@ -82,6 +82,7 @@ resource "metal_device" "test" {
     operating_system = "ubuntu_16_04"
     billing_cycle    = "hourly"
     project_id       = "${metal_project.test.id}"
+    termination_time = "%s"
 }
 
 resource "metal_bgp_session" "test4" {
@@ -99,5 +100,5 @@ resource "metal_bgp_session" "test6" {
 data "metal_device_bgp_neighbors" "test" {
   device_id  = metal_bgp_session.test4.device_id
 }
-`, name)
+`, name, testDeviceTerminationTime())
 }

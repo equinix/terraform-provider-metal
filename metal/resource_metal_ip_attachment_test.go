@@ -66,6 +66,7 @@ resource "metal_device" "test" {
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = metal_project.test.id
+  termination_time = "%s"
 }
 
 resource "metal_reserved_ip_block" "test" {
@@ -78,7 +79,7 @@ resource "metal_reserved_ip_block" "test" {
 resource "metal_ip_attachment" "test" {
 	device_id = metal_device.test.id
 	cidr_notation = "${cidrhost(metal_reserved_ip_block.test.cidr_notation,0)}/32"
-}`, name)
+}`, name, testDeviceTerminationTime())
 }
 
 func TestAccMetalIPAttachment_Metro(t *testing.T) {
@@ -122,6 +123,7 @@ resource "metal_device" "test" {
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = metal_project.test.id
+  termination_time = "%s"
 }
 
 resource "metal_reserved_ip_block" "test" {
@@ -134,5 +136,5 @@ resource "metal_reserved_ip_block" "test" {
 resource "metal_ip_attachment" "test" {
 	device_id = metal_device.test.id
 	cidr_notation = "${cidrhost(metal_reserved_ip_block.test.cidr_notation,0)}/32"
-}`, name)
+}`, name, testDeviceTerminationTime())
 }

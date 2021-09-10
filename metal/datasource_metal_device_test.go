@@ -50,12 +50,13 @@ resource "metal_device" "test" {
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
+  termination_time = "%s"
 }
 
 data "metal_device" "test" {
   project_id       = metal_project.test.id
   hostname         = metal_device.test.hostname
-}`, projSuffix)
+}`, projSuffix, testDeviceTerminationTime())
 }
 
 func TestAccDataSourceMetalDevice_ByID(t *testing.T) {
@@ -100,9 +101,10 @@ resource "metal_device" "test" {
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
+  termination_time = "%s"
 }
 
 data "metal_device" "test" {
   device_id       = metal_device.test.id
-}`, projSuffix)
+}`, projSuffix, testDeviceTerminationTime())
 }

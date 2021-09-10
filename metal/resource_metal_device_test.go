@@ -473,8 +473,9 @@ resource "metal_device" "test" {
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
   tags             = ["%d"]
+  termination_time = "%s"
 }
-`, projSuffix, rInt, rInt)
+`, projSuffix, rInt, rInt, testDeviceTerminationTime())
 }
 
 func testAccCheckMetalDeviceConfig_reinstall(rInt int, projSuffix string) string {
@@ -492,13 +493,14 @@ resource "metal_device" "test" {
   project_id       = "${metal_project.test.id}"
   tags             = ["%d"]
   user_data = "#!/usr/bin/env sh\necho Reinstall\n"
+  termination_time = "%s"
 
   reinstall {
 	  enabled = true
 	  deprovision_fast = true
   }
 }
-`, projSuffix, rInt, rInt)
+`, projSuffix, rInt, rInt, testDeviceTerminationTime())
 }
 
 func testAccCheckMetalDeviceConfig_varname(rInt int, projSuffix string) string {
@@ -516,8 +518,9 @@ resource "metal_device" "test" {
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
   tags             = ["%d"]
+  termination_time = "%s"
 }
-`, projSuffix, rInt, rInt, rInt)
+`, projSuffix, rInt, rInt, rInt, testDeviceTerminationTime())
 }
 
 func testAccCheckMetalDeviceConfig_varname_pxe(rInt int, projSuffix string) string {
@@ -537,8 +540,9 @@ resource "metal_device" "test" {
   tags             = ["%d"]
   always_pxe       = true
   ipxe_script_url  = "http://matchbox.foo.wtf:8080/boot.ipxe"
+  termination_time = "%s"
 }
-`, projSuffix, rInt, rInt, rInt)
+`, projSuffix, rInt, rInt, rInt, testDeviceTerminationTime())
 }
 
 func testAccCheckMetalDeviceConfig_metro(projSuffix string) string {
@@ -554,7 +558,8 @@ resource "metal_device" "test" {
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
-}`, projSuffix)
+  termination_time = "%s"
+}`, projSuffix, testDeviceTerminationTime())
 }
 
 func testAccCheckMetalDeviceConfig_basic(projSuffix string) string {
@@ -570,7 +575,8 @@ resource "metal_device" "test" {
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
-}`, projSuffix)
+  termination_time = "%s"
+}`, projSuffix, testDeviceTerminationTime())
 }
 
 func testAccCheckMetalDeviceConfig_facility_list(projSuffix string) string {
@@ -587,7 +593,8 @@ resource "metal_device" "test"  {
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
-}`, projSuffix)
+  termination_time = "%s"
+}`, projSuffix, testDeviceTerminationTime())
 }
 
 func testAccCheckMetalDeviceConfig_ipxe_script_url(projSuffix, url, pxe string) string {
@@ -607,7 +614,8 @@ resource "metal_device" "test_ipxe_script_url"  {
   project_id       = "${metal_project.test.id}"
   ipxe_script_url  = "%s"
   always_pxe       = "%s"
-}`, projSuffix, url, pxe)
+  termination_time = "%s"
+}`, projSuffix, url, pxe, testDeviceTerminationTime())
 }
 
 var testAccCheckMetalDeviceConfig_ipxe_conflict = `

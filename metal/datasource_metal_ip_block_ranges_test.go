@@ -49,6 +49,7 @@ resource "metal_device" "test" {
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = metal_project.test.id
+  termination_time = "%s"
 }
 
 data "metal_ip_block_ranges" "test" {
@@ -60,5 +61,5 @@ resource "metal_ip_attachment" "test" {
     device_id = metal_device.test.id
     cidr_notation = cidrsubnet(data.metal_ip_block_ranges.test.ipv6.0, 8,2)
 }
-`, name)
+`, name, testDeviceTerminationTime())
 }

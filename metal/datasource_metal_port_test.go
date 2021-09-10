@@ -41,6 +41,7 @@ resource "metal_device" "test" {
   operating_system = "ubuntu_20_04"
   billing_cycle    = "hourly"
   project_id       = metal_project.test.id
+  termination_time = "%s"
 }
 
 data "metal_port" "test" {
@@ -48,7 +49,7 @@ data "metal_port" "test" {
     name      = "eth0"
 }
 
-`, name)
+`, name, testDeviceTerminationTime())
 }
 
 func TestAccMetalPort_ById(t *testing.T) {
@@ -84,11 +85,12 @@ resource "metal_device" "test" {
   operating_system = "ubuntu_20_04"
   billing_cycle    = "hourly"
   project_id       = metal_project.test.id
+  termination_time = "%s"
 }
 
 data "metal_port" "test" {
   port_id        = metal_device.test.ports[0].id
 }
 
-`, name)
+`, name, testDeviceTerminationTime())
 }
