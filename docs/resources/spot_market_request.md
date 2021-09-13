@@ -39,6 +39,7 @@ The following arguments are supported:
 * `max_bid_price` - (Required) Maximum price user is willing to pay per hour per device
 * `project_id` - (Required) Project ID
 * `wait_for_devices` - (Optional) On resource creation - wait until all desired devices are active, on resource destruction - wait until devices are removed
+* `end_at` - (Optional) Deadline for the request. For example \"2021-09-03T16:32:00+03:00\". If you don't supply timezone info, timestamp is assumed to be in UTC."
 * `facilities` - (Optional) Facility IDs where devices should be created
 * `metro` - (Optional) Metro where devices should be created
 * `locked` - (Optional) Blocks deletion of the SpotMarketRequest device until the lock is disabled
@@ -47,7 +48,6 @@ The following arguments are supported:
   * `plan`
   * `operating_system`
   * `hostname`
-  * `termintation_time`
   * `always_pxe`
   * `description`
   * `features`

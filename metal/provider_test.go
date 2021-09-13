@@ -45,3 +45,7 @@ func testAccPreCheck(t *testing.T) {
 func testDeviceTerminationTime() string {
 	return time.Now().UTC().Add(60 * time.Minute).Format(time.RFC3339)
 }
+
+func testSpotMarketRequestTerminationTime() string {
+	return time.Now().UTC().Add(60 * time.Minute).Format(time.RFC3339)
+}

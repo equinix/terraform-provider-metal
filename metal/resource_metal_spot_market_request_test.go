@@ -32,6 +32,7 @@ resource "metal_spot_market_request" "request" {
   devices_min      = 1
   devices_max      = 1
   wait_for_devices = true
+  end_at = "%s"
 
   instance_parameters {
     hostname         = "tfacc-testspot"
@@ -39,7 +40,7 @@ resource "metal_spot_market_request" "request" {
     operating_system = "ubuntu_18_04"
     plan             = "c3.small.x86"
   }
-}`, name)
+}`, name, testSpotMarketRequestTerminationTime())
 }
 
 func TestAccMetalSpotMarketRequest_Basic(t *testing.T) {
@@ -124,6 +125,7 @@ resource "metal_spot_market_request" "request" {
   devices_min      = 1
   devices_max      = 1
   wait_for_devices = true
+  end_at           = "%s"
 
   instance_parameters {
     hostname         = "tfacc-testspot"
@@ -131,7 +133,7 @@ resource "metal_spot_market_request" "request" {
     operating_system = "ubuntu_20_04"
     plan             = "c3.small.x86"
   }
-}`, name)
+}`, name, testSpotMarketRequestTerminationTime())
 }
 
 func TestAccMetalSpotMarketRequest_Import(t *testing.T) {
