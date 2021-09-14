@@ -448,7 +448,7 @@ func TestAccMetalDevice_importBasic(t *testing.T) {
 		CheckDestroy: testAccCheckMetalDeviceDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckMetalDeviceConfig_basic(rs),
+				Config: testAccCheckMetalDeviceConfig_importBasic(rs),
 			},
 			{
 				ResourceName:      "metal_device.test",
@@ -577,6 +577,22 @@ resource "metal_device" "test" {
   project_id       = "${metal_project.test.id}"
   termination_time = "%s"
 }`, projSuffix, testDeviceTerminationTime())
+}
+
+func testAccCheckMetalDeviceConfig_importBasic(projSuffix string) string {
+	return fmt.Sprintf(`
+resource "metal_project" "test" {
+    name = "tfacc-device-%s"
+}
+
+resource "metal_device" "test" {
+  hostname         = "tfacc-test-device"
+  plan             = "t1.small.x86"
+  facilities       = ["sjc1"]
+  operating_system = "ubuntu_16_04"
+  billing_cycle    = "hourly"
+  project_id       = "${metal_project.test.id}"
+}`, projSuffix)
 }
 
 func testAccCheckMetalDeviceConfig_facility_list(projSuffix string) string {
