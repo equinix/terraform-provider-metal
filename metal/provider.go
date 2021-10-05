@@ -51,6 +51,7 @@ func Provider() *schema.Provider {
 			"metal_spot_market_price":    dataSourceSpotMarketPrice(),
 			"metal_device":               dataSourceMetalDevice(),
 			"metal_device_bgp_neighbors": dataSourceMetalDeviceBGPNeighbors(),
+			"metal_plans":                dataSourceMetalPlans(),
 			"metal_port":                 dataSourceMetalPort(),
 			"metal_project":              dataSourceMetalProject(),
 			"metal_project_ssh_key":      dataSourceMetalProjectSSHKey(),
