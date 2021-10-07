@@ -125,8 +125,8 @@ func flattenPlan(rawPlan interface{}, meta interface{}, extra map[string]interfa
 	}
 
 	if plan.Pricing != nil {
-		flattenedPlan["pricing_hour"] = plan.Pricing.Hour
-		flattenedPlan["pricing_month"] = plan.Pricing.Month
+		flattenedPlan["pricing_hour"] = float64(plan.Pricing.Hour)
+		flattenedPlan["pricing_month"] = float64(plan.Pricing.Month)
 	}
 
 	return flattenedPlan, nil

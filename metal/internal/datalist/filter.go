@@ -40,7 +40,7 @@ func filterSchema(allowedKeys []string) *schema.Schema {
 					Type:         schema.TypeString,
 					Optional:     true,
 					Default:      "exact",
-					ValidateFunc: validation.StringInSlice([]string{"exact", "re", "substring"}, false),
+					ValidateFunc: validation.StringInSlice([]string{"exact", "re", "substring", "less_than", "more_than"}, false),
 				},
 			},
 		},
@@ -69,6 +69,11 @@ func expandFilters(recordSchema map[string]*schema.Schema, rawFilters []interfac
 		expandedFilterValues, err := expandFilterValues(f["values"].([]interface{}), s, matchBy)
 		if err != nil {
 			return nil, err
+		}
+		if matchBy == "less_than" || matchBy == "more_than" {
+			if len(expandedFilterValues) != 1 {
+				return nil, fmt.Errorf("field '%s' works with only one value", matchBy)
+			}
 		}
 
 		all := false
