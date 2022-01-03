@@ -3,13 +3,55 @@ package metal
 import (
 	"fmt"
 	"reflect"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 	"github.com/packethost/packngo"
 )
 
+var mega uint64 = 1000 * 1000
+var giga uint64 = 1000 * mega
+var allowedSpeeds = []struct {
+	Int uint64
+	Str string
+}{
+	{50 * mega, "50Mbps"},
+	{200 * mega, "200Mbps"},
+	{500 * mega, "500Mbps"},
+	{1 * giga, "1Gbps"},
+	{2 * giga, "2Gbps"},
+	{5 * giga, "5Gbps"},
+	{10 * giga, "10Gbps"},
+}
+
+func speedStrToUint(speed string) (uint64, error) {
+	allowedStrings := []string{}
+	for _, allowedSpeed := range allowedSpeeds {
+		if allowedSpeed.Str == speed {
+			return allowedSpeed.Int, nil
+		}
+		allowedStrings = append(allowedStrings, allowedSpeed.Str)
+	}
+	return 0, fmt.Errorf("Invalid speed string: %s. Allowed strings: %s", speed, strings.Join(allowedStrings, ", "))
+}
+
+func speedUintToStr(speed uint64) (string, error) {
+	allowedUints := []uint64{}
+	for _, allowedSpeed := range allowedSpeeds {
+		if speed == allowedSpeed.Int {
+			return allowedSpeed.Str, nil
+		}
+		allowedUints = append(allowedUints, allowedSpeed.Int)
+	}
+	return "", fmt.Errorf("%d is not allowed speed value. Allowed values: %v", speed, allowedUints)
+}
+
 func resourceMetalConnection() *schema.Resource {
+	speeds := []string{}
+	for _, allowedSpeed := range allowedSpeeds {
+		speeds = append(speeds, allowedSpeed.Str)
+	}
 	return &schema.Resource{
 		Read:   resourceMetalConnectionRead,
 		Create: resourceMetalConnectionCreate,
@@ -71,13 +113,14 @@ func resourceMetalConnection() *schema.Resource {
 			},
 			"organization_id": {
 				Type:        schema.TypeString,
-				Required:    true,
+				Computed:    true,
 				Description: "ID of the organization responsible for the connection",
 				ForceNew:    true,
+				Deprecated:  "Use the project_id field instead",
 			},
 			"project_id": {
 				Type:        schema.TypeString,
-				Optional:    true,
+				Required:    true,
 				Description: "ID of the project where the connection is scoped to, only used for type == \"shared\"",
 				ForceNew:    true,
 			},
@@ -95,11 +138,12 @@ func resourceMetalConnection() *schema.Resource {
 				Type:        schema.TypeString,
 				Computed:    true,
 				Description: "Fabric Token from the [Equinix Fabric Portal](https://ecxfabric.equinix.com/dashboard)",
+				Deprecated:  "token is deprecated",
 			},
 			"speed": {
-				Type:        schema.TypeInt,
-				Computed:    true,
-				Description: "Port speed in bits per second",
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: fmt.Sprintf("Port speed. Allowed values are %s", strings.Join(speeds, ", ")),
 			},
 			"ports": {
 				Type:        schema.TypeList,
@@ -113,8 +157,76 @@ func resourceMetalConnection() *schema.Resource {
 				Optional:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
+			"service_token_type": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Only used with shared connection. Type of service token to use for the connection, a_side or z_side.",
+			},
+			"service_tokens": {
+				Type:        schema.TypeList,
+				Description: "Only used with shared connection. List of service tokens to use for the connection.",
+				Computed:    true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"id": {
+							Type:        schema.TypeString,
+							Description: "ID of the service token",
+							Computed:    true,
+						},
+						"expires_at": {
+							Type:        schema.TypeString,
+							Description: "Expiration date of the service token",
+							Computed:    true,
+						},
+						"max_allowed_speed": {
+							Type:        schema.TypeInt,
+							Description: "Maximum allowed speed for the service token",
+							Computed:    true,
+						},
+						"type": {
+							Type:        schema.TypeString,
+							Description: "Type of the service token, a_side or z_side",
+							Computed:    true,
+						},
+						"state": {
+							Type:        schema.TypeString,
+							Description: "State of the service token",
+							Computed:    true,
+						},
+						"role": {
+							Type:        schema.TypeString,
+							Description: "Status of the service token",
+							Computed:    true,
+						},
+					},
+				},
+			},
+
+			"vlans": {
+				Type:        schema.TypeList,
+				Description: "Only used with shared connection. Vlans to attach. Pass one vlan for Primary/Single connection and two vlans for Redundant connection.",
+				Optional:    true,
+				Elem:        &schema.Schema{Type: schema.TypeInt},
+				MaxItems:    2,
+			},
 		},
 	}
+}
+
+func getServiceTokens(tokens []packngo.FabricServiceToken) []map[string]interface{} {
+	tokenList := []map[string]interface{}{}
+	for _, token := range tokens {
+		rawToken := map[string]interface{}{
+			"id":                token.ID,
+			"expires_at":        token.ExpiresAt.String(),
+			"max_allowed_speed": token.MaxAllowedSpeed,
+			"role":              string(token.Role),
+			"state":             token.State,
+			"type":              string(token.ServiceTokenType),
+		}
+		tokenList = append(tokenList, rawToken)
+	}
+	return tokenList
 }
 
 func resourceMetalConnectionCreate(d *schema.ResourceData, meta interface{}) error {
@@ -127,21 +239,57 @@ func resourceMetalConnectionCreate(d *schema.ResourceData, meta interface{}) err
 		return fmt.Errorf("You must set either metro or facility")
 	}
 
-	project, projectOk := d.GetOk("project_id")
 	connType := packngo.ConnectionType(d.Get("type").(string))
-	connMode := packngo.ConnectionMode(d.Get("mode").(string))
 
-	if connType == packngo.ConnectionShared && !projectOk {
-		return fmt.Errorf("When you create a \"shared\" connection, you must set project_id")
+	connMode := d.Get("mode").(string)
+
+	tokenTypeRaw, tokenTypeOk := d.GetOk("service_token_type")
+	tokenType := packngo.FabricServiceTokenType(tokenTypeRaw.(string))
+
+	vlans := []int{}
+	vlansNum := d.Get("vlans.#").(int)
+	if vlansNum > 0 {
+		vlans = convertIntArr2(d.Get("vlans").([]interface{}))
 	}
-	if connType == packngo.ConnectionDedicated && projectOk {
-		return fmt.Errorf("When you create a \"dedicated\" connection, you mustn't set project_id")
+	connRedundancy := packngo.ConnectionRedundancy(d.Get("redundancy").(string))
+
+	speed, err := speedStrToUint(d.Get("speed").(string))
+	if err != nil {
+		return err
 	}
 
 	connReq := packngo.ConnectionCreateRequest{
 		Name:       d.Get("name").(string),
-		Redundancy: packngo.ConnectionRedundancy(d.Get("redundancy").(string)),
+		Redundancy: connRedundancy,
 		Type:       connType,
+		Speed:      speed,
+	}
+
+	projectId := d.Get("project_id").(string)
+	if connType == packngo.ConnectionShared {
+		if connMode == string(packngo.ConnectionModeTunnel) {
+			return fmt.Errorf("Tunnel  mode is not supported for shared connections")
+		}
+		if !tokenTypeOk {
+			return fmt.Errorf("You must set service_token_type for shared connection")
+		}
+		if connRedundancy == packngo.ConnectionPrimary && vlansNum == 2 {
+			return fmt.Errorf("When you create a \"shared\" connection without redundancy, you must only set max 1 vlan")
+		}
+		connReq.VLANs = vlans
+		connReq.ServiceTokenType = tokenType
+		connReq.Project = projectId
+	}
+
+	if connType == packngo.ConnectionDedicated {
+
+		if tokenTypeOk {
+			return fmt.Errorf("When you create a \"dedicated\" connection, you must not set service_token_type")
+		}
+		if vlansNum > 0 {
+			return fmt.Errorf("When you create a \"dedicated\" connection, you mustn't set vlans")
+		}
+		connReq.Mode = packngo.ConnectionMode(connMode)
 	}
 
 	// this could be generalized, see $ grep "d.Get(\"tags" *
@@ -149,12 +297,6 @@ func resourceMetalConnectionCreate(d *schema.ResourceData, meta interface{}) err
 	if tags > 0 {
 		connReq.Tags = convertStringArr(d.Get("tags").([]interface{}))
 	}
-
-	if connType == packngo.ConnectionShared {
-		connReq.Project = project.(string)
-	}
-
-	connReq.Mode = connMode
 
 	if metOk {
 		connReq.Metro = metro.(string)
@@ -169,9 +311,7 @@ func resourceMetalConnectionCreate(d *schema.ResourceData, meta interface{}) err
 		connReq.Description = &description
 	}
 
-	orgId := d.Get("organization_id").(string)
-
-	conn, _, err := client.Connections.OrganizationCreate(orgId, &connReq)
+	conn, _, err := client.Connections.ProjectCreate(projectId, &connReq)
 	if err != nil {
 		return err
 	}
@@ -242,7 +382,7 @@ func resourceMetalConnectionRead(d *schema.ResourceData, meta interface{}) error
 
 	conn, _, err := client.Connections.Get(
 		connId,
-		&packngo.GetOptions{Includes: []string{"organization", "facility", "metro", "project"}})
+		&packngo.GetOptions{Includes: []string{"service_tokens", "organization", "facility", "metro", "project"}})
 	if err != nil {
 		return err
 	}
@@ -258,28 +398,38 @@ func resourceMetalConnectionRead(d *schema.ResourceData, meta interface{}) error
 	if conn.Mode != nil {
 		mode = string(*conn.Mode)
 	}
+	side := ""
+	if len(conn.Tokens) > 0 {
+		side = string(conn.Tokens[0].ServiceTokenType)
+	}
+	speed, err := speedUintToStr(conn.Speed)
+	if err != nil {
+		return err
+	}
 
 	return setMap(d, map[string]interface{}{
-		"organization_id": conn.Organization.ID,
-		"project_id":      projectId,
-		"name":            conn.Name,
-		"description":     conn.Description,
-		"status":          conn.Status,
-		"redundancy":      conn.Redundancy,
-		"facility":        conn.Facility.Code,
-		"metro":           conn.Metro.Code,
-		"token":           conn.Token,
-		"type":            conn.Type,
-		"speed":           conn.Speed,
-		"ports":           getConnectionPorts(conn.Ports),
-		"mode":            mode,
-		"tags":            conn.Tags,
+		"organization_id":    conn.Organization.ID,
+		"project_id":         projectId,
+		"name":               conn.Name,
+		"description":        conn.Description,
+		"status":             conn.Status,
+		"redundancy":         conn.Redundancy,
+		"facility":           conn.Facility.Code,
+		"metro":              conn.Metro.Code,
+		"token":              conn.Token,
+		"type":               conn.Type,
+		"speed":              speed,
+		"ports":              getConnectionPorts(conn.Ports),
+		"mode":               mode,
+		"tags":               conn.Tags,
+		"service_tokens":     getServiceTokens(conn.Tokens),
+		"service_token_type": side,
 	})
 }
 
 func resourceMetalConnectionDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*packngo.Client)
-	resp, err := client.Connections.Delete(d.Id())
+	resp, err := client.Connections.Delete(d.Id(), true)
 	if ignoreResponseErrors(httpForbidden, httpNotFound)(resp, err) != nil {
 		return friendlyError(err)
 	}
