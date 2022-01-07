@@ -102,6 +102,22 @@ func resourceMetalConnection() *schema.Resource {
 					string(packngo.ConnectionDedicated),
 					string(packngo.ConnectionShared)}, false),
 			},
+			"project_id": {
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "ID of the project where the connection is scoped to, only used for type == \"shared\"",
+				ForceNew:    true,
+			},
+			"speed": {
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: fmt.Sprintf("Port speed. Allowed values are %s", strings.Join(speeds, ", ")),
+			},
+			"description": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Description of the connection resource",
+			},
 			"mode": {
 				Type:        schema.TypeString,
 				Description: "Mode for connections in IBX facilities with the dedicated type - standard or tunnel",
@@ -111,23 +127,30 @@ func resourceMetalConnection() *schema.Resource {
 					string(packngo.ConnectionModeStandard),
 					string(packngo.ConnectionModeTunnel)}, false),
 			},
+			"tags": {
+				Type:        schema.TypeList,
+				Description: "Tags attached to the connection",
+				Optional:    true,
+				Elem:        &schema.Schema{Type: schema.TypeString},
+			},
+			"vlans": {
+				Type:        schema.TypeList,
+				Description: "Only used with shared connection. Vlans to attach. Pass one vlan for Primary/Single connection and two vlans for Redundant connection.",
+				Optional:    true,
+				Elem:        &schema.Schema{Type: schema.TypeInt},
+				MaxItems:    2,
+			},
+			"service_token_type": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Only used with shared connection. Type of service token to use for the connection, a_side or z_side.",
+			},
 			"organization_id": {
 				Type:        schema.TypeString,
 				Computed:    true,
 				Description: "ID of the organization responsible for the connection",
 				ForceNew:    true,
 				Deprecated:  "Use the project_id field instead",
-			},
-			"project_id": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: "ID of the project where the connection is scoped to, only used for type == \"shared\"",
-				ForceNew:    true,
-			},
-			"description": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "Description of the connection resource",
 			},
 			"status": {
 				Type:        schema.TypeString,
@@ -140,27 +163,11 @@ func resourceMetalConnection() *schema.Resource {
 				Description: "Fabric Token from the [Equinix Fabric Portal](https://ecxfabric.equinix.com/dashboard)",
 				Deprecated:  "token is deprecated",
 			},
-			"speed": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: fmt.Sprintf("Port speed. Allowed values are %s", strings.Join(speeds, ", ")),
-			},
 			"ports": {
 				Type:        schema.TypeList,
 				Elem:        connectionPortSchema(),
 				Computed:    true,
 				Description: "List of connection ports - primary (`ports[0]`) and secondary (`ports[1]`)",
-			},
-			"tags": {
-				Type:        schema.TypeList,
-				Description: "Tags attached to the connection",
-				Optional:    true,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-			},
-			"service_token_type": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "Only used with shared connection. Type of service token to use for the connection, a_side or z_side.",
 			},
 			"service_tokens": {
 				Type:        schema.TypeList,
@@ -179,7 +186,7 @@ func resourceMetalConnection() *schema.Resource {
 							Computed:    true,
 						},
 						"max_allowed_speed": {
-							Type:        schema.TypeInt,
+							Type:        schema.TypeString,
 							Description: "Maximum allowed speed for the service token",
 							Computed:    true,
 						},
@@ -195,38 +202,34 @@ func resourceMetalConnection() *schema.Resource {
 						},
 						"role": {
 							Type:        schema.TypeString,
-							Description: "Status of the service token",
+							Description: "Role of the service token",
 							Computed:    true,
 						},
 					},
 				},
 			},
-
-			"vlans": {
-				Type:        schema.TypeList,
-				Description: "Only used with shared connection. Vlans to attach. Pass one vlan for Primary/Single connection and two vlans for Redundant connection.",
-				Optional:    true,
-				Elem:        &schema.Schema{Type: schema.TypeInt},
-				MaxItems:    2,
-			},
 		},
 	}
 }
 
-func getServiceTokens(tokens []packngo.FabricServiceToken) []map[string]interface{} {
+func getServiceTokens(tokens []packngo.FabricServiceToken) ([]map[string]interface{}, error) {
 	tokenList := []map[string]interface{}{}
 	for _, token := range tokens {
+		speed, err := speedUintToStr(token.MaxAllowedSpeed)
+		if err != nil {
+			return nil, err
+		}
 		rawToken := map[string]interface{}{
 			"id":                token.ID,
 			"expires_at":        token.ExpiresAt.String(),
-			"max_allowed_speed": token.MaxAllowedSpeed,
+			"max_allowed_speed": speed,
 			"role":              string(token.Role),
 			"state":             token.State,
 			"type":              string(token.ServiceTokenType),
 		}
 		tokenList = append(tokenList, rawToken)
 	}
-	return tokenList
+	return tokenList, nil
 }
 
 func resourceMetalConnectionCreate(d *schema.ResourceData, meta interface{}) error {
@@ -390,6 +393,8 @@ func resourceMetalConnectionRead(d *schema.ResourceData, meta interface{}) error
 	d.SetId(conn.ID)
 
 	projectId := ""
+	// fix the project id get when it's added straight to the Connection API resource
+	// https://github.com/packethost/packngo/issues/317
 	if conn.Type == packngo.ConnectionShared {
 		projectId = conn.Ports[0].VirtualCircuits[0].Project.ID
 	}
@@ -403,6 +408,11 @@ func resourceMetalConnectionRead(d *schema.ResourceData, meta interface{}) error
 		side = string(conn.Tokens[0].ServiceTokenType)
 	}
 	speed, err := speedUintToStr(conn.Speed)
+	if err != nil {
+		return err
+	}
+
+	serviceTokens, err := getServiceTokens(conn.Tokens)
 	if err != nil {
 		return err
 	}
@@ -422,7 +432,7 @@ func resourceMetalConnectionRead(d *schema.ResourceData, meta interface{}) error
 		"ports":              getConnectionPorts(conn.Ports),
 		"mode":               mode,
 		"tags":               conn.Tags,
-		"service_tokens":     getServiceTokens(conn.Tokens),
+		"service_tokens":     serviceTokens,
 		"service_token_type": side,
 	})
 }

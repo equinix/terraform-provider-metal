@@ -61,12 +61,13 @@ func testAccMetalConnectionConfig_Shared(randstr string) string {
         }
 
         resource "metal_connection" "test" {
-            name            = "tfacc-conn-%s"
-            organization_id = metal_project.test.organization_id
-            project_id      = metal_project.test.id
-            metro           = "sv"
-            redundancy      = "redundant"
-            type            = "shared"
+            name               = "tfacc-conn-%s"
+            project_id         = metal_project.test.id
+            type               = "shared"
+            redundancy         = "redundant"
+            metro              = "sv"
+			speed              = "50Mbps"
+			service_token_type = "a_side"
         }`,
 		randstr, randstr)
 }
@@ -85,6 +86,12 @@ func TestAccMetalConnection_Shared(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
 						"metal_connection.test", "metro", "sv"),
+					resource.TestCheckResourceAttr(
+						"metal_connection.test", "service_tokens.0.type", "a_side"),
+					resource.TestCheckResourceAttr(
+						"metal_connection.test", "service_token_type", "a_side"),
+					resource.TestCheckResourceAttr(
+						"metal_connection.test", "service_tokens.0.max_allowed_speed", "50Mbps"),
 				),
 			},
 			{
@@ -105,11 +112,12 @@ func testAccMetalConnectionConfig_Dedicated(randstr string) string {
         // No project ID. We only use the project resource to get org_id
         resource "metal_connection" "test" {
             name            = "tfacc-conn-%s"
-            organization_id = metal_project.test.organization_id
             metro           = "sv"
-            redundancy      = "redundant"
+            project_id      = metal_project.test.id
             type            = "dedicated"
+            redundancy      = "redundant"
 			tags            = ["tfacc"]
+			speed           = "50Mbps"
 			mode            = "standard"
         }`,
 		randstr, randstr)
@@ -139,7 +147,6 @@ func TestAccMetalConnection_Dedicated(t *testing.T) {
 					resource.TestCheckResourceAttr("metal_connection.test", "mode", "standard"),
 					resource.TestCheckResourceAttr("metal_connection.test", "type", "dedicated"),
 					resource.TestCheckResourceAttr("metal_connection.test", "redundancy", "redundant"),
-					resource.TestCheckResourceAttr("metal_connection.test", "metro", "sv"),
 				),
 			},
 			{
@@ -155,7 +162,6 @@ func TestAccMetalConnection_Dedicated(t *testing.T) {
 					resource.TestCheckResourceAttr("data.metal_connection.test", "mode", "standard"),
 					resource.TestCheckResourceAttr("data.metal_connection.test", "type", "dedicated"),
 					resource.TestCheckResourceAttr("data.metal_connection.test", "redundancy", "redundant"),
-					resource.TestCheckResourceAttr("data.metal_connection.test", "metro", "sv"),
 				),
 			},
 		},
