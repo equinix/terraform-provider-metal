@@ -5,10 +5,16 @@ import (
 	"log"
 	"path"
 	"strings"
+	"time"
 
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 	"github.com/packethost/packngo"
+)
+
+const (
+	ReservedIPCreateTimeout = 10 * time.Minute
 )
 
 func metalIPComputedFields() map[string]*schema.Schema {
@@ -48,6 +54,17 @@ func metalIPComputedFields() map[string]*schema.Schema {
 		"management": {
 			Type:     schema.TypeBool,
 			Computed: true,
+		},
+		"wait_for_state": {
+			Type:        schema.TypeString,
+			Description: "Wait for the IP reservation block to reach a desired state on resource creation. One of: `pending`, `created`. The `created` state is default and recommended if the addresses are needed within the configuration. An error will be returned if a timeout or the `denied` state is encountered.",
+			Default:     packngo.IPReservationStateCreated,
+			ValidateDiagFunc: validation.ToDiagFunc(
+				validation.StringInSlice([]string{
+					string(packngo.IPReservationStateCreated),
+					string(packngo.IPReservationStatePending),
+				}, false),
+			),
 		},
 	}
 }
@@ -165,6 +182,9 @@ func resourceMetalReservedIPBlock() *schema.Resource {
 		},
 
 		Schema: reservedBlockSchema,
+		Timeouts: &schema.ResourceTimeout{
+			Create: schema.DefaultTimeout(ReservedIPCreateTimeout),
+		},
 	}
 }
 
@@ -216,11 +236,38 @@ func resourceMetalReservedIPBlockCreate(d *schema.ResourceData, meta interface{}
 	if err != nil {
 		return fmt.Errorf("Error reserving IP address block: %s", err)
 	}
-
 	d.Set("project_id", projectID)
 	d.SetId(blockAddr.ID)
 
+	wfs := d.Get("wait_for_state").(string)
+	log.Printf("[DEBUG] Waiting for IP Reservation (%s) to become %s", d.Id(), wfs)
+	target := []string{string(packngo.IPReservationStateCreated)}
+	if wfs != string(packngo.IPReservationStateCreated) {
+		target = append(target, wfs)
+	}
+	stateConf := &resource.StateChangeConf{
+		Pending:    []string{string(packngo.IPReservationStatePending)},
+		Target:     target,
+		Refresh:    reservedIPStateRefreshFunc(client, d.Id()),
+		Timeout:    d.Timeout(schema.TimeoutCreate),
+		MinTimeout: 15 * time.Second,
+	}
+	if _, err := stateConf.WaitForState(); err != nil {
+		return fmt.Errorf("Error waiting for IP Reservation (%s) to become %s: %s", d.Id(), wfs, err)
+	}
+
 	return resourceMetalReservedIPBlockRead(d, meta)
+}
+
+func reservedIPStateRefreshFunc(client *packngo.Client, reservedIPId string) resource.StateRefreshFunc {
+	return func() (interface{}, string, error) {
+		reservedIP, _, err := client.ProjectIPs.Get(reservedIPId, nil)
+		if err != nil {
+			return nil, "", fmt.Errorf("Error retrieving reserved IP block %s: %s", reservedIPId, err)
+		}
+
+		return reservedIP, string(reservedIP.State), nil
+	}
 }
 
 func getType(r *packngo.IPAddressReservation) (string, error) {
