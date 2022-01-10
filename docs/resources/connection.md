@@ -44,11 +44,4 @@ resource "metal_connection" "test" {
 * `organization_id` - ID of the organization where the connection is scoped to
 * `status` - Status of the connection resource
 * `ports` - List of connection ports - primary (`ports[0]`) and secondary (`ports[1]`). Schema of port is described in documentation of the [metal_connection datasource](../data-sources/connection.md).
-* `service_tokens` - List of connection service tokens with attributes
-  * `id` - UUID of the service token
-  * `expires_at` - Expiration date of the service token
-  * `max_allowed_speed` - Maximum allowed speed for the service token, string like in the `speed` attribute
-  * `type` - Token type, `a_side` or `z_side`
-  * `role` - Token role, `primary` or `secondary`
-* `token` - (Deprecated) Fabric Token from the [Equinix Fabric Portal](https://ecxfabric.equinix.com/dashboard)
-
+* `service_tokens` - List of connection service tokens with attributes. Scehma of service_token is described in documentation of the [metal_connection datasource](../data-sources/connection.md).
