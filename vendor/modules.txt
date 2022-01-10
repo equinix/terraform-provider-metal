@@ -191,7 +191,7 @@ github.com/mitchellh/mapstructure
 github.com/mitchellh/reflectwalk
 # github.com/oklog/run v1.0.0
 github.com/oklog/run
-# github.com/packethost/packngo v0.19.2-0.20210922152159-b073e9ef6568 => github.com/t0mk/packngo v0.0.0-20220103111840-26c097341bbc
+# github.com/packethost/packngo v0.20.1-0.20220109151846-46c24be88530
 ## explicit
 github.com/packethost/packngo
 # github.com/ulikunitz/xz v0.5.8
@@ -404,4 +404,3 @@ google.golang.org/protobuf/types/known/durationpb
 google.golang.org/protobuf/types/known/emptypb
 google.golang.org/protobuf/types/known/timestamppb
 google.golang.org/protobuf/types/pluginpb
-# github.com/packethost/packngo => github.com/t0mk/packngo v0.0.0-20220103111840-26c097341bbc
