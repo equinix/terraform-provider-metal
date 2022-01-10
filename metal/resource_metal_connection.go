@@ -80,7 +80,7 @@ func resourceMetalConnection() *schema.Resource {
 				Type:          schema.TypeString,
 				Optional:      true,
 				Computed:      true,
-				Description:   "Metro where to the connection will be created",
+				Description:   "Metro where the connection will be created",
 				ConflictsWith: []string{"facility"},
 				ForceNew:      true,
 				StateFunc:     toLower,
@@ -173,63 +173,10 @@ func resourceMetalConnection() *schema.Resource {
 				Type:        schema.TypeList,
 				Description: "Only used with shared connection. List of service tokens to use for the connection.",
 				Computed:    true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"id": {
-							Type:        schema.TypeString,
-							Description: "ID of the service token",
-							Computed:    true,
-						},
-						"expires_at": {
-							Type:        schema.TypeString,
-							Description: "Expiration date of the service token",
-							Computed:    true,
-						},
-						"max_allowed_speed": {
-							Type:        schema.TypeString,
-							Description: "Maximum allowed speed for the service token",
-							Computed:    true,
-						},
-						"type": {
-							Type:        schema.TypeString,
-							Description: "Type of the service token, a_side or z_side",
-							Computed:    true,
-						},
-						"state": {
-							Type:        schema.TypeString,
-							Description: "State of the service token",
-							Computed:    true,
-						},
-						"role": {
-							Type:        schema.TypeString,
-							Description: "Role of the service token",
-							Computed:    true,
-						},
-					},
-				},
+				Elem:        serviceTokenSchema(),
 			},
 		},
 	}
-}
-
-func getServiceTokens(tokens []packngo.FabricServiceToken) ([]map[string]interface{}, error) {
-	tokenList := []map[string]interface{}{}
-	for _, token := range tokens {
-		speed, err := speedUintToStr(token.MaxAllowedSpeed)
-		if err != nil {
-			return nil, err
-		}
-		rawToken := map[string]interface{}{
-			"id":                token.ID,
-			"expires_at":        token.ExpiresAt.String(),
-			"max_allowed_speed": speed,
-			"role":              string(token.Role),
-			"state":             token.State,
-			"type":              string(token.ServiceTokenType),
-		}
-		tokenList = append(tokenList, rawToken)
-	}
-	return tokenList, nil
 }
 
 func resourceMetalConnectionCreate(d *schema.ResourceData, meta interface{}) error {

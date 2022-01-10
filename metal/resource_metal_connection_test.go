@@ -99,6 +99,21 @@ func TestAccMetalConnection_Shared(t *testing.T) {
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
+			{
+				Config: testAccMetalConnectionConfig_Shared(rs) + testDataSourceMetalConnectionConfig(),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.metal_connection.test", "metro", "sv"),
+					resource.TestCheckResourceAttr("data.metal_connection.test", "mode", "standard"),
+					resource.TestCheckResourceAttr("data.metal_connection.test", "type", "shared"),
+					resource.TestCheckResourceAttr("data.metal_connection.test", "redundancy", "redundant"),
+					resource.TestCheckResourceAttr(
+						"data.metal_connection.test", "service_tokens.0.type", "a_side"),
+					resource.TestCheckResourceAttr(
+						"data.metal_connection.test", "service_token_type", "a_side"),
+					resource.TestCheckResourceAttr(
+						"data.metal_connection.test", "service_tokens.0.max_allowed_speed", "50Mbps"),
+				),
+			},
 		},
 	})
 }
@@ -123,7 +138,7 @@ func testAccMetalConnectionConfig_Dedicated(randstr string) string {
 		randstr, randstr)
 }
 
-func testDataSourceMetalConnectionConfig_Dedicated() string {
+func testDataSourceMetalConnectionConfig() string {
 	return `
 		data "metal_connection" "test" {
             connection_id = metal_connection.test.id
@@ -155,7 +170,7 @@ func TestAccMetalConnection_Dedicated(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				Config: testAccMetalConnectionConfig_Dedicated(rs) + testDataSourceMetalConnectionConfig_Dedicated(),
+				Config: testAccMetalConnectionConfig_Dedicated(rs) + testDataSourceMetalConnectionConfig(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.metal_connection.test", "metro", "sv"),
 					resource.TestCheckResourceAttr("data.metal_connection.test", "tags.#", "1"),
