@@ -782,7 +782,7 @@ func resourceMetalDeviceDelete(d *schema.ResourceData, meta interface{}) error {
 	if resIdOk {
 		wfrd, wfrdOK := d.GetOk("wait_for_reservation_deprovision")
 		if wfrdOK && wfrd.(bool) {
-			err := waitUntilReservationProvisionable(resId.(string), meta)
+			err := waitUntilReservationProvisionable(resId.(string), d.Id(), meta)
 			if err != nil {
 				return err
 			}

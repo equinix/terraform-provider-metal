@@ -110,21 +110,25 @@ func getPorts(ps []packngo.Port) []map[string]interface{} {
 	return ret
 }
 
-func waitUntilReservationProvisionable(id string, meta interface{}) error {
+func waitUntilReservationProvisionable(reservationId, instanceId string, meta interface{}) error {
 	stateConf := &resource.StateChangeConf{
-		Pending: []string{"false"},
-		Target:  []string{"true"},
+		Pending: []string{"deprovisioning"},
+		Target:  []string{"provisionable", "reprovisioned"},
 		Refresh: func() (interface{}, string, error) {
 			client := meta.(*packngo.Client)
-			r, _, err := client.HardwareReservations.Get(id, nil)
-			if err != nil {
-				return 42, "error", friendlyError(err)
+			r, _, err := client.HardwareReservations.Get(reservationId, nil)
+			provisionable := "deprovisioning"
+			switch {
+			case err != nil:
+				err = friendlyError(err)
+				provisionable = "error"
+			case r.Provisionable:
+				provisionable = "provisionable"
+			case r.Device != nil && (r.Device.ID != "" && r.Device.ID != instanceId):
+				provisionable = "reprovisioned"
 			}
-			provisionableString := "false"
-			if r.Provisionable {
-				provisionableString = "true"
-			}
-			return 42, provisionableString, nil
+
+			return r, provisionable, err
 		},
 		Timeout:    60 * time.Minute,
 		Delay:      10 * time.Second,
