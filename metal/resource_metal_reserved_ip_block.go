@@ -59,6 +59,8 @@ func metalIPComputedFields() map[string]*schema.Schema {
 			Type:        schema.TypeString,
 			Description: "Wait for the IP reservation block to reach a desired state on resource creation. One of: `pending`, `created`. The `created` state is default and recommended if the addresses are needed within the configuration. An error will be returned if a timeout or the `denied` state is encountered.",
 			Default:     packngo.IPReservationStateCreated,
+			Optional:    true,
+			ForceNew:    false,
 			ValidateDiagFunc: validation.ToDiagFunc(
 				validation.StringInSlice([]string{
 					string(packngo.IPReservationStateCreated),
