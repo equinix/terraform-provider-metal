@@ -105,7 +105,6 @@ func Test_waitUntilReservationProvisionable(t *testing.T) {
 							GetFn: func(_ string, _ *packngo.GetOptions) (*packngo.HardwareReservation, *packngo.Response, error) {
 								response := responses[*invoked]
 								*invoked++
-								fmt.Println("GAHTEST", *invoked)
 
 								return &packngo.HardwareReservation{
 									Device: &packngo.Device{ID: response.id}, Provisionable: response.provisionable,

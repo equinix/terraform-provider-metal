@@ -2,6 +2,7 @@ package metal
 
 import (
 	"fmt"
+	"log"
 	"strings"
 	"sync"
 	"time"
@@ -128,13 +129,10 @@ func hwReservationStateRefreshFunc(client *packngo.Client, reservationId, instan
 		case r != nil && r.Provisionable:
 			state = provisionable
 		case r != nil && r.Device != nil && (r.Device.ID != "" && r.Device.ID != instanceId):
+			log.Printf("[WARN] Equinix Metal device instance %s (reservation %s) was reprovisioned to a another instance (%s)", instanceId, reservationId, r.Device.ID)
 			state = reprovisioned
 		}
-		p := false
-		if r != nil {
-			p = r.Provisionable
-		}
-		fmt.Println("provisionable", p, "state", state, "err", err, "reservation", r)
+
 		return r, state, err
 	}
 }
