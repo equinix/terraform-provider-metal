@@ -110,29 +110,43 @@ func getPorts(ps []packngo.Port) []map[string]interface{} {
 	return ret
 }
 
-func waitUntilReservationProvisionable(reservationId, instanceId string, meta interface{}) error {
-	stateConf := &resource.StateChangeConf{
-		Pending: []string{"deprovisioning"},
-		Target:  []string{"provisionable", "reprovisioned"},
-		Refresh: func() (interface{}, string, error) {
-			client := meta.(*packngo.Client)
-			r, _, err := client.HardwareReservations.Get(reservationId, nil)
-			provisionable := "deprovisioning"
-			switch {
-			case err != nil:
-				err = friendlyError(err)
-				provisionable = "error"
-			case r.Provisionable:
-				provisionable = "provisionable"
-			case r.Device != nil && (r.Device.ID != "" && r.Device.ID != instanceId):
-				provisionable = "reprovisioned"
-			}
+const (
+	deprovisioning = "deprovisioning"
+	provisionable  = "provisionable"
+	reprovisioned  = "reprovisioned"
+	errstate       = "error"
+)
 
-			return r, provisionable, err
-		},
-		Timeout:    60 * time.Minute,
-		Delay:      10 * time.Second,
-		MinTimeout: 3 * time.Second,
+func hwReservationStateRefreshFunc(client *packngo.Client, reservationId, instanceId string) resource.StateRefreshFunc {
+	return func() (interface{}, string, error) {
+		r, _, err := client.HardwareReservations.Get(reservationId, nil)
+		state := deprovisioning
+		switch {
+		case err != nil:
+			err = friendlyError(err)
+			state = errstate
+		case r != nil && r.Provisionable:
+			state = provisionable
+		case r != nil && r.Device != nil && (r.Device.ID != "" && r.Device.ID != instanceId):
+			state = reprovisioned
+		}
+		p := false
+		if r != nil {
+			p = r.Provisionable
+		}
+		fmt.Println("provisionable", p, "state", state, "err", err, "reservation", r)
+		return r, state, err
+	}
+}
+
+func waitUntilReservationProvisionable(client *packngo.Client, reservationId, instanceId string, delay, timeout, minTimeout time.Duration) error {
+	stateConf := &resource.StateChangeConf{
+		Pending:    []string{deprovisioning},
+		Target:     []string{provisionable, reprovisioned},
+		Refresh:    hwReservationStateRefreshFunc(client, reservationId, instanceId),
+		Timeout:    timeout,
+		Delay:      delay,
+		MinTimeout: minTimeout,
 	}
 	_, err := stateConf.WaitForState()
 	return err
