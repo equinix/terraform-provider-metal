@@ -2,6 +2,7 @@ package metal
 
 import (
 	"fmt"
+	"log"
 	"strings"
 	"sync"
 	"time"
@@ -110,25 +111,40 @@ func getPorts(ps []packngo.Port) []map[string]interface{} {
 	return ret
 }
 
-func waitUntilReservationProvisionable(id string, meta interface{}) error {
+const (
+	deprovisioning = "deprovisioning"
+	provisionable  = "provisionable"
+	reprovisioned  = "reprovisioned"
+	errstate       = "error"
+)
+
+func hwReservationStateRefreshFunc(client *packngo.Client, reservationId, instanceId string) resource.StateRefreshFunc {
+	return func() (interface{}, string, error) {
+		r, _, err := client.HardwareReservations.Get(reservationId, nil)
+		state := deprovisioning
+		switch {
+		case err != nil:
+			err = friendlyError(err)
+			state = errstate
+		case r != nil && r.Provisionable:
+			state = provisionable
+		case r != nil && r.Device != nil && (r.Device.ID != "" && r.Device.ID != instanceId):
+			log.Printf("[WARN] Equinix Metal device instance %s (reservation %s) was reprovisioned to a another instance (%s)", instanceId, reservationId, r.Device.ID)
+			state = reprovisioned
+		}
+
+		return r, state, err
+	}
+}
+
+func waitUntilReservationProvisionable(client *packngo.Client, reservationId, instanceId string, delay, timeout, minTimeout time.Duration) error {
 	stateConf := &resource.StateChangeConf{
-		Pending: []string{"false"},
-		Target:  []string{"true"},
-		Refresh: func() (interface{}, string, error) {
-			client := meta.(*packngo.Client)
-			r, _, err := client.HardwareReservations.Get(id, nil)
-			if err != nil {
-				return 42, "error", friendlyError(err)
-			}
-			provisionableString := "false"
-			if r.Provisionable {
-				provisionableString = "true"
-			}
-			return 42, provisionableString, nil
-		},
-		Timeout:    60 * time.Minute,
-		Delay:      10 * time.Second,
-		MinTimeout: 3 * time.Second,
+		Pending:    []string{deprovisioning},
+		Target:     []string{provisionable, reprovisioned},
+		Refresh:    hwReservationStateRefreshFunc(client, reservationId, instanceId),
+		Timeout:    timeout,
+		Delay:      delay,
+		MinTimeout: minTimeout,
 	}
 	_, err := stateConf.WaitForState()
 	return err
