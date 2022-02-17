@@ -10,6 +10,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 	"github.com/packethost/packngo"
 )
@@ -164,12 +165,13 @@ func resourceMetalReservedIPBlock() *schema.Resource {
 	}
 
 	reservedBlockSchema["custom_data"] = &schema.Schema{
-		Type:         schema.TypeSet,
-		ForceNew:     false,
-		Description:  "Custom Data is an arbitrary object (submitted in Terraform as serialized JSON) to assign to the IP Reservation. This may be helpful for self-managed IPAM. The object must be valid JSON.",
-		Optional:     true,
-		ValidateFunc: validation.StringIsJSON,
-		Elem:         &schema.Schema{Type: schema.TypeString},
+		Type:             schema.TypeSet,
+		ForceNew:         false,
+		Description:      "Custom Data is an arbitrary object (submitted in Terraform as serialized JSON) to assign to the IP Reservation. This may be helpful for self-managed IPAM. The object must be valid JSON.",
+		Optional:         true,
+		ValidateFunc:     validation.StringIsJSON,
+		DiffSuppressFunc: structure.SuppressJsonDiff,
+		Elem:             &schema.Schema{Type: schema.TypeString},
 	}
 
 	reservedBlockSchema["wait_for_state"] = &schema.Schema{
