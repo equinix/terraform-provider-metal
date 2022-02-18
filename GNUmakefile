@@ -1,3 +1,4 @@
+ACCTEST_PARALLELISM ?= 8
 TEST?=$$(go list ./... |grep -v 'vendor')
 GOFMT_FILES?=$$(find . -name '*.go' |grep -v vendor)
 WEBSITE_REPO=github.com/hashicorp/terraform-website
@@ -17,7 +18,7 @@ test: fmtcheck
 	go test $(TEST) -v $(TESTARGS) -timeout=30s -parallel=10
 
 testacc: fmtcheck
-	TF_ACC=1 go test $(TEST) -v $(TESTARGS) -timeout=120m -parallel=10
+	TF_ACC=1 go test $(TEST) -v $(TESTARGS) -timeout=120m -parallel=$(ACCTEST_PARALLELISM)
 
 vet:
 	@echo "go vet ."
