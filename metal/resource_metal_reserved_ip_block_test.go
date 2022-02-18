@@ -21,6 +21,9 @@ resource "metal_reserved_ip_block" "test" {
 	type        = "global_ipv4"
 	description = "testdesc"
 	quantity    = 1
+	custom_data = jsonencode({
+		"foo": "bar"
+	})
 }`, name)
 }
 
@@ -77,6 +80,8 @@ func TestAccMetalReservedIPBlock_Global(t *testing.T) {
 						"metal_reserved_ip_block.test", "public", "true"),
 					resource.TestCheckResourceAttr(
 						"metal_reserved_ip_block.test", "management", "false"),
+					resource.TestCheckResourceAttr(
+						"metal_reserved_ip_block.test", "custom_data", `{"foo":"bar"}`),
 				),
 			},
 		},
@@ -148,9 +153,10 @@ func TestAccMetalReservedIPBlock_ImportBasic(t *testing.T) {
 				Config: testAccCheckMetalReservedIPBlockConfig_Public(rs),
 			},
 			{
-				ResourceName:      "metal_reserved_ip_block.test",
-				ImportState:       true,
-				ImportStateVerify: true,
+				ResourceName:            "metal_reserved_ip_block.test",
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"wait_for_state"},
 			},
 		},
 	})

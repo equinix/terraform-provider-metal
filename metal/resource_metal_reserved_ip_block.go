@@ -165,7 +165,8 @@ func resourceMetalReservedIPBlock() *schema.Resource {
 	}
 
 	reservedBlockSchema["custom_data"] = &schema.Schema{
-		Type:             schema.TypeSet,
+		Type:             schema.TypeString,
+		Default:          "{}",
 		ForceNew:         false,
 		Description:      "Custom Data is an arbitrary object (submitted in Terraform as serialized JSON) to assign to the IP Reservation. This may be helpful for self-managed IPAM. The object must be valid JSON.",
 		Optional:         true,
