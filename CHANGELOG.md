@@ -1,3 +1,9 @@
+## 3.2.2 (Feb 18, 2021)
+
+### Bug Fixes
+
+* Fix `wait_for_deprovision` behavior of `metal_device` to detect reservations being repurposed during the wait period ([#208](https://github.com/equinix/terraform-provider-metal/issues/208))
+
 ## 3.2.1 (Dec 8, 2021)
 
 ### Bug Fixes
