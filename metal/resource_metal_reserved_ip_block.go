@@ -62,11 +62,6 @@ func metalIPComputedFields() map[string]*schema.Schema {
 
 func metalIPResourceComputedFields() map[string]*schema.Schema {
 	s := metalIPComputedFields()
-	s["address_family"] = &schema.Schema{
-		Type:        schema.TypeInt,
-		Computed:    true,
-		Description: "Address family as integer (4 or 6)",
-	}
 	s["public"] = &schema.Schema{
 		Type:        schema.TypeBool,
 		Computed:    true,
