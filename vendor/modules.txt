@@ -191,7 +191,7 @@ github.com/mitchellh/mapstructure
 github.com/mitchellh/reflectwalk
 # github.com/oklog/run v1.0.0
 github.com/oklog/run
-# github.com/packethost/packngo v0.19.1
+# github.com/packethost/packngo v0.20.1-0.20220109151846-46c24be88530
 ## explicit
 github.com/packethost/packngo
 # github.com/ulikunitz/xz v0.5.8
