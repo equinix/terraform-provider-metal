@@ -1,3 +1,10 @@
+## 3.3.0 (unreleased)
+
+### Improvements
+
+* packngo version bumped to 0.22.0
+* go version used in builds and testing bumped to 1.17
+
 ## 3.2.2 (Feb 18, 2021)
 
 ### Bug Fixes

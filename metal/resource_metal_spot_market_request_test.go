@@ -17,8 +17,8 @@ resource "metal_project" "test" {
 }
 
 data "metal_spot_market_price" "test" {
-  facility = "ewr1"
-  plan     = "baremetal_0"
+  facility = "sv15"
+  plan     = "c3.small.x86"
 }
 
 data "metal_spot_market_request" "dreq" {
@@ -46,7 +46,7 @@ func TestAccMetalSpotMarketRequest_Basic(t *testing.T) {
 	var key packngo.SpotMarketRequest
 	rs := acctest.RandString(10)
 
-	resource.Test(t, resource.TestCase{
+	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccCheckMetalSSHKeyDestroy,
@@ -136,7 +136,7 @@ resource "metal_spot_market_request" "request" {
 
 func TestAccMetalSpotMarketRequest_Import(t *testing.T) {
 	rs := acctest.RandString(10)
-	resource.Test(t, resource.TestCase{
+	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccCheckMetalSSHKeyDestroy,
