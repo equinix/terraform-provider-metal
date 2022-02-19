@@ -17,8 +17,8 @@ resource "metal_project" "test" {
 }
 
 data "metal_spot_market_price" "test" {
-  facility = "ewr1"
-  plan     = "baremetal_0"
+  facility = "sv15"
+  plan     = "c3.small.x86"
 }
 
 data "metal_spot_market_request" "dreq" {
