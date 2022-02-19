@@ -1,9 +1,28 @@
 ## 3.3.0 (unreleased)
 
+### DEPRECATIONS
+
+- **Deprecated Attribute:** `metal_connection`.`token` ([#207](https://github.com/equinix/terraform-provider-metal/pull/207))
+
+### Bug Fixes
+
+* `metal_reserved_ip_block` will now block until the IP range is available. This is generally the desired outcome but is a change in behavior. Use `wait_for_state` to achieve the previous behavior, if desired.
+
+### Features
+
+* Adds `wait_for_state` as an argument to `metal_reserved_ip_block` ([#209](https://github.com/equinix/terraform-provider-metal/pull/209))
+* Adds `custom_data` as an argument to `metal_reserved_ip_block` ([#209](https://github.com/equinix/terraform-provider-metal/pull/209))
+* Changed `tags` and `description` arguments to updatable in `metal_reserved_ip_block` ([#209](https://github.com/equinix/terraform-provider-metal/pull/209))
+* Adds `service_token` as a datasource and resource attribute to `metal_connection` ([#207](https://github.com/equinix/terraform-provider-metal/pull/207))
+* Adds `service_token_type` as a datasource attribute and resource argument to `metal_connection` ([#207](https://github.com/equinix/terraform-provider-metal/pull/207))
+* Adds `vlans` as a datasource attribute and resource argument to `metal_connection` ([#207](https://github.com/equinix/terraform-provider-metal/pull/207))
+* Adds `speed` argument to `metal_connection` resources ([#207](https://github.com/equinix/terraform-provider-metal/pull/207))
+
 ### Improvements
 
 * packngo version bumped to 0.22.0
-* go version used in builds and testing bumped to 1.17
+* CI build cleanup (go bumped to 1.17, vendor directory removed)
+* E2E tests sped up with parallelization and fixing spot market tests
 
 ## 3.2.2 (Feb 18, 2021)
 
