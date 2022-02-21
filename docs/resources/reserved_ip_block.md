@@ -94,6 +94,8 @@ The following arguments are supported:
 * `metro` - (Optional) Metro where to allocate the public IP address block, makes sense only for type==public_ipv4, must be empty for type==global_ipv4, conflicts with `facility`
 * `description` - (Optional) Arbitrary description
 * `tags` - (Optional) String list of tags
+* `wait_for_state` - (Optional) Wait for the IP reservation block to reach a desired state on resource creation. One of: `pending`, `created`. The `created` state is default and recommended if the addresses are needed within the configuration. An error will be returned if a timeout or the `denied` state is encountered.
+* `custom_data` - (Optional) Custom Data is an arbitrary object (submitted in Terraform as serialized JSON) to assign to the IP Reservation. This may be helpful for self-managed IPAM. The object must be valid JSON.
 
 ## Attributes Reference
 
