@@ -120,7 +120,7 @@ const (
 
 func hwReservationStateRefreshFunc(client *packngo.Client, reservationId, instanceId string) resource.StateRefreshFunc {
 	return func() (interface{}, string, error) {
-		r, _, err := client.HardwareReservations.Get(reservationId, nil)
+		r, _, err := client.HardwareReservations.Get(reservationId, &packngo.GetOptions{Includes: []string{"device"}})
 		state := deprovisioning
 		switch {
 		case err != nil:
@@ -224,14 +224,14 @@ func powerOnAndWait(d *schema.ResourceData, meta interface{}) error {
 	}
 	state := d.Get("state").(string)
 	if state != "active" {
-		return friendlyError(fmt.Errorf("Device in non-active state \"%s\"", state))
+		return friendlyError(fmt.Errorf("device in non-active state \"%s\"", state))
 	}
 	return nil
 }
 
 func validateFacilityForDevice(v interface{}, k string) (ws []string, errors []error) {
 	if v.(string) == "any" {
-		errors = append(errors, fmt.Errorf(`Cannot use facility: "any"`))
+		errors = append(errors, fmt.Errorf(`cannot use facility: "any"`))
 	}
 	return
 }

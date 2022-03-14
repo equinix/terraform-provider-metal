@@ -71,12 +71,16 @@ func Test_waitUntilReservationProvisionable(t *testing.T) {
 						}
 
 						return &mockHWService{
-							GetFn: func(_ string, _ *packngo.GetOptions) (*packngo.HardwareReservation, *packngo.Response, error) {
+							GetFn: func(_ string, opts *packngo.GetOptions) (*packngo.HardwareReservation, *packngo.Response, error) {
 								response := responses[*invoked]
 								*invoked++
 
+								var device *packngo.Device
+								if opts != nil && contains(opts.Includes, "device") {
+									device = &packngo.Device{ID: response.id}
+								}
 								return &packngo.HardwareReservation{
-									Device: &packngo.Device{ID: response.id}, Provisionable: response.provisionable,
+									Device: device, Provisionable: response.provisionable,
 								}, nil, nil
 							},
 						}
@@ -102,12 +106,16 @@ func Test_waitUntilReservationProvisionable(t *testing.T) {
 						invoked := new(int)
 
 						return &mockHWService{
-							GetFn: func(_ string, _ *packngo.GetOptions) (*packngo.HardwareReservation, *packngo.Response, error) {
+							GetFn: func(_ string, opts *packngo.GetOptions) (*packngo.HardwareReservation, *packngo.Response, error) {
 								response := responses[*invoked]
 								*invoked++
 
+								var device *packngo.Device
+								if opts != nil && contains(opts.Includes, "device") {
+									device = &packngo.Device{ID: response.id}
+								}
 								return &packngo.HardwareReservation{
-									Device: &packngo.Device{ID: response.id}, Provisionable: response.provisionable,
+									Device: device, Provisionable: response.provisionable,
 								}, nil, nil
 							},
 						}
@@ -127,7 +135,6 @@ func Test_waitUntilReservationProvisionable(t *testing.T) {
 							return &packngo.HardwareReservation{
 								Device: nil, Provisionable: false,
 							}, nil, nil
-
 						},
 					},
 				},
