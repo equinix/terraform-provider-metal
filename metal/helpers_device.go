@@ -13,8 +13,10 @@ import (
 	"github.com/packethost/packngo"
 )
 
-var wgMap = map[string]*sync.WaitGroup{}
-var wgMutex = sync.Mutex{}
+var (
+	wgMap   = map[string]*sync.WaitGroup{}
+	wgMutex = sync.Mutex{}
+)
 
 func ifToIPCreateRequest(m interface{}) packngo.IPAddressCreateRequest {
 	iacr := packngo.IPAddressCreateRequest{}
@@ -131,6 +133,8 @@ func hwReservationStateRefreshFunc(client *packngo.Client, reservationId, instan
 		case r != nil && r.Device != nil && (r.Device.ID != "" && r.Device.ID != instanceId):
 			log.Printf("[WARN] Equinix Metal device instance %s (reservation %s) was reprovisioned to a another instance (%s)", instanceId, reservationId, r.Device.ID)
 			state = reprovisioned
+		default:
+			log.Printf("[DEBUG] Equinix Metal device instance %s (reservation %s) is still deprovisioning", instanceId, reservationId)
 		}
 
 		return r, state, err
@@ -162,7 +166,6 @@ func getWaitForDeviceLock(deviceID string) *sync.WaitGroup {
 }
 
 func waitForDeviceAttribute(d *schema.ResourceData, targets []string, pending []string, attribute string, meta interface{}) (string, error) {
-
 	wg := getWaitForDeviceLock(d.Id())
 	wg.Wait()
 

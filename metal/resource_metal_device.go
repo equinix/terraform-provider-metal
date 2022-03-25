@@ -20,11 +20,15 @@ import (
 	"github.com/packethost/packngo"
 )
 
-var matchIPXEScript = regexp.MustCompile(`(?i)^#![i]?pxe`)
-var ipAddressTypes = []string{"public_ipv4", "private_ipv4", "public_ipv6"}
+var (
+	matchIPXEScript = regexp.MustCompile(`(?i)^#![i]?pxe`)
+	ipAddressTypes  = []string{"public_ipv4", "private_ipv4", "public_ipv6"}
+)
 
-var deviceCommonIncludes = []string{"project", "metro", "facility", "hardware_reservation"}
-var deviceReadOptions = &packngo.GetOptions{Includes: deviceCommonIncludes}
+var (
+	deviceCommonIncludes = []string{"project", "metro", "facility", "hardware_reservation"}
+	deviceReadOptions    = &packngo.GetOptions{Includes: deviceCommonIncludes}
+)
 
 func resourceMetalDevice() *schema.Resource {
 	return &schema.Resource{
@@ -719,12 +723,10 @@ func resourceMetalDeviceUpdate(d *schema.ResourceData, meta interface{}) error {
 		if _, _, err := client.Devices.Update(d.Id(), &ur); err != nil {
 			return friendlyError(err)
 		}
-
 	}
 
 	if d.HasChange("operating_system") || d.HasChange("user_data") || d.HasChange("custom_data") {
 		reinstallOptions, err := getReinstallOptions(d)
-
 		if err != nil {
 			return friendlyError(err)
 		}
@@ -773,6 +775,8 @@ func resourceMetalDeviceDelete(d *schema.ResourceData, meta interface{}) error {
 		fdv = true
 	}
 
+	start := time.Now()
+
 	resp, err := client.Devices.Delete(d.Id(), fdv)
 	if ignoreResponseErrors(httpForbidden, httpNotFound)(resp, err) != nil {
 		return friendlyError(err)
@@ -782,7 +786,10 @@ func resourceMetalDeviceDelete(d *schema.ResourceData, meta interface{}) error {
 	if resIdOk {
 		wfrd, wfrdOK := d.GetOk("wait_for_reservation_deprovision")
 		if wfrdOK && wfrd.(bool) {
-			err := waitUntilReservationProvisionable(client, resId.(string), d.Id(), 10*time.Second, 60*time.Minute, 3*time.Second)
+			// avoid "context: deadline exceeded"
+			timeout := d.Timeout(schema.TimeoutDelete) - time.Minute - time.Since(start)
+
+			err := waitUntilReservationProvisionable(client, resId.(string), d.Id(), 10*time.Second, timeout, 3*time.Second)
 			if err != nil {
 				return err
 			}
