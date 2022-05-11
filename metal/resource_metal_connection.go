@@ -372,9 +372,13 @@ func resourceMetalConnectionRead(d *schema.ResourceData, meta interface{}) error
 		return err
 	}
 
+	projectId := ""
+	if conn.Project != nil {
+		projectId = conn.Project.ID
+	}
 	return setMap(d, map[string]interface{}{
 		"organization_id":    conn.Organization.ID,
-		"project_id":         conn.Project.ID,
+		"project_id":         projectId,
 		"name":               conn.Name,
 		"description":        conn.Description,
 		"status":             conn.Status,
