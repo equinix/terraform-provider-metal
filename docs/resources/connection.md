@@ -7,28 +7,24 @@ description: |-
 
 # metal\_connection
 
-Use this resource to request the creation an Interconnection asset to connect with other parties using [Equinix Fabric - software-defined interconnections](https://metal.equinix.com/developers/docs/networking/fabric/).
-
-~> Equinix Metal connection with service_token_type `a_side` is not generally available and may not be enabled yet for your organization.
+Use this resource to request of create an Interconnection from [Equinix Fabric - software-defined interconnections](https://metal.equinix.com/developers/docs/networking/fabric/)
 
 ## Example Usage
 
 ```hcl
 
 resource "metal_connection" "test" {
-    name               = "My Interconnection"
-    project_id         = metal_project.test.id
-    type               = "shared"
-    redundancy         = "redundant"
-    metro              = "sv"
-    speed              = "50Mbps"
-    service_token_type = "a_side"
+	name               = "My Interconnection"
+	project_id         = metal_project.test.id
+	type               = "shared"
+	redundancy         = "redundant"
+	metro              = "sv"
+	speed              = "50Mbps"
+	service_token_type = "a_side"
 }
 ```
 
 ## Argument Reference
-
-The following arguments are supported:
 
 * `name` - (Required) Name of the connection resource
 * `metro` - (Optional) Metro where the connection will be created

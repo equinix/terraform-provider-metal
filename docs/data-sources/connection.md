@@ -7,27 +7,21 @@ description: |-
 
 # metal\_connection
 
-Use this data source to retrieve a [connection resource](https://metal.equinix.com/developers/docs/networking/fabric/)
-
-~> Equinix Metal connection with service_token_type `a_side` is not generally available and may not be enabled yet for your organization.
+Use this data source to retrieve a connection resource from [Equinix Fabric - software-defined interconnections](https://metal.equinix.com/developers/docs/networking/fabric/)
 
 ## Example Usage
 
 ```hcl
 data "metal_connection" "example" {
-  connection_id = "4347e805-eb46-4699-9eb9-5c116e6a017d"
+  connection_id     = "4347e805-eb46-4699-9eb9-5c116e6a017d"
 }
 ```
 
 ## Argument Reference
 
-The following arguments are supported:
-
 * `connection_id` - (Required) ID of the connection resource
 
 ## Attributes Reference
-
-In addition to all arguments above, the following attributes are exported:
 
 * `name` - Name of the connection resource
 * `metro` - Slug of a metro to which the connection belongs
@@ -44,7 +38,7 @@ In addition to all arguments above, the following attributes are exported:
 * `organization_id` - ID of the organization where the connection is scoped to
 * `status` - Status of the connection resource
 * `service_tokens` - List of connection service tokens with attributes
-  * `id` - UUID of the service token required to configure the connection in the [Equinix Fabric Portal](https://ecxfabric.equinix.com/dashboard).
+  * `id` - UUID of the service token
   * `expires_at` - Expiration date of the service token
   * `max_allowed_speed` - Maximum allowed speed for the service token, string like in the `speed` attribute
   * `type` - Token type, `a_side` or `z_side`
@@ -54,7 +48,7 @@ In addition to all arguments above, the following attributes are exported:
   * `id` - Port UUID
   * `role` - Port role - primary or secondary
   * `speed` - Port speed in bits per second
-  * `status` - Port status
+  * `status` - Port status 
   * `link_status` - Port link status
   * `virtual_circuit_ids` - List of IDs of virtual cicruits attached to this port
-* `token` - (Deprecated) Token to configure the connection in the [Equinix Fabric Portal](https://ecxfabric.equinix.com/dashboard)
+* `token` - (Deprecated) Fabric Token from the [Equinix Fabric Portal](https://ecxfabric.equinix.com/dashboard)
