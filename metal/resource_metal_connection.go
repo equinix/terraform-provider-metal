@@ -354,7 +354,7 @@ func resourceMetalConnectionRead(d *schema.ResourceData, meta interface{}) error
 		side = string(conn.Tokens[0].ServiceTokenType)
 	}
 	speed := "0"
-	if conn.speed > 0 {
+	if conn.Speed > 0 {
 		speed, err = speedUintToStr(conn.Speed)
 		if err != nil {
 			return err
