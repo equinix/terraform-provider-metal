@@ -238,13 +238,13 @@ func resourceMetalConnectionCreate(d *schema.ResourceData, meta interface{}) err
 	projectId, projectIdOk := d.GetOk("project_id")
 	if connType == packngo.ConnectionShared {
 		if !projectIdOk {
-			return fmt.Errorf("you must set project_id for shared connection")
+			return fmt.Errorf("you must set project_id for \"shared\" connection")
 		}
 		if connMode == string(packngo.ConnectionModeTunnel) {
-			return fmt.Errorf("tunnel mode is not supported for shared connections")
+			return fmt.Errorf("tunnel mode is not supported for \"shared\" connections")
 		}
 		if !tokenTypeOk {
-			return fmt.Errorf("you must set service_token_type for shared connection")
+			return fmt.Errorf("you must set service_token_type for \"shared\" connection")
 		}
 		if connRedundancy == packngo.ConnectionPrimary && vlansNum == 2 {
 			return fmt.Errorf("when you create a \"shared\" connection without redundancy, you must only set max 1 vlan")
@@ -259,19 +259,20 @@ func resourceMetalConnectionCreate(d *schema.ResourceData, meta interface{}) err
 	} else {
 		organizationId, organizationIdOk := d.GetOk("organization_id")
 		if !organizationIdOk {
-			proj, _, err := client.Projects.Get(d.Id(), nil)
+			if !projectIdOk {
+				return fmt.Errorf("you must set one of organization_id or project_id for \"dedicated\" connection")
+			}
+			proj, _, err := client.Projects.Get(projectId.(string), &packngo.GetOptions{Includes: []string{"organization"}})
 			if err != nil {
 				return friendlyError(err)
 			}
-			organizationId = proj.Organization
-
-			return fmt.Errorf("you must set project_id for shared connection")
+			organizationId = proj.Organization.ID
 		}
 		if tokenTypeOk {
 			return fmt.Errorf("when you create a \"dedicated\" connection, you must not set service_token_type")
 		}
 		if vlansNum > 0 {
-			return fmt.Errorf("when you create a \"dedicated\" connection, you mustn't set vlans")
+			return fmt.Errorf("when you create a \"dedicated\" connection, you must not set vlans")
 		}
 		connReq.Mode = packngo.ConnectionMode(connMode)
 		conn, _, err := client.Connections.OrganizationCreate(organizationId.(string), &connReq)
@@ -351,6 +352,12 @@ func resourceMetalConnectionRead(d *schema.ResourceData, meta interface{}) error
 
 	d.SetId(conn.ID)
 
+	projectId := d.Get("project_id").(string)
+	// fix the project id get when it's added straight to the Connection API resource
+	// https://github.com/packethost/packngo/issues/317
+	if conn.Type == packngo.ConnectionShared {
+		projectId = conn.Ports[0].VirtualCircuits[0].Project.ID
+	}
 	mode := "standard"
 	if conn.Mode != nil {
 		mode = string(*conn.Mode)
@@ -366,16 +373,11 @@ func resourceMetalConnectionRead(d *schema.ResourceData, meta interface{}) error
 			return err
 		}
 	}
-
 	serviceTokens, err := getServiceTokens(conn.Tokens)
 	if err != nil {
 		return err
 	}
 
-	projectId := ""
-	if conn.Project != nil {
-		projectId = conn.Project.ID
-	}
 	return setMap(d, map[string]interface{}{
 		"organization_id":    conn.Organization.ID,
 		"project_id":         projectId,
