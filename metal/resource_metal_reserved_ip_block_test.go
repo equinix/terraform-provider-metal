@@ -35,7 +35,7 @@ resource "metal_project" "foobar" {
 
 resource "metal_reserved_ip_block" "test" {
 	project_id  = metal_project.foobar.id
-	facility    = "ewr1"
+	facility    = "ny5"
 	type        = "public_ipv4"
 	quantity    = 2
 	tags        = ["Tag1", "Tag2"]
@@ -228,15 +228,15 @@ resource "metal_project" "foobar" {
 
 resource "metal_reserved_ip_block" "test" {
 	project_id  = metal_project.foobar.id
-	facility    = "ewr1"
+	facility    = "ny5"
 	type        = "public_ipv4"
 	quantity    = 2
 }
 
 resource "metal_device" "test" {
   project_id       = metal_project.foobar.id
-  facilities       = ["ewr1"]
-  plan             = "t1.small.x86"
+  facilities       = ["ny5"]
+  plan             = "c1.small.x86"
   operating_system = "ubuntu_16_04"
   hostname         = "tfacc-reserved-ip-device"
   billing_cycle    = "hourly"

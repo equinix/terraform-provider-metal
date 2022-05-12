@@ -25,7 +25,7 @@ resource "metal_project_ssh_key" "test" {
 resource "metal_device" "test" {
     hostname            = "tfacc-device-key-test"
     plan                = "baremetal_0"
-    facilities          = ["ewr1"]
+    facilities          = ["ny5", "ny7", "any"]
     operating_system    = "ubuntu_16_04"
     billing_cycle       = "hourly"
     project_ssh_key_ids = ["${metal_project_ssh_key.test.id}"]

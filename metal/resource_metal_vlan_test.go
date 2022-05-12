@@ -50,7 +50,7 @@ func TestAccMetalVlan_Metro(t *testing.T) {
 func TestAccMetalVlan_Basic(t *testing.T) {
 	var vlan packngo.VirtualNetwork
 	rs := acctest.RandString(10)
-	fac := "ewr1"
+	fac := "ny5"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
@@ -128,7 +128,7 @@ resource "metal_vlan" "foovlan" {
 
 func TestAccMetalVlan_importBasic(t *testing.T) {
 	rs := acctest.RandString(10)
-	fac := "ewr1"
+	fac := "ny5"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
