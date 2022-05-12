@@ -66,6 +66,7 @@ jobs:
         #
 
         METAL_AUTH_TOKEN: ${{ secrets.PACKET_AUTH_TOKEN }}
+        TF_ACC_METAL_DEDICATED_CONNECTION_ID: ${{ secrets.TF_ACC_METAL_DEDICATED_CONNECTION_ID }}
       run: |
         go test -v -coverprofile coverage.txt -covermode=atomic -parallel 8 -timeout 180m ./metal
     - name: Sweeper

@@ -73,9 +73,10 @@ func TestAccMetalVirtualCircuit_Dedicated(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:      "metal_virtual_circuit.test",
-				ImportState:       true,
-				ImportStateVerify: true,
+				ResourceName:            "metal_virtual_circuit.test",
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"connection_id"},
 			},
 		},
 	})
