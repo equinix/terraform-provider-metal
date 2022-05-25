@@ -1,22 +1,13 @@
 package metal
 
-// I am not sure what to do with the test code. It's useful, but it won't run
-// either:
-// * unless the Connections are automatically approved.
-// * unless we specify an existing Connection and Project for testing.
-//
-// I can remove this file from the PR if it looks too bad here.
-
-/*
-
-
 import (
 	"fmt"
+	"os"
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"github.com/packethost/packngo"
 )
 
@@ -35,66 +26,31 @@ func testAccCheckMetalVirtualCircuitDestroy(s *terraform.State) error {
 	return nil
 }
 
-func tconf(randstr string, randint int) string {
-	return fmt.Sprintf(`
-        locals {
-                project_id = "52000fb2-ee46-4673-93a8-de2c2bdba33b"
-                conn_id = "73f12f29-3e19-43a0-8e90-ae81580db1e9"
-        }
-
-        data "metal_connection" test {
-            connection_id = local.conn_id
-        }
-
-        resource "metal_vlan" "test" {
-            project_id = local.project_id
-            metro      = data.metal_connection.test.metro
-        }
-
-        resource "metal_virtual_circuit" "test" {
-            connection_id = local.conn_id
-            project_id = local.project_id
-            port_id = data.metal_connection.test.ports[0].id
-            vlan_id = metal_vlan.test.id
-            nni_vlan = %d
-        }
-
-
-        `,
-		randint)
-}
-
 func testAccMetalVirtualCircuitConfig_Dedicated(randstr string, randint int) string {
+	// Dedicated connection in DA metro
+	testConnection := os.Getenv(metalDedicatedConnIDEnvVar)
 	return fmt.Sprintf(`
-        resource "metal_project" "test" {
+        data "metal_connection" "test" {
+			connection_id = "%s"
+		}
+
+		resource "metal_project" "test" {
             name = "tfacc-conn-pro-%s"
         }
 
-        // No project ID. We only use the project resource to get org_id
-        resource "metal_connection" "test" {
-            name            = "tfacc-conn-%s"
-            organization_id = metal_project.test.organization_id
-            metro           = "sv"
-            redundancy      = "redundant"
-            type            = "dedicated"
-        }
-
         resource "metal_vlan" "test" {
             project_id = metal_project.test.id
-            metro      = "sv"
+            metro      = "da"
         }
 
         resource "metal_virtual_circuit" "test" {
-            connection_id = metal_connection.test.id
+            connection_id = data.metal_connection.test.id
             project_id = metal_project.test.id
-            port_id = metal_connection.test.ports[0].id
+            port_id = data.metal_connection.test.ports[0].id
             vlan_id = metal_vlan.test.id
             nni_vlan = %d
-        }
-
-
-        `,
-		randstr, randstr, randint)
+        }`,
+		testConnection, randstr, randint)
 }
 
 func TestAccMetalVirtualCircuit_Dedicated(t *testing.T) {
@@ -108,8 +64,7 @@ func TestAccMetalVirtualCircuit_Dedicated(t *testing.T) {
 		CheckDestroy: testAccCheckMetalVirtualCircuitDestroy,
 		Steps: []resource.TestStep{
 			{
-				//Config: testAccMetalVirtualCircuitConfig_Dedicated(rs, ri),
-				Config: tconf(rs, ri),
+				Config: testAccMetalVirtualCircuitConfig_Dedicated(rs, ri),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrPair(
 						"metal_virtual_circuit.test", "vlan_id",
@@ -117,12 +72,12 @@ func TestAccMetalVirtualCircuit_Dedicated(t *testing.T) {
 					),
 				),
 			},
-				{
-					ResourceName:      "metal_virtual_circuit.test",
-					ImportState:       true,
-					ImportStateVerify: true,
-				},
+			{
+				ResourceName:            "metal_virtual_circuit.test",
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"connection_id"},
+			},
 		},
 	})
 }
-*/

@@ -34,7 +34,7 @@ data "metal_spot_market_price" "metro" {
 }
 
 data "metal_spot_market_price" "facility" {
-	facility = "sjc1"
+	facility = "sv15"
 	plan     = "c3.medium.x86"
 }
 `)

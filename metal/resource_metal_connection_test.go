@@ -10,10 +10,14 @@ import (
 	"github.com/packethost/packngo"
 )
 
+const (
+	metalDedicatedConnIDEnvVar = "TF_ACC_METAL_DEDICATED_CONNECTION_ID"
+)
+
 func TestSpeedConversion(t *testing.T) {
 	speedUint, err := speedStrToUint("50Mbps")
 	if err != nil {
-		t.Errorf("Error converting speed string to uint: %s", err)
+		t.Errorf("Error converting speed string to uint64: %s", err)
 
 	}
 	if speedUint != 50*mega {
@@ -123,12 +127,12 @@ func testAccMetalConnectionConfig_Dedicated(randstr string) string {
         resource "metal_project" "test" {
             name = "tfacc-conn-pro-%s"
         }
-        
-        // No project ID. We only use the project resource to get org_id
+
+        // We use the project resource to get organization_id
         resource "metal_connection" "test" {
             name            = "tfacc-conn-%s"
             metro           = "sv"
-            project_id      = metal_project.test.id
+            organization_id = metal_project.test.organization_id
             type            = "dedicated"
             redundancy      = "redundant"
 			tags            = ["tfacc"]
@@ -189,13 +193,15 @@ func testAccMetalConnectionConfig_Tunnel(randstr string) string {
             name = "tfacc-conn-pro-%s"
         }
 
+		// We use the project resource to get organization_id internally
         resource "metal_connection" "test" {
             name            = "tfacc-conn-%s"
-            organization_id = metal_project.test.organization_id
+            project_id      = metal_project.test.id
             metro           = "sv"
             redundancy      = "redundant"
             type            = "dedicated"
             mode            = "tunnel"
+			speed           = "50Mbps"
         }`,
 		randstr, randstr)
 }
@@ -217,9 +223,10 @@ func TestAccMetalConnection_Tunnel(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:      "metal_connection.test",
-				ImportState:       true,
-				ImportStateVerify: true,
+				ResourceName:            "metal_connection.test",
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"project_id"},
 			},
 		},
 	})
