@@ -18,7 +18,6 @@ func TestSpeedConversion(t *testing.T) {
 	speedUint, err := speedStrToUint("50Mbps")
 	if err != nil {
 		t.Errorf("Error converting speed string to uint64: %s", err)
-
 	}
 	if speedUint != 50*mega {
 		t.Errorf("Speed string conversion failed. Expected: %d, got: %d", 50*mega, speedUint)
@@ -77,7 +76,6 @@ func testAccMetalConnectionConfig_Shared(randstr string) string {
 }
 
 func TestAccMetalConnection_Shared(t *testing.T) {
-
 	rs := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
@@ -150,7 +148,6 @@ func testDataSourceMetalConnectionConfig() string {
 }
 
 func TestAccMetalConnection_Dedicated(t *testing.T) {
-
 	rs := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
@@ -207,7 +204,6 @@ func testAccMetalConnectionConfig_Tunnel(randstr string) string {
 }
 
 func TestAccMetalConnection_Tunnel(t *testing.T) {
-
 	rs := acctest.RandString(10)
 
 	resource.ParallelTest(t, resource.TestCase{
