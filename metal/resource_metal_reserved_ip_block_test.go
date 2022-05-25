@@ -114,6 +114,8 @@ func TestAccMetalReservedIPBlock_Public(t *testing.T) {
 						"metal_reserved_ip_block.test", "management", "false"),
 					resource.TestCheckResourceAttr(
 						"metal_reserved_ip_block.test", "tags.#", "2"),
+					resource.TestCheckResourceAttrSet("metal_reserved_ip_block.test", "network"),
+					resource.TestCheckResourceAttrSet("metal_reserved_ip_block.test", "cidr"),
 				),
 			},
 		},

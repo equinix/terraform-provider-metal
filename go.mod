@@ -5,7 +5,11 @@ require (
 	github.com/hashicorp/go-multierror v1.0.0
 	github.com/hashicorp/go-retryablehttp v0.6.6
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.9.0
+<<<<<<< HEAD
 	github.com/packethost/packngo v0.25.0
+=======
+	github.com/packethost/packngo v0.23.0
+>>>>>>> backport VRF support from equinix/equinix provider
 )
 
 require (

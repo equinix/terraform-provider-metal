@@ -2,6 +2,7 @@ package metal
 
 import (
 	"fmt"
+	"log"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
@@ -9,6 +10,55 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"github.com/packethost/packngo"
 )
+
+func init() {
+	resource.AddTestSweepers("metal_vlan", &resource.Sweeper{
+		Name:         "metal_vlan",
+		Dependencies: []string{"metal_virtual_circuit", "metal_vrf", "metal_device"},
+		F:            testSweepVlans,
+	})
+}
+
+func testSweepVlans(region string) error {
+	log.Printf("[DEBUG] Sweeping vlans")
+	config, err := sharedConfigForRegion(region)
+	if err != nil {
+		return fmt.Errorf("[INFO][SWEEPER_LOG] Error getting configuration for sweeping vlans: %s", err)
+	}
+	metal := config.(*packngo.Client)
+	ps, _, err := metal.Projects.List(nil)
+	if err != nil {
+		return fmt.Errorf("[INFO][SWEEPER_LOG] Error getting project list for sweeping vlans: %s", err)
+	}
+	pids := []string{}
+	for _, p := range ps {
+		if isSweepableTestResource(p.Name) {
+			pids = append(pids, p.ID)
+		}
+	}
+	dids := []string{}
+	for _, pid := range pids {
+		ds, _, err := metal.ProjectVirtualNetworks.List(pid, nil)
+		if err != nil {
+			log.Printf("Error listing vlans to sweep: %s", err)
+			continue
+		}
+		for _, d := range ds.VirtualNetworks {
+			if isSweepableTestResource(d.Description) {
+				dids = append(dids, d.ID)
+			}
+		}
+	}
+
+	for _, did := range dids {
+		log.Printf("Removing vlan %s", did)
+		_, err := metal.ProjectVirtualNetworks.Delete(did)
+		if err != nil {
+			return fmt.Errorf("Error deleting vlan %s", err)
+		}
+	}
+	return nil
+}
 
 func testAccCheckMetalVlanConfig_metro(projSuffix, metro, desc string) string {
 	return fmt.Sprintf(`
@@ -35,7 +85,7 @@ func TestAccMetalVlan_Metro(t *testing.T) {
 		CheckDestroy: testAccCheckMetalVlanDestroyed,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckMetalVlanConfig_metro(rs, metro, "testvlan"),
+				Config: testAccCheckMetalVlanConfig_metro(rs, metro, "tfacc-vlan"),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
 						"metal_vlan.foovlan", "metro", metro),

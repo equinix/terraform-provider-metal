@@ -30,6 +30,7 @@ terraform {
 provider "metal" {
   auth_token = var.auth_token
 }
+# Credentials for all Equinix resources
 
 data "metal_project" "project" {
   name = "My Project"
@@ -37,6 +38,16 @@ data "metal_project" "project" {
 
 # If you want to create a fresh project, you can create one with metal_project
 #
+Client ID and Client Secret can be omitted when the only Equinix resources
+consumed are Equinix Metal resources.
+
+```hcl
+# Credentials for only Equinix Metal resources
+provider "equinix" {
+  auth_token    = "someEquinixMetalToken"
+}
+```
+
 # resource "metal_project" "cool_project" {
 #   name           = "My First Terraform Project"
 # }

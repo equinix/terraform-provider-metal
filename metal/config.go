@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/http/httputil"
 	"net/url"
 	"os"
 	"regexp"
@@ -18,6 +19,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/meta"
 	"github.com/packethost/packngo"
 )
+
+type DumpTransport struct {
+	r http.RoundTripper
+}
+
+func (d *DumpTransport) RoundTrip(h *http.Request) (*http.Response, error) {
+	dump, _ := httputil.DumpRequestOut(h, true)
+	fmt.Printf("****REQUEST****\n%q\n", dump)
+	resp, err := d.r.RoundTrip(h)
+	dump, _ = httputil.DumpResponse(resp, true)
+	fmt.Printf("****RESPONSE****\n%q\n****************\n\n", dump)
+	return resp, err
+}
 
 const (
 	consumerToken = "aZ9GmqHTPtxevvFq9SK3Pi2yr9YCbRzduCSXF2SNem5sjB91mDq7Th3ZwTtRqMWZ"
@@ -74,7 +88,9 @@ func terraformUserAgent(version string) string {
 
 // Client returns a new client for accessing Equinix Metal's API.
 func (c *Config) Client() *packngo.Client {
-	transport := logging.NewTransport("Equinix Metal", http.DefaultTransport)
+	transport := http.DefaultTransport
+	// transport = &DumpTransport{http.DefaultTransport} // Debug only
+	transport = logging.NewTransport("Equinix Metal", transport)
 	retryClient := retryablehttp.NewClient()
 	retryClient.HTTPClient.Transport = transport
 	retryClient.RetryMax = c.MaxRetries
