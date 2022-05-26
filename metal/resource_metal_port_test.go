@@ -19,8 +19,8 @@ resource "metal_project" "test" {
 
 resource "metal_device" "test" {
   hostname         = "tfacc-metal-port-test"
-  plan             = "c2.medium.x86"
-  metro            = "ny"
+  plan             = "c3.medium.x86"
+  metro            = "da"
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"

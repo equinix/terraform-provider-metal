@@ -14,7 +14,7 @@ var (
 )
 
 func TestAccDataSourceFacility_Basic(t *testing.T) {
-	testFac := "ewr1"
+	testFac := "da11"
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:  func() { testAccPreCheck(t) },
@@ -62,7 +62,7 @@ func TestAccDataSourceFacility_Features(t *testing.T) {
 func testAccDataSourceFacilityConfigFeatures() string {
 	return `
 data "metal_facility" "test" {
-    code = "ewr1"
+    code = "da11"
     features_required = ["baremetal", "ibx"]
 }
 `
