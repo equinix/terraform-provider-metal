@@ -37,11 +37,11 @@ resource "metal_device" "www" {
 
 ## Argument Reference
 
-You should pass either `id`, or both `project_id` and `ip_address`.
+* `id` - (Optional) UUID of the IP address block to look up
+* `project_id` - (Optional) UUID of the project where the searched block should be
+* `ip_address` - (Optional) Block containing this IP address will be returned
 
-* `id` - (Required) UUID of the IP address block to look up
-* `project_id` - (Required) UUID of the project where the searched block should be
-* `ip_address` - (Required) Block containing this IP address will be returned
+-> **NOTE:** You should pass either `id`, or both `project_id` and `ip_address`.
 
 ## Attributes Reference
 

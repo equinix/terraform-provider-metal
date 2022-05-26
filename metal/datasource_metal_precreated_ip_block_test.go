@@ -44,7 +44,7 @@ resource "metal_project" "test" {
 
 resource "metal_device" "test" {
   hostname         = "tfacc-test-device-ip-blockt"
-  plan             = "c3.small.x86"
+  plan             = "c2.medium.x86"
   metro            = "ny"
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"

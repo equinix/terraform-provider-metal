@@ -61,8 +61,8 @@ resource "metal_project" "test" {
 
 resource "metal_device" "test" {
   hostname         = "tfacc-device-ip-attachment-test"
-  plan             = "c3.small.x86"
-  facilities       = ["sv15"]
+  plan             = "c2.medium.x86"
+  facilities       = ["ewr1"]
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = metal_project.test.id
@@ -70,7 +70,7 @@ resource "metal_device" "test" {
 
 resource "metal_reserved_ip_block" "test" {
     project_id = metal_project.test.id
-    facility = "sv15"
+    facility = "ewr1"
 	quantity = 2
 }
 
@@ -117,8 +117,8 @@ resource "metal_project" "test" {
 
 resource "metal_device" "test" {
   hostname         = "tfacc-device-ip-attachment-test"
-  plan             = "c3.medium.x86"
-  metro            = "sv"
+  plan             = "c2.medium.x86"
+  metro            = "ny"
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = metal_project.test.id
@@ -126,7 +126,7 @@ resource "metal_device" "test" {
 
 resource "metal_reserved_ip_block" "test" {
     project_id = metal_project.test.id
-    metro      = "sv"
+    metro      = "ny"
 	quantity = 2
 }
 

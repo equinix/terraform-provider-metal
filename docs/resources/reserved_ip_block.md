@@ -90,7 +90,7 @@ resource "metal_device" "nodes" {
 The following arguments are supported:
 
 * `project_id` - (Required) The metal project ID where to allocate the address block
-* `quantity` - (Required) The number of allocated /32 addresses, a power of 2.
+* `quantity` - (Optional) The number of allocated /32 addresses, a power of 2.
   Required when `type` is not `vrf`.
 * `type` - (Optional) One of `global_ipv4`, `public_ipv4`, or `vrf`. Defaults to
   `public_ipv4` for backward compatibility.
@@ -110,12 +110,8 @@ The following arguments are supported:
 
 ## Attributes Reference
 
-The following attributes are exported:
+In addition to all arguments above, the following attributes are exported:
 
-* `facility` - The facility where the block was allocated, empty for global blocks
-* `metro` - The metro where the block was allocated, empty for global blocks
-* `project_id` - To which project the addresses beling
-* `quantity` - Number of "/32" addresses in the block
 * `id` - The unique ID of the block
 * `cidr_notation` - Address and mask in CIDR notation, e.g. "147.229.15.30/31"
 * `network` - Network IP address portion of the block specification
@@ -125,11 +121,9 @@ The following attributes are exported:
 * `vrf_id` - VRF ID of the block when type=vrf
 * `public` - boolean flag whether addresses from a block are public
 * `global` - boolean flag whether addresses from a block are global (i.e. can be assigned in any facility)
-* `tags` - string list of tags
 
-Idempotent reference to a first "/32" address from a reserved block might look like this:
-
-`join("/", [cidrhost(metal_reserved_ip_block.myblock.cidr_notation,0), "32"])`
+-> **NOTE:** Idempotent reference to a first `/32` address from a reserved block might look
+like `join("/", [cidrhost(metal_reserved_ip_block.myblock.cidr_notation,0), "32"])`.
 
 ## Import
 

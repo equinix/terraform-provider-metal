@@ -172,6 +172,7 @@ func TestAccMetalVRF_withIPReservations(t *testing.T) {
 				ResourceName:      "metal_reserved_ip_block.test",
 				ImportState:       true,
 				ImportStateVerify: true,
+				ImportStateVerifyIgnore: []string{"wait_for_state"},
 			},
 		},
 	})
@@ -220,7 +221,7 @@ func TestAccMetalVRF_withGateway(t *testing.T) {
 func TestAccMetalVRFConfig_withConnection(t *testing.T) {
 	var vrf packngo.VRF
 	rInt := acctest.RandInt()
-	nniVlan := acctest.RandIntRange(1024, 1093)
+	nniVlan := acctest.RandIntRange(2024, 2093)
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
