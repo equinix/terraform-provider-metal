@@ -19,8 +19,8 @@ resource "metal_project" "test" {
 
 resource "metal_device" "test" {
   hostname         = "tfacc-metal-port-test"
-  plan             = "c3.small.x86"
-  metro            = "sv"
+  plan             = "c2.medium.x86"
+  metro            = "ny"
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
@@ -119,7 +119,7 @@ resource "metal_port" "bond0" {
 
 resource "metal_vlan" "test" {
   description = "test"
-  metro = "sv"
+  metro = "ny"
   project_id = metal_project.test.id
 }
 `, confAccMetalPort_base(name))
@@ -139,14 +139,14 @@ resource "metal_port" "bond0" {
 
 resource "metal_vlan" "test1" {
   description = "test1"
-  metro = "sv"
+  metro = "ny"
   project_id = metal_project.test.id
   vxlan = 1001
 }
 
 resource "metal_vlan" "test2" {
   description = "test2"
-  metro = "sv"
+  metro = "ny"
   project_id = metal_project.test.id
   vxlan = 1002
 }

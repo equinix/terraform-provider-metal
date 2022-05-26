@@ -23,7 +23,7 @@ resource "metal_vlan" "test" {
 }
 
 data "metal_gateway" "test" {
-  gateway_id               = local.gateway_id
+  gateway_id = local.gateway_id
 }
 ```
 
