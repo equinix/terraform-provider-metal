@@ -166,7 +166,7 @@ func TestAccMetalDevice_Metro(t *testing.T) {
 					testAccCheckMetalDeviceNetwork(r),
 					testAccCheckMetalDeviceAttributes(&device),
 					resource.TestCheckResourceAttr(
-						r, "metro", "ny"),
+						r, "metro", "da"),
 				),
 			},
 		},
@@ -478,8 +478,8 @@ resource "metal_project" "test" {
 
 resource "metal_device" "test" {
   hostname         = "tfacc-test-device-%d"
-  plan             = "c2.medium.x86"
-  facilities       = ["ewr1"]
+  plan             = "c3.medium.x86"
+  facilities       = ["da11"]
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
@@ -496,8 +496,8 @@ resource "metal_project" "test" {
 
 resource "metal_device" "test" {
   hostname         = "tfacc-test-device-%d"
-  plan             = "c2.medium.x86"
-  facilities       = ["ewr1"]
+  plan             = "c3.medium.x86"
+  facilities       = ["da11"]
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
@@ -521,8 +521,8 @@ resource "metal_project" "test" {
 resource "metal_device" "test" {
   hostname         = "tfacc-test-device-%d"
   description      = "test-desc-%d"
-  plan             = "c2.medium.x86"
-  facilities       = ["ewr1"]
+  plan             = "c3.medium.x86"
+  facilities       = ["da11"]
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
@@ -540,8 +540,8 @@ resource "metal_project" "test" {
 resource "metal_device" "test" {
   hostname         = "tfacc-test-device-%d"
   description      = "test-desc-%d"
-  plan             = "c2.medium.x86"
-  facilities       = ["ewr1"]
+  plan             = "c3.medium.x86"
+  facilities       = ["da11"]
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
@@ -560,8 +560,8 @@ resource "metal_project" "test" {
 
 resource "metal_device" "test" {
   hostname         = "tfacc-test-device"
-  plan             = "c2.medium.x86"
-  metro            = "ny"
+  plan             = "c3.medium.x86"
+  metro            = "da"
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
@@ -575,8 +575,8 @@ resource "metal_project" "test" {
 }
 
 resource "metal_device" "test" {
-  plan             = "c2.medium.x86"
-  facilities       = ["ewr1"]
+  plan             = "c3.medium.x86"
+  facilities       = ["da11"]
   operating_system = "ubuntu_16_04"
   project_id       = "${metal_project.test.id}"
 }`, projSuffix)
@@ -590,8 +590,8 @@ resource "metal_project" "test" {
 
 resource "metal_device" "test" {
   hostname         = "tfacc-test-device"
-  plan             = "c2.medium.x86"
-  facilities       = ["ewr1"]
+  plan             = "c3.medium.x86"
+  facilities       = ["da11"]
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
@@ -607,8 +607,8 @@ resource "metal_project" "test" {
 resource "metal_device" "test"  {
 
   hostname         = "tfacc-device-test-ipxe-script-url"
-  plan             = "c2.medium.x86"
-  facilities       = ["ewr1", "any"]
+  plan             = "c3.medium.x86"
+  facilities       = ["da11", "any"]
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
@@ -624,8 +624,8 @@ resource "metal_project" "test" {
 resource "metal_device" "test_ipxe_script_url"  {
 
   hostname         = "tfacc-device-test-ipxe-script-url"
-  plan             = "c2.medium.x86"
-  facilities       = ["ewr1"]
+  plan             = "c3.medium.x86"
+  facilities       = ["da11"]
   operating_system = "custom_ipxe"
   user_data        = "#!/bin/sh\ntouch /tmp/test"
   billing_cycle    = "hourly"
@@ -642,8 +642,8 @@ resource "metal_project" "test" {
 
 resource "metal_device" "test_ipxe_conflict" {
   hostname         = "tfacc-device-test-ipxe-conflict"
-  plan             = "c2.medium.x86"
-  facilities       = ["ewr1"]
+  plan             = "c3.medium.x86"
+  facilities       = ["da11"]
   operating_system = "custom_ipxe"
   user_data        = "#!ipxe\nset conflict ipxe_script_url"
   billing_cycle    = "hourly"
@@ -659,8 +659,8 @@ resource "metal_project" "test" {
 
 resource "metal_device" "test_ipxe_missing" {
   hostname         = "tfacc-device-test-ipxe-missing"
-  plan             = "c2.medium.x86"
-  facilities       = ["ewr1"]
+  plan             = "c3.medium.x86"
+  facilities       = ["da11"]
   operating_system = "custom_ipxe"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
