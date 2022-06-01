@@ -75,8 +75,7 @@ func planSchema() map[string]*schema.Schema {
 			Description: "list of deployment types, e.g. on_demand, spot_market",
 			Elem:        &schema.Schema{Type: schema.TypeString},
 		},
-		// should we put here "available_in_facilities"?
-		"available_in": {
+		"available_in_facilities": {
 			Type:        schema.TypeSet,
 			Description: "list of facilities where the plan is available",
 			Elem:        &schema.Schema{Type: schema.TypeString},
@@ -92,7 +91,7 @@ func planSchema() map[string]*schema.Schema {
 func flattenPlan(rawPlan interface{}, meta interface{}, extra map[string]interface{}) (map[string]interface{}, error) {
 	plan, ok := rawPlan.(packngo.Plan)
 	if !ok {
-		return nil, fmt.Errorf("Unable to convert to packngo.Plan")
+		return nil, fmt.Errorf("unable to convert to packngo.Plan")
 	}
 
 	facs := []string{}
@@ -111,17 +110,16 @@ func flattenPlan(rawPlan interface{}, meta interface{}, extra map[string]interfa
 		stringArrToIfArr(plan.DeploymentTypes))
 
 	flattenedPlan := map[string]interface{}{
-		"id":               plan.ID,
-		"name":             plan.Name,
-		"slug":             plan.Slug,
-		"description":      plan.Description,
-		"line":             plan.Line,
-		"legacy":           plan.Legacy,
-		"class":            plan.Class,
-		"deployment_types": flattenedDepTypes,
-		// should we put here "available_in_facilities"?
-		"available_in":        flattenedFacs,
-		"available_in_metros": flattenedMetros,
+		"id":                      plan.ID,
+		"name":                    plan.Name,
+		"slug":                    plan.Slug,
+		"description":             plan.Description,
+		"line":                    plan.Line,
+		"legacy":                  plan.Legacy,
+		"class":                   plan.Class,
+		"deployment_types":        flattenedDepTypes,
+		"available_in_facilities": flattenedFacs,
+		"available_in_metros":     flattenedMetros,
 	}
 
 	if plan.Pricing != nil {
