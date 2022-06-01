@@ -24,21 +24,25 @@ func filterSchema(allowedKeys []string) *schema.Schema {
 			Schema: map[string]*schema.Schema{
 				"key": {
 					Type:         schema.TypeString,
+					Description:  "The attribute used to filter. Filter keys are case-sensitive",
 					Required:     true,
 					ValidateFunc: validation.StringInSlice(allowedKeys, false),
 				},
 				"values": {
-					Type:     schema.TypeList,
-					Required: true,
-					Elem:     &schema.Schema{Type: schema.TypeString},
+					Type:        schema.TypeList,
+					Description: "The filter values. Filter values are case-sensitive. If you specify multiple values for a filter, the values are joined with an OR by default, and the request returns all results that match any of the specified values",
+					Required:    true,
+					Elem:        &schema.Schema{Type: schema.TypeString},
 				},
 				"all": {
-					Type:     schema.TypeBool,
-					Optional: true,
-					Default:  false,
+					Type:        schema.TypeBool,
+					Description: "If is set to true, the requests returns only the results that match all specified values",
+					Optional:    true,
+					Default:     false,
 				},
 				"match_by": {
 					Type:         schema.TypeString,
+					Description:  "The type of comparison to apply. One of: exact (default), re, substring, less_than, less_than_or_equal, greater_than, greater_than_or_equal",
 					Optional:     true,
 					Default:      "exact",
 					ValidateFunc: validation.StringInSlice([]string{"exact", "re", "substring", "less_than", "less_than_or_equal", "greater_than", "greater_than_or_equal"}, false),

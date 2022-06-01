@@ -19,6 +19,9 @@ type ResourceConfig struct {
 	// The name of the attribute in the resource through which to expose results.
 	ResultAttributeName string
 
+	// The description of the attribute in the resource through which to expose results.
+	ResultAttributeDescription string
+
 	// Given a record returned from the GetRecords function, flatten the record to a
 	// map acceptable to the Set method on schema.ResourceData.
 	FlattenRecord func(record, meta interface{}, extra map[string]interface{}) (map[string]interface{}, error)
@@ -62,6 +65,7 @@ func NewResource(config *ResourceConfig) *schema.Resource {
 		config.ResultAttributeName: {
 			Type:     schema.TypeList,
 			Computed: true,
+			Description: config.ResultAttributeDescription,
 			Elem: &schema.Resource{
 				Schema: recordSchema,
 			},
@@ -81,7 +85,7 @@ func NewResource(config *ResourceConfig) *schema.Resource {
 func dataListResourceRead(config *ResourceConfig) schema.ReadContextFunc {
 	return func(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 		extra := map[string]interface{}{}
-		for key, _ := range config.ExtraQuerySchema {
+		for key := range config.ExtraQuerySchema {
 			extra[key] = d.Get(key)
 		}
 

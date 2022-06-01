@@ -10,10 +10,11 @@ import (
 
 func dataSourceMetalPlans() *schema.Resource {
 	dataListConfig := &datalist.ResourceConfig{
-		RecordSchema:        planSchema(),
-		ResultAttributeName: "plans",
-		FlattenRecord:       flattenPlan,
-		GetRecords:          getPlans,
+		RecordSchema:               planSchema(),
+		ResultAttributeName:        "plans",
+		ResultAttributeDescription: "Sorted list of available server plans that match the specified filters",
+		FlattenRecord:              flattenPlan,
+		GetRecords:                 getPlans,
 	}
 
 	return datalist.NewResource(dataListConfig)

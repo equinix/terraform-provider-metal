@@ -23,18 +23,20 @@ func sortSchema(allowedKeys []string) *schema.Schema {
 			Schema: map[string]*schema.Schema{
 				"key": {
 					Type:         schema.TypeString,
+					Description:  "The attribute used to sort the results. Sort keys are case-sensitive",
 					Required:     true,
 					ValidateFunc: validation.StringInSlice(allowedKeys, false),
 				},
 				"direction": {
 					Type:         schema.TypeString,
+					Description:  "Sort results in ascending or descending order. Strings are sorted in alphabetical order. One of: asc, desc",
 					Optional:     true,
 					ValidateFunc: validation.StringInSlice(sortKeys, false),
 				},
 			},
 		},
 		Optional:    true,
-		Description: "One or more key/direction pairs on which to sort results",
+		Description: "One or more key/direction pairs on which to sort results. If multiple sorts are provided, they will be applied in order",
 	}
 }
 
