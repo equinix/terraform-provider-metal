@@ -158,8 +158,8 @@ func resourceMetalVirtualCircuitRead(d *schema.ResourceData, meta interface{}) e
 
 	return setMap(d, map[string]interface{}{
 		"connection_id": d.Get("connection_id").(string),
-		"project_id": vc.Project.ID,
-		"port_id":    vc.Port.ID,
+		"project_id":    vc.Project.ID,
+		"port_id":       vc.Port.ID,
 		"vlan_id": func(d *schema.ResourceData, k string) error {
 			if vc.VirtualNetwork != nil {
 				return d.Set(k, vc.VirtualNetwork.ID)

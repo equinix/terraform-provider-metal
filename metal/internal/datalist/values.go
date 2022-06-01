@@ -31,15 +31,20 @@ func valueMatches(s *schema.Schema, value interface{}, filterValue interface{}, 
 		return filterValue.(int) == value.(int)
 
 	case schema.TypeFloat:
-		if matchBy == "less_than" {
-			val := value.(float64)
-			return val != 0. && (val < filterValue.(float64))
+		val := value.(float64)
+		filter := filterValue.(float64)
+		switch matchBy {
+		case "less_than":
+			return val != 0. && (val < filter)
+		case "less_than_or_equal":
+			return val != 0. && ((val < filter) || floatApproxEquals(filter, val))
+		case "greater_than":
+			return val != 0. && (val > filter)
+		case "greater_than_or_equal":
+			return val != 0. && ((val > filter) || floatApproxEquals(filter, val))
+		default:
+			return floatApproxEquals(filter, val)
 		}
-		if matchBy == "more_than" {
-			val := value.(float64)
-			return val != 0. && val > filterValue.(float64)
-		}
-		return floatApproxEquals(filterValue.(float64), value.(float64))
 
 	case schema.TypeList:
 		listValues := value.([]interface{})

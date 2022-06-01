@@ -217,6 +217,26 @@ func TestApplyFilters(t *testing.T) {
 			[]string{"s-1vcpu-1gb", "s-4vcpu-8gb", "m-1vcpu-8gb"},
 		},
 		{
+			"ByPriceHourlyGreaterThan",
+			commonFilter{
+				"price_hourly",
+				[]interface{}{0.059519},
+				false,
+				"greater_than",
+			},
+			[]string{"s-4vcpu-8gb", "m-1vcpu-8gb"},
+		},
+		{
+			"ByPriceHourlyLessThanOrEqual",
+			commonFilter{
+				"price_hourly",
+				[]interface{}{0.0223200},
+				false,
+				"less_than_or_equal",
+			},
+			[]string{"s-1vcpu-1gb", "s-2vcpu-2gb"},
+		},
+		{
 			"ByRegions",
 			commonFilter{
 				"regions",
