@@ -4,29 +4,33 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
-	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
+var (
+	matchByStringComparison = []string{"in", "re", "substring"}
+	matchByNumberComparison = []string{"less_than", "less_than_or_equal", "greater_than", "greater_than_or_equal"}
+)
+
 type commonFilter struct {
-	key     string
-	values  []interface{}
-	all     bool
-	matchBy string
+	attribute string
+	values    []interface{}
+	all       bool
+	matchBy   string
 }
 
-func filterSchema(allowedKeys []string) *schema.Schema {
+func filterSchema(allowedAttributes []string) *schema.Schema {
 	return &schema.Schema{
 		Type: schema.TypeSet,
 		Elem: &schema.Resource{
 			Schema: map[string]*schema.Schema{
-				"key": {
+				"attribute": {
 					Type:         schema.TypeString,
-					Description:  "The attribute used to filter. Filter keys are case-sensitive",
+					Description:  "The attribute used to filter. Filter attributes are case-sensitive",
 					Required:     true,
-					ValidateFunc: validation.StringInSlice(allowedKeys, false),
+					ValidateFunc: validation.StringInSlice(allowedAttributes, false),
 				},
 				"values": {
 					Type:        schema.TypeList,
@@ -42,10 +46,10 @@ func filterSchema(allowedKeys []string) *schema.Schema {
 				},
 				"match_by": {
 					Type:         schema.TypeString,
-					Description:  "The type of comparison to apply. One of: exact (default), re, substring, less_than, less_than_or_equal, greater_than, greater_than_or_equal",
+					Description:  "The type of comparison to apply. One of: in (default), re, substring, less_than, less_than_or_equal, greater_than, greater_than_or_equal",
 					Optional:     true,
-					Default:      "exact",
-					ValidateFunc: validation.StringInSlice([]string{"exact", "re", "substring", "less_than", "less_than_or_equal", "greater_than", "greater_than_or_equal"}, false),
+					Default:      "in",
+					ValidateFunc: validation.StringInSlice(append(matchByNumberComparison, matchByStringComparison...), false),
 				},
 			},
 		},
@@ -60,13 +64,13 @@ func expandFilters(recordSchema map[string]*schema.Schema, rawFilters []interfac
 	for i, rawFilter := range rawFilters {
 		f := rawFilter.(map[string]interface{})
 
-		key := f["key"].(string)
-		s, ok := recordSchema[key]
+		attr := f["attribute"].(string)
+		s, ok := recordSchema[attr]
 		if !ok {
-			return nil, fmt.Errorf("field '%s' does not exist in record schema", key)
+			return nil, fmt.Errorf("field '%s' does not exist in record schema", attr)
 		}
 
-		matchBy := "exact"
+		matchBy := "in"
 		if v, ok := f["match_by"].(string); ok {
 			matchBy = v
 		}
@@ -75,9 +79,12 @@ func expandFilters(recordSchema map[string]*schema.Schema, rawFilters []interfac
 		if err != nil {
 			return nil, err
 		}
-		if strings.Contains(matchBy, "less_than") || strings.Contains(matchBy, "greater_than") {
-			if len(expandedFilterValues) != 1 {
-				return nil, fmt.Errorf("field '%s' works with only one value", matchBy)
+
+		for _, nc := range matchByNumberComparison {
+			if matchBy == nc {
+				if len(expandedFilterValues) != 1 {
+					return nil, fmt.Errorf("field '%s' works with only one value", matchBy)
+				}
 			}
 		}
 
@@ -87,10 +94,10 @@ func expandFilters(recordSchema map[string]*schema.Schema, rawFilters []interfac
 		}
 
 		expandedFilter := commonFilter{
-			key:     key,
-			values:  expandedFilterValues,
-			all:     all,
-			matchBy: matchBy,
+			attribute: attr,
+			values:    expandedFilterValues,
+			all:       all,
+			matchBy:   matchBy,
 		}
 
 		expandedFilters[i] = expandedFilter
@@ -124,7 +131,7 @@ func expandPrimitiveFilterValue(
 	switch fieldType {
 	case schema.TypeString:
 		switch matchBy {
-		case "exact", "substring":
+		case "in", "substring":
 			expandedValue = filterValue
 		case "re":
 			re, err := regexp.Compile(filterValue)
@@ -214,11 +221,11 @@ func applyFilters(recordSchema map[string]*schema.Schema, records []map[string]i
 			result := f.all
 
 			for _, filterValue := range f.values {
-				thisValueMatches := valueMatches(recordSchema[f.key], record[f.key], filterValue, f.matchBy)
-				if f.all {
-					result = result && thisValueMatches
-				} else {
+				thisValueMatches := valueMatches(recordSchema[f.attribute], record[f.attribute], filterValue, f.matchBy)
+				if !f.all {
 					result = result || thisValueMatches
+				} else {
+					result = result && thisValueMatches
 				}
 			}
 

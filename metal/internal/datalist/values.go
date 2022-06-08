@@ -16,19 +16,30 @@ func valueMatches(s *schema.Schema, value interface{}, filterValue interface{}, 
 	switch s.Type {
 	case schema.TypeString:
 		switch matchBy {
-		case "exact":
-			return strings.EqualFold(filterValue.(string), value.(string))
 		case "substring":
 			return strings.Contains(value.(string), filterValue.(string))
 		case "re":
 			return filterValue.(*regexp.Regexp).MatchString(value.(string))
 		}
+		return strings.EqualFold(filterValue.(string), value.(string))
 
 	case schema.TypeBool:
 		return filterValue.(bool) == value.(bool)
 
 	case schema.TypeInt:
-		return filterValue.(int) == value.(int)
+		val := value.(int)
+		filter := filterValue.(int)
+		switch matchBy {
+		case "less_than":
+			return val < filter
+		case "less_than_or_equal":
+			return val <= filter
+		case "greater_than":
+			return val > filter
+		case "greater_than_or_equal":
+			return val >= filter
+		}
+		return val == filter
 
 	case schema.TypeFloat:
 		val := value.(float64)
@@ -42,9 +53,8 @@ func valueMatches(s *schema.Schema, value interface{}, filterValue interface{}, 
 			return val != 0. && (val > filter)
 		case "greater_than_or_equal":
 			return val != 0. && ((val > filter) || floatApproxEquals(filter, val))
-		default:
-			return floatApproxEquals(filter, val)
 		}
+		return floatApproxEquals(filter, val)
 
 	case schema.TypeList:
 		listValues := value.([]interface{})

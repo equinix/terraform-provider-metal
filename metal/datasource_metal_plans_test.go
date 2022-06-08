@@ -28,8 +28,8 @@ func testAccDataSourcePlansConfigBasic(slug string) string {
 	return fmt.Sprintf(`
 data "metal_plans" "test" {
     filter {
-        key = "slug"
-        values = ["%s"]
+        attribute = "slug"
+        values    = ["%s"]
     }
 }
 
