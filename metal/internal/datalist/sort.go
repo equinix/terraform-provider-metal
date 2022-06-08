@@ -8,30 +8,30 @@ import (
 )
 
 var (
-	sortKeys = []string{"asc", "desc"}
+	sortAttributes = []string{"asc", "desc"}
 )
 
 type commonSort struct {
-	key       string
+	attribute string
 	direction string
 }
 
-func sortSchema(allowedKeys []string) *schema.Schema {
+func sortSchema(allowedAttributes []string) *schema.Schema {
 	return &schema.Schema{
 		Type: schema.TypeList,
 		Elem: &schema.Resource{
 			Schema: map[string]*schema.Schema{
-				"key": {
+				"attribute": {
 					Type:         schema.TypeString,
-					Description:  "The attribute used to sort the results. Sort keys are case-sensitive",
+					Description:  "The attribute used to sort the results. Sort attributes are case-sensitive",
 					Required:     true,
-					ValidateFunc: validation.StringInSlice(allowedKeys, false),
+					ValidateFunc: validation.StringInSlice(allowedAttributes, false),
 				},
 				"direction": {
 					Type:         schema.TypeString,
 					Description:  "Sort results in ascending or descending order. Strings are sorted in alphabetical order. One of: asc, desc",
 					Optional:     true,
-					ValidateFunc: validation.StringInSlice(sortKeys, false),
+					ValidateFunc: validation.StringInSlice(allowedAttributes, false),
 				},
 			},
 		},
@@ -46,7 +46,7 @@ func expandSorts(rawSorts []interface{}) []commonSort {
 		f := rawSort.(map[string]interface{})
 
 		expandedSort := commonSort{
-			key:       f["key"].(string),
+			attribute: f["attribute"].(string),
 			direction: f["direction"].(string),
 		}
 
@@ -69,7 +69,7 @@ func applySorts(recordSchema map[string]*schema.Schema, records []map[string]int
 
 			value1 := records[i]
 			value2 := records[j]
-			cmp := compareValues(recordSchema[s.key], value1[s.key], value2[s.key])
+			cmp := compareValues(recordSchema[s.attribute], value1[s.attribute], value2[s.attribute])
 			if cmp != 0 {
 				return cmp < 0
 			}

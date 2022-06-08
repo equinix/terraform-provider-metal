@@ -56,15 +56,15 @@ func NewResource(config *ResourceConfig) *schema.Resource {
 		recordSchema[attributeName] = newAttributeSchema
 	}
 
-	filterKeys := computeFilterKeys(recordSchema)
-	sortKeys := computeSortKeys(recordSchema)
+	filterAttributes := computeFilterAttributes(recordSchema)
+	sortAttributes := computeSortAttributes(recordSchema)
 
 	datasourceSchema := map[string]*schema.Schema{
-		"filter": filterSchema(filterKeys),
-		"sort":   sortSchema(sortKeys),
+		"filter": filterSchema(filterAttributes),
+		"sort":   sortSchema(sortAttributes),
 		config.ResultAttributeName: {
-			Type:     schema.TypeList,
-			Computed: true,
+			Type:        schema.TypeList,
+			Computed:    true,
 			Description: config.ResultAttributeDescription,
 			Elem: &schema.Resource{
 				Schema: recordSchema,
@@ -72,8 +72,8 @@ func NewResource(config *ResourceConfig) *schema.Resource {
 		},
 	}
 
-	for key, value := range config.ExtraQuerySchema {
-		datasourceSchema[key] = value
+	for attr, value := range config.ExtraQuerySchema {
+		datasourceSchema[attr] = value
 	}
 
 	return &schema.Resource{
@@ -85,8 +85,8 @@ func NewResource(config *ResourceConfig) *schema.Resource {
 func dataListResourceRead(config *ResourceConfig) schema.ReadContextFunc {
 	return func(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 		extra := map[string]interface{}{}
-		for key := range config.ExtraQuerySchema {
-			extra[key] = d.Get(key)
+		for attr := range config.ExtraQuerySchema {
+			extra[attr] = d.Get(attr)
 		}
 
 		records, err := config.GetRecords(meta, extra)
@@ -126,36 +126,36 @@ func dataListResourceRead(config *ResourceConfig) schema.ReadContextFunc {
 	}
 }
 
-// Compute the set of filter keys for the resource.
-func computeFilterKeys(recordSchema map[string]*schema.Schema) []string {
-	var filterKeys []string
+// Compute the set of filter attributes for the resource.
+func computeFilterAttributes(recordSchema map[string]*schema.Schema) []string {
+	var filterAttributes []string
 
-	for key, schemaForKey := range recordSchema {
-		if schemaForKey.Type != schema.TypeMap {
-			filterKeys = append(filterKeys, key)
+	for attr, schemaForAttr := range recordSchema {
+		if schemaForAttr.Type != schema.TypeMap {
+			filterAttributes = append(filterAttributes, attr)
 		}
 	}
 
-	return filterKeys
+	return filterAttributes
 }
 
-// Compute the set of sort keys for the source.
-func computeSortKeys(recordSchema map[string]*schema.Schema) []string {
-	var sortKeys []string
+// Compute the set of sort attributes for the source.
+func computeSortAttributes(recordSchema map[string]*schema.Schema) []string {
+	var sortAttributes []string
 
-	for key, schemaForKey := range recordSchema {
+	for attr, schemaForAttr := range recordSchema {
 		supported := false
-		switch schemaForKey.Type {
+		switch schemaForAttr.Type {
 		case schema.TypeString, schema.TypeBool, schema.TypeInt, schema.TypeFloat:
 			supported = true
 		}
 
 		if supported {
-			sortKeys = append(sortKeys, key)
+			sortAttributes = append(sortAttributes, attr)
 		}
 	}
 
-	return sortKeys
+	return sortAttributes
 
 }
 

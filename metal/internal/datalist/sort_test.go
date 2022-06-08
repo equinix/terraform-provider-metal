@@ -50,11 +50,11 @@ func sizesTestDataForSorts() []map[string]interface{} {
 func TestExpandSorts(t *testing.T) {
 	rawSorts := []interface{}{
 		map[string]interface{}{
-			"key":       "fieldA",
+			"attribute": "fieldA",
 			"direction": "asc",
 		},
 		map[string]interface{}{
-			"key":       "fieldB",
+			"attribute": "fieldB",
 			"direction": "desc",
 		},
 	}
@@ -64,11 +64,11 @@ func TestExpandSorts(t *testing.T) {
 	if len(rawSorts) != len(expandedSorts) {
 		t.Fatalf("incorrect expected length of expanded sorts")
 	}
-	if expandedSorts[0].key != "fieldA" ||
+	if expandedSorts[0].attribute != "fieldA" ||
 		expandedSorts[0].direction != "asc" {
 		t.Fatalf("incorrect expansion of the 1st expanded sorts")
 	}
-	if expandedSorts[1].key != "fieldB" ||
+	if expandedSorts[1].attribute != "fieldB" ||
 		expandedSorts[1].direction != "desc" {
 		t.Fatalf("incorrect expansion of the 2nd expanded sorts")
 	}
@@ -77,7 +77,7 @@ func TestExpandSorts(t *testing.T) {
 func TestApplySorts(t *testing.T) {
 	testCases := []struct {
 		name        string
-		key         string
+		attribute   string
 		expectedAsc []string // Expected sizes if sorted ascendingly
 	}{
 		{"BySlug", "slug", []string{"s-1vcpu-1gb", "s-2vcpu-2gb", "s-4vcpu-8gb"}},
@@ -92,7 +92,7 @@ func TestApplySorts(t *testing.T) {
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 			// Test ascending order
-			sizes := applySorts(sizesTestSchema(), sizesTestDataForSorts(), []commonSort{{testCase.key, "asc"}})
+			sizes := applySorts(sizesTestSchema(), sizesTestDataForSorts(), []commonSort{{testCase.attribute, "asc"}})
 			if len(sizes) != len(testCase.expectedAsc) {
 				t.Fatalf("Expecting %d size results, found %d size results instead", len(testCase.expectedAsc), len(sizes))
 			}
@@ -103,7 +103,7 @@ func TestApplySorts(t *testing.T) {
 			}
 
 			// Test descending order
-			sizes = applySorts(sizesTestSchema(), sizesTestDataForSorts(), []commonSort{{testCase.key, "desc"}})
+			sizes = applySorts(sizesTestSchema(), sizesTestDataForSorts(), []commonSort{{testCase.attribute, "desc"}})
 			if len(sizes) != len(testCase.expectedAsc) {
 				t.Fatalf("Expecting %d size results, found %d size results instead", len(testCase.expectedAsc), len(sizes))
 			}
