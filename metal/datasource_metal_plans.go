@@ -76,7 +76,7 @@ func planSchema() map[string]*schema.Schema {
 			Description: "list of deployment types, e.g. on_demand, spot_market",
 			Elem:        &schema.Schema{Type: schema.TypeString},
 		},
-		"available_in_facilities": {
+		"available_in": {
 			Type:        schema.TypeSet,
 			Description: "list of facilities where the plan is available",
 			Elem:        &schema.Schema{Type: schema.TypeString},
@@ -111,16 +111,16 @@ func flattenPlan(rawPlan interface{}, meta interface{}, extra map[string]interfa
 		stringArrToIfArr(plan.DeploymentTypes))
 
 	flattenedPlan := map[string]interface{}{
-		"id":                      plan.ID,
-		"name":                    plan.Name,
-		"slug":                    plan.Slug,
-		"description":             plan.Description,
-		"line":                    plan.Line,
-		"legacy":                  plan.Legacy,
-		"class":                   plan.Class,
-		"deployment_types":        flattenedDepTypes,
-		"available_in_facilities": flattenedFacs,
-		"available_in_metros":     flattenedMetros,
+		"id":                  plan.ID,
+		"name":                plan.Name,
+		"slug":                plan.Slug,
+		"description":         plan.Description,
+		"line":                plan.Line,
+		"legacy":              plan.Legacy,
+		"class":               plan.Class,
+		"deployment_types":    flattenedDepTypes,
+		"available_in":        flattenedFacs,
+		"available_in_metros": flattenedMetros,
 	}
 
 	if plan.Pricing != nil {
