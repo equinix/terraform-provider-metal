@@ -31,7 +31,7 @@ func sortSchema(allowedAttributes []string) *schema.Schema {
 					Type:         schema.TypeString,
 					Description:  "Sort results in ascending or descending order. Strings are sorted in alphabetical order. One of: asc, desc",
 					Optional:     true,
-					ValidateFunc: validation.StringInSlice(allowedAttributes, false),
+					ValidateFunc: validation.StringInSlice(sortAttributes, false),
 				},
 			},
 		},

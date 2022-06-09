@@ -42,7 +42,7 @@ data "metal_plans" "example" {
     filter {
         attribute = "class"
         values    = ["large"]
-        match_by  = ["substring"]
+        match_by  = "substring"
     }
     filter {
         attribute = "deployment_types"
