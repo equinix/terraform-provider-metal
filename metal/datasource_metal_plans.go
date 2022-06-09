@@ -65,11 +65,11 @@ func planSchema() map[string]*schema.Schema {
 		},
 		"pricing_hour": {
 			Type:        schema.TypeFloat,
-			Description: "plan class",
+			Description: "plan hourly price",
 		},
 		"pricing_month": {
 			Type:        schema.TypeFloat,
-			Description: "plan class",
+			Description: "plan monthly price",
 		},
 		"deployment_types": {
 			Type:        schema.TypeSet,

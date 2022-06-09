@@ -36,7 +36,7 @@ func sortSchema(allowedAttributes []string) *schema.Schema {
 			},
 		},
 		Optional:    true,
-		Description: "One or more key/direction pairs on which to sort results. If multiple sorts are provided, they will be applied in order",
+		Description: "One or more attribute/direction pairs on which to sort results. If multiple sorts are provided, they will be applied in order",
 	}
 }
 
