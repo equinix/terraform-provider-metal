@@ -40,7 +40,7 @@ func filterSchema(allowedAttributes []string) *schema.Schema {
 				},
 				"all": {
 					Type:        schema.TypeBool,
-					Description: "If is set to true, the requests returns only the results that match all specified values",
+					Description: "If is set to true, the values are joined with an AND, and the requests returns only the results that match all specified values",
 					Optional:    true,
 					Default:     false,
 				},
@@ -54,7 +54,7 @@ func filterSchema(allowedAttributes []string) *schema.Schema {
 			},
 		},
 		Optional:    true,
-		Description: "One or more key/value pairs on which to filter results",
+		Description: "One or more attribute/values pairs on which to filter results",
 	}
 }
 
