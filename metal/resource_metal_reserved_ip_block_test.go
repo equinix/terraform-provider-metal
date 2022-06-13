@@ -35,7 +35,7 @@ resource "metal_project" "foobar" {
 
 resource "metal_reserved_ip_block" "test" {
 	project_id  = metal_project.foobar.id
-	facility    = "ny5"
+	metro       = "sv"
 	type        = "public_ipv4"
 	quantity    = 2
 	tags        = ["Tag1", "Tag2"]
@@ -101,7 +101,7 @@ func TestAccMetalReservedIPBlock_Public(t *testing.T) {
 				Config: testAccCheckMetalReservedIPBlockConfig_Public(rs),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
-						"metal_reserved_ip_block.test", "facility", "ewr1"),
+						"metal_reserved_ip_block.test", "metro", "sv"),
 					resource.TestCheckResourceAttr(
 						"metal_reserved_ip_block.test", "type", "public_ipv4"),
 					resource.TestCheckResourceAttr(
@@ -114,6 +114,8 @@ func TestAccMetalReservedIPBlock_Public(t *testing.T) {
 						"metal_reserved_ip_block.test", "management", "false"),
 					resource.TestCheckResourceAttr(
 						"metal_reserved_ip_block.test", "tags.#", "2"),
+					resource.TestCheckResourceAttrSet("metal_reserved_ip_block.test", "network"),
+					resource.TestCheckResourceAttrSet("metal_reserved_ip_block.test", "cidr"),
 				),
 			},
 		},
@@ -228,15 +230,15 @@ resource "metal_project" "foobar" {
 
 resource "metal_reserved_ip_block" "test" {
 	project_id  = metal_project.foobar.id
-	facility    = "ny5"
+	facility    = "da11"
 	type        = "public_ipv4"
 	quantity    = 2
 }
 
 resource "metal_device" "test" {
   project_id       = metal_project.foobar.id
-  facilities       = ["ny5"]
-  plan             = "c1.small.x86"
+  facilities       = ["da11"]
+  plan             = "c3.medium.x86"
   operating_system = "ubuntu_16_04"
   hostname         = "tfacc-reserved-ip-device"
   billing_cycle    = "hourly"

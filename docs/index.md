@@ -38,7 +38,7 @@ data "metal_project" "project" {
 # If you want to create a fresh project, you can create one with metal_project
 #
 # resource "metal_project" "cool_project" {
-#   name           = "My First Terraform Project"
+#   name = "My First Terraform Project"
 # }
 
 # Create a device and add it to tf_project_1

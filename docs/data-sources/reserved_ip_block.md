@@ -9,6 +9,8 @@ Look up an IP address block
 
 Use this data source to find IP address blocks in Equinix Metal. You can use IP address or a block ID for lookup.
 
+~> VRF features are not generally available. The interfaces related to VRF resources may change ahead of general availability.
+
 ## Example Usage
 
 Look up an IP address for a domain name, then use the IP to look up the containing IP block and run a device with IP address from the block:
@@ -35,13 +37,14 @@ resource "metal_device" "www" {
 
 ## Argument Reference
 
-You should pass either `id`, or both `project_id` and `ip_address`.
+* `id` - (Optional) UUID of the IP address block to look up
+* `project_id` - (Optional) UUID of the project where the searched block should be
+* `ip_address` - (Optional) Block containing this IP address will be returned
 
-* `id` - (Required) UUID of the IP address block to look up
-* `project_id` - (Required) UUID of the project where the searched block should be
-* `ip_address` - (Required) Block containing this IP address will be returned
+-> **NOTE:** You should pass either `id`, or both `project_id` and `ip_address`.
 
 ## Attributes Reference
 
-This datasource exposes the same attributes as the [metal_reserved_ip_block resource](../resources/reserved_ip_block.md).
+This datasource exposes the same attributes as the [metal_reserved_ip_block resource](../resources/reserved_ip_block.md), with the following differences:
 
+* `type` - One of `global_ipv4`, `public_ipv4`, `private_ipv4`, `public_ipv6`,or `vrf`

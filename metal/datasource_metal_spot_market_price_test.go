@@ -29,12 +29,12 @@ func TestAccDataSourceMetalSpotPrice_Basic(t *testing.T) {
 func testDataSourceMetalSpotMarketPrice() string {
 	return fmt.Sprintf(`
 data "metal_spot_market_price" "metro" {
-	metro = "sv"
+	metro    = "da"
 	plan     = "c3.medium.x86"
 }
 
 data "metal_spot_market_price" "facility" {
-	facility = "sv15"
+	facility = "da11"
 	plan     = "c3.medium.x86"
 }
 `)
