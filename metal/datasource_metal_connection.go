@@ -236,11 +236,13 @@ func getServiceTokens(tokens []packngo.FabricServiceToken) ([]map[string]interfa
 		}
 		rawToken := map[string]interface{}{
 			"id":                token.ID,
-			"expires_at":        token.ExpiresAt.String(),
 			"max_allowed_speed": speed,
 			"role":              string(token.Role),
 			"state":             token.State,
 			"type":              string(token.ServiceTokenType),
+		}
+		if token.ExpiresAt != nil {
+			rawToken["expires_at"] = token.ExpiresAt.String()
 		}
 		tokenList = append(tokenList, rawToken)
 	}
