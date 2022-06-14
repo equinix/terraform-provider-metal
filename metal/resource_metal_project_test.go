@@ -18,7 +18,7 @@ import (
 func init() {
 	resource.AddTestSweepers("metal_project", &resource.Sweeper{
 		Name:         "metal_project",
-		Dependencies: []string{"metal_device"},
+		Dependencies: []string{"metal_vlan"},
 		F:            testSweepProjects,
 	})
 }
@@ -73,14 +73,15 @@ func TestAccMetalProject_Basic(t *testing.T) {
 }
 
 type mockProjectService struct {
-	CreateFn          func(project *packngo.ProjectCreateRequest) (*packngo.Project, *packngo.Response, error)
-	UpdateFn          func(projectID string, project *packngo.ProjectUpdateRequest) (*packngo.Project, *packngo.Response, error)
-	ListFn            func(project *packngo.ListOptions) ([]packngo.Project, *packngo.Response, error)
-	DeleteFn          func(projectID string) (*packngo.Response, error)
-	GetFn             func(projectID string, opts *packngo.GetOptions) (*packngo.Project, *packngo.Response, error)
-	ListBGPSessionsFn func(projectID string, opts *packngo.ListOptions) ([]packngo.BGPSession, *packngo.Response, error)
-	ListEventsFn      func(projectID string, opts *packngo.ListOptions) ([]packngo.Event, *packngo.Response, error)
-	ListSSHKeysFn     func(projectID string, opts *packngo.ListOptions) ([]packngo.SSHKey, *packngo.Response, error)
+	CreateFn              func(project *packngo.ProjectCreateRequest) (*packngo.Project, *packngo.Response, error)
+	UpdateFn              func(projectID string, project *packngo.ProjectUpdateRequest) (*packngo.Project, *packngo.Response, error)
+	ListFn                func(project *packngo.ListOptions) ([]packngo.Project, *packngo.Response, error)
+	DeleteFn              func(projectID string) (*packngo.Response, error)
+	GetFn                 func(projectID string, opts *packngo.GetOptions) (*packngo.Project, *packngo.Response, error)
+	ListBGPSessionsFn     func(projectID string, opts *packngo.ListOptions) ([]packngo.BGPSession, *packngo.Response, error)
+	ListEventsFn          func(projectID string, opts *packngo.ListOptions) ([]packngo.Event, *packngo.Response, error)
+	ListSSHKeysFn         func(projectID string, opts *packngo.ListOptions) ([]packngo.SSHKey, *packngo.Response, error)
+	DiscoverBGPSessionsFn func(projectID string, opts *packngo.GetOptions) ([]packngo.BGPDiscoverResponse, *packngo.Response, error)
 }
 
 func (m *mockProjectService) Create(project *packngo.ProjectCreateRequest) (*packngo.Project, *packngo.Response, error) {
@@ -112,6 +113,10 @@ func (m *mockProjectService) ListSSHKeys(projectID string, opts *packngo.ListOpt
 
 func (m *mockProjectService) ListEvents(projectID string, opts *packngo.ListOptions) ([]packngo.Event, *packngo.Response, error) {
 	return m.ListEventsFn(projectID, opts)
+}
+
+func (m *mockProjectService) DiscoverBGPSessions(projectID string, opts *packngo.ListOptions) (*packngo.BGPDiscoverResponse, *packngo.Response, error) {
+	return m.DiscoverBGPSessions(projectID, opts)
 }
 
 var _ packngo.ProjectService = (*mockProjectService)(nil)

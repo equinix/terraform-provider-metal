@@ -25,7 +25,7 @@ resource "metal_ssh_key" "key1" {
 resource "metal_device" "test" {
   hostname         = "test-device"
   plan             = "c3.small.x86"
-  facilities       = ["sjc1"]
+  metro            = "sv"
   operating_system = "ubuntu_20_04"
   billing_cycle    = "hourly"
   project_id       = local.project_id
@@ -43,11 +43,9 @@ can be read using the file interpolation function
 
 ## Attributes Reference
 
-The following attributes are exported:
+In addition to all arguments above, the following attributes are exported:
 
 * `id` - The unique ID of the key
-* `name` - The name of the SSH key
-* `public_key` - The text of the public key
 * `fingerprint` - The fingerprint of the SSH key
 * `owner_id` - The UUID of the Equinix Metal API User who owns this key
 * `created` - The timestamp for when the SSH key was created

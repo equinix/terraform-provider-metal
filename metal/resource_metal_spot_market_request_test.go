@@ -17,8 +17,8 @@ resource "metal_project" "test" {
 }
 
 data "metal_spot_market_price" "test" {
-  facility = "sv15"
-  plan     = "c3.small.x86"
+  facility = "da11"
+  plan     = "c3.medium.x86"
 }
 
 data "metal_spot_market_request" "dreq" {
@@ -28,7 +28,7 @@ data "metal_spot_market_request" "dreq" {
 resource "metal_spot_market_request" "request" {
   project_id       = metal_project.test.id
   max_bid_price    = data.metal_spot_market_price.test.price * 1.2
-  facilities       = ["sv15"]
+  facilities       = ["da11"]
   devices_min      = 1
   devices_max      = 1
   wait_for_devices = true
@@ -37,7 +37,7 @@ resource "metal_spot_market_request" "request" {
     hostname         = "tfacc-testspot"
     billing_cycle    = "hourly"
     operating_system = "ubuntu_18_04"
-    plan             = "c3.small.x86"
+    plan             = "c3.medium.x86"
   }
 }`, name)
 }
@@ -113,14 +113,14 @@ resource "metal_project" "test" {
 }
 
 data "metal_spot_market_price" "test" {
-  facility = "sv15"
+  facility = "da11"
   plan     = "c3.medium.x86"
 }
 
 resource "metal_spot_market_request" "request" {
   project_id       = metal_project.test.id
   max_bid_price    = data.metal_spot_market_price.test.price * 1.2
-  facilities       = ["sv15"]
+  facilities       = ["da11"]
   devices_min      = 1
   devices_max      = 1
   wait_for_devices = true
@@ -129,7 +129,7 @@ resource "metal_spot_market_request" "request" {
     hostname         = "tfacc-testspot"
     billing_cycle    = "hourly"
     operating_system = "ubuntu_20_04"
-    plan             = "c3.small.x86"
+    plan             = "c3.medium.x86"
   }
 }`, name)
 }

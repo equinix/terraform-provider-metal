@@ -44,15 +44,15 @@ resource "metal_project" "test" {
 
 resource "metal_device" "test" {
   hostname         = "tfacc-device-ip-test"
-  plan             = "c1.small.x86"
-  facilities       = ["ny5"]
+  plan             = "c3.medium.x86"
+  facilities       = ["da11"]
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = metal_project.test.id
 }
 
 data "metal_ip_block_ranges" "test" {
-    facility         = "ny5"
+    facility         = "da11"
     project_id       = metal_device.test.project_id
 }
 

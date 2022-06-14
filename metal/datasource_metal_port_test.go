@@ -37,7 +37,7 @@ resource "metal_project" "test" {
 resource "metal_device" "test" {
   hostname         = "tfacc-test-device-port"
   plan             = "c3.medium.x86"
-  metro            = "sv"
+  metro            = "da"
   operating_system = "ubuntu_20_04"
   billing_cycle    = "hourly"
   project_id       = metal_project.test.id
@@ -80,7 +80,7 @@ resource "metal_project" "test" {
 resource "metal_device" "test" {
   hostname         = "tfacc-test-device-port"
   plan             = "c3.medium.x86"
-  metro            = "sv"
+  metro            = "da"
   operating_system = "ubuntu_20_04"
   billing_cycle    = "hourly"
   project_id       = metal_project.test.id

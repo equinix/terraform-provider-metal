@@ -1,6 +1,7 @@
 package metal
 
 import (
+	"fmt"
 	"strings"
 	"time"
 
@@ -60,6 +61,7 @@ func Provider() *schema.Provider {
 			"metal_volume":               dataSourceMetalVolume(),
 			"metal_virtual_circuit":      dataSourceMetalVirtualCircuit(),
 			"metal_vlan":                 dataSourceMetalVlan(),
+			"metal_vrf":                  dataSourceMetalVRF(),
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
@@ -80,6 +82,7 @@ func Provider() *schema.Provider {
 			"metal_spot_market_request":  resourceMetalSpotMarketRequest(),
 			"metal_vlan":                 resourceMetalVlan(),
 			"metal_virtual_circuit":      resourceMetalVirtualCircuit(),
+			"metal_vrf":                  resourceMetalVRF(),
 			"metal_bgp_session":          resourceMetalBGPSession(),
 			"metal_port_vlan_attachment": resourceMetalPortVlanAttachment(),
 			"metal_gateway":              resourceMetalGateway(),
@@ -107,6 +110,19 @@ func providerConfigure(tfVersion string) func(d *schema.ResourceData) (interface
 		}
 		return config.Client(), nil
 	}
+}
+
+func expandListToStringList(list []interface{}) []string {
+	result := make([]string, len(list))
+	for i, v := range list {
+		result[i] = fmt.Sprint(v)
+	}
+	return result
+}
+
+func expandSetToStringList(set *schema.Set) []string {
+	list := set.List()
+	return expandListToStringList(list)
 }
 
 var resourceDefaultTimeouts = &schema.ResourceTimeout{

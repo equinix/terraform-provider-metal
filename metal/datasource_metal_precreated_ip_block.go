@@ -68,7 +68,10 @@ func dataSourceMetalPreCreatedIPBlock() *schema.Resource {
 func dataSourceMetalPreCreatedIPBlockRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*packngo.Client)
 	projectID := d.Get("project_id").(string)
-	ips, _, err := client.ProjectIPs.List(projectID, nil)
+	getOpts := packngo.GetOptions{Includes: []string{"facility", "metro", "project", "vrf"}}
+	getOpts.Filter("types", "public_ipv4,global_ipv4,private_ipv4,public_ipv6,vrf")
+
+	ips, _, err := client.ProjectIPs.List(projectID, &getOpts)
 	if err != nil {
 		return err
 	}
@@ -115,8 +118,6 @@ func dataSourceMetalPreCreatedIPBlockRead(d *schema.ResourceData, meta interface
 				return loadBlock(d, &ip)
 			}
 		}
-
 	}
 	return fmt.Errorf("Could not find matching reserved block, all IPs were %v", ips)
-
 }
