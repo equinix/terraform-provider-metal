@@ -27,25 +27,21 @@ func resourceMetalOrganization() *schema.Resource {
 				Type:        schema.TypeString,
 				Description: "Description string",
 				Optional:    true,
-				Required:    false,
 			},
 			"website": {
 				Type:        schema.TypeString,
 				Description: "Website link",
 				Optional:    true,
-				Required:    false,
 			},
 			"twitter": {
 				Type:        schema.TypeString,
 				Description: "Twitter handle",
 				Optional:    true,
-				Required:    false,
 			},
 			"logo": {
 				Type:        schema.TypeString,
 				Description: "Logo URL",
 				Optional:    true,
-				Required:    false,
 			},
 			"created": {
 				Type:     schema.TypeString,
