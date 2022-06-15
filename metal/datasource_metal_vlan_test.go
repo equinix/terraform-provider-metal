@@ -94,7 +94,6 @@ data "metal_vlan" "bardsvlan" {
 func TestAccMetalDatasourceVlan_ByVxlanMetro(t *testing.T) {
 	rs := acctest.RandString(10)
 	metro := "sv"
-	description := fmt.Sprintf("%s-vlan", tstResourcePrefix)
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
@@ -102,7 +101,7 @@ func TestAccMetalDatasourceVlan_ByVxlanMetro(t *testing.T) {
 		CheckDestroy: testAccCheckMetalDatasourceVlanDestroyed,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckMetalDatasourceVlanConfig_ByVxlanMetro(rs, metro, description),
+				Config: testAccCheckMetalDatasourceVlanConfig_ByVxlanMetro(rs, metro),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrPair(
 						"metal_vlan.foovlan", "vxlan",
@@ -143,16 +142,16 @@ func testAccCheckMetalDatasourceVlanDestroyed(s *terraform.State) error {
 	return nil
 }
 
-func testAccCheckMetalDatasourceVlanConfig_ByVlanId(projSuffix, metro, desc string) string {
+func testAccCheckMetalDatasourceVlanConfig_ByVlanId(projSuffix, metro string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "foobar" {
-    name = "%[1]-vlan-%s"
+    name = "%[1]s-pro-%[2]s"
 }
 
 resource "metal_vlan" "foovlan" {
     project_id = metal_project.foobar.id
     metro = "%[3]s"
-    description = "%s"
+    description = "%[1]s-vlan foovlan"
     vxlan = 5
 }
 
@@ -165,7 +164,6 @@ data "metal_vlan" "dsvlan" {
 func TestAccMetalDatasourceVlan_ByVlanId(t *testing.T) {
 	rs := acctest.RandString(10)
 	metro := "sv"
-	description := fmt.Sprintf("%s-vlan", tstResourcePrefix)
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
@@ -173,7 +171,7 @@ func TestAccMetalDatasourceVlan_ByVlanId(t *testing.T) {
 		CheckDestroy: testAccCheckMetalDatasourceVlanDestroyed,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckMetalDatasourceVlanConfig_ByVlanId(rs, metro, description),
+				Config: testAccCheckMetalDatasourceVlanConfig_ByVlanId(rs, metro),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrPair(
 						"metal_vlan.foovlan", "vxlan",
@@ -189,7 +187,7 @@ func TestAccMetalDatasourceVlan_ByVlanId(t *testing.T) {
 	})
 }
 
-func testAccCheckMetalDatasourceVlanConfig_ByProjectId(projSuffix, metro, desc string) string {
+func testAccCheckMetalDatasourceVlanConfig_ByProjectId(projSuffix, metro string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "foobar" {
     name = "%[1]s-pro-%[2]s"
@@ -205,13 +203,12 @@ resource "metal_vlan" "foovlan" {
 data "metal_vlan" "dsvlan" {
     project_id = metal_vlan.foovlan.project_id
 }
-`, projSuffix, metro, desc)
+`, tstResourcePrefix, projSuffix, metro)
 }
 
 func TestAccMetalDatasourceVlan_ByProjectId(t *testing.T) {
 	rs := acctest.RandString(10)
 	metro := "sv"
-	description := fmt.Sprintf("%s-vlan", tstResourcePrefix)
 
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
@@ -219,7 +216,7 @@ func TestAccMetalDatasourceVlan_ByProjectId(t *testing.T) {
 		CheckDestroy: testAccCheckMetalDatasourceVlanDestroyed,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckMetalDatasourceVlanConfig_ByProjectId(rs, metro, description),
+				Config: testAccCheckMetalDatasourceVlanConfig_ByProjectId(rs, metro),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrPair(
 						"metal_vlan.foovlan", "vxlan",
