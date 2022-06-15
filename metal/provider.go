@@ -130,3 +130,13 @@ var resourceDefaultTimeouts = &schema.ResourceTimeout{
 	Delete:  schema.DefaultTimeout(60 * time.Minute),
 	Default: schema.DefaultTimeout(60 * time.Minute),
 }
+
+func getResourceDataChangedKeys(keys []string, d *schema.ResourceData) map[string]interface{} {
+	changed := make(map[string]interface{})
+	for _, key := range keys {
+		if v := d.Get(key); v != nil && d.HasChange(key) {
+			changed[key] = v
+		}
+	}
+	return changed
+}

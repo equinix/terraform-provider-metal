@@ -404,11 +404,17 @@ func testAccCheckMetalProjectOrgConfig(r string) string {
 	return fmt.Sprintf(`
 resource "metal_organization" "test" {
 	name = "tfacc-project-%s"
+	address {
+		address = "tfacc org street"
+		city = "london"
+		zip_code = "12345"
+		country = "GB"
+	}
 }
 
 resource "metal_project" "foobar" {
-		name = "tfacc-project-%s"
-		organization_id = "${metal_organization.test.id}"
+	name = "tfacc-project-%s"
+	organization_id = "${metal_organization.test.id}"
 }`, r, r)
 }
 
