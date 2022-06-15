@@ -77,6 +77,7 @@ func testAccCheckMetalVirtualCircuitDestroy(s *terraform.State) error {
 func testAccMetalVirtualCircuitConfig_Dedicated(randstr string, randint int) string {
 	// Dedicated connection in DA metro
 	testConnection := os.Getenv(metalDedicatedConnIDEnvVar)
+
 	return fmt.Sprintf(`
 data "metal_connection" "test" {
 	connection_id = "%[1]s"

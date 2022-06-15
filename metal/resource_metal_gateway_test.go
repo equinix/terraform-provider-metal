@@ -75,7 +75,6 @@ resource "metal_gateway" "test" {
 `, tstResourcePrefix)
 }
 
-
 func TestAccMetalGateway_ExistingReservation(t *testing.T) {
 	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },

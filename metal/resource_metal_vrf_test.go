@@ -169,9 +169,9 @@ func TestAccMetalVRF_withIPReservations(t *testing.T) {
 				ImportStateVerify: true,
 			},
 			{
-				ResourceName:      "metal_reserved_ip_block.test",
-				ImportState:       true,
-				ImportStateVerify: true,
+				ResourceName:            "metal_reserved_ip_block.test",
+				ImportState:             true,
+				ImportStateVerify:       true,
 				ImportStateVerifyIgnore: []string{"wait_for_state"},
 			},
 		},
