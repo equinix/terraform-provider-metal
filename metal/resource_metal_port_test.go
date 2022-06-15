@@ -14,7 +14,7 @@ import (
 func confAccMetalPort_base(name string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-    name = "tfacc-port-test-%s"
+    name = "tfacc-pro-port-%s"
 }
 
 resource "metal_device" "test" {

@@ -11,7 +11,7 @@ import (
 
 func TestAccMetalProjectSSHKeyDataSource_BySearch(t *testing.T) {
 	datasourceName := "data.metal_project_ssh_key.foobar"
-	keyName := acctest.RandomWithPrefix("tfacc-project-key")
+	keyName := acctest.RandomWithPrefix("tfacc-pro-key")
 
 	publicKeyMaterial, _, err := acctest.RandSSHKeyPair("")
 
@@ -52,7 +52,7 @@ func TestAccMetalProjectSSHKeyDataSource_ByID(t *testing.T) {
 	datasourceName := "data.metal_project_ssh_key.foobar"
 
 	publicKeyMaterial, _, err := acctest.RandSSHKeyPair("")
-	keyName := acctest.RandomWithPrefix("tfacc-project-key")
+	keyName := acctest.RandomWithPrefix("tfacc-pro-key")
 
 	if err != nil {
 		t.Fatalf("Cannot generate test SSH key pair: %s", err)

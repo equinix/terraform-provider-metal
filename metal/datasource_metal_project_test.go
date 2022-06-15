@@ -12,7 +12,7 @@ import (
 func testAccCheckMetalDataSourceProject_Basic(r string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "foobar" {
-	name = "tfacc-project-%s"
+	name = "tfacc-pro-%s"
 	bgp_config {
 		deployment_type = "local"
 		md5 = "2SFsdfsg43"

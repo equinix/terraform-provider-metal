@@ -56,7 +56,7 @@ func testAccCheckMetalIPAttachmentDestroy(s *terraform.State) error {
 func testAccCheckMetalIPAttachmentConfig_Basic(name string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-    name = "tfacc-ip_attachment-%s"
+    name = "tfacc-pro-ipattach-%s"
 }
 
 resource "metal_device" "test" {
@@ -112,7 +112,7 @@ func TestAccMetalIPAttachment_Metro(t *testing.T) {
 func testAccCheckMetalIPAttachmentConfig_Metro(name string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-    name = "tfacc-ip_attachment-%s"
+    name = "tfacc-pro-ipattach-%s"
 }
 
 resource "metal_device" "test" {

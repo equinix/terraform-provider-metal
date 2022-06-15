@@ -335,7 +335,7 @@ func testAccMetalVRFConfig_basic(r int) string {
 
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-    name = "tfacc-vrfs-%d"
+    name = "tfacc-pro-%d"
 }
 
 resource "metal_vrf" "test" {
@@ -350,7 +350,7 @@ func testAccMetalVRFConfig_withIPRanges(r int) string {
 
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-    name = "tfacc-vrfs-%d"
+    name = "tfacc-pro-%d"
 }
 
 resource "metal_vrf" "test" {
@@ -429,7 +429,7 @@ func testAccMetalVRFConfig_withVCGateway(r, nniVlan int) string {
 	testConnection := os.Getenv(metalDedicatedConnIDEnvVar)
 	return testAccMetalVRFConfig_withGateway(r) + fmt.Sprintf(`
 	data "metal_connection" "test" {
-		connection_id = "%s"
+		connection_id = "%[1]s"
 	}
 
 	resource "metal_virtual_circuit" "test" {

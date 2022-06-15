@@ -13,7 +13,7 @@ import (
 func metalProjectSSHKeyConfig_Basic(name, publicSshKey string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-    name = "tfacc-project_ssh_key-%s"
+    name = "tfacc-pro-project_ssh_key-%s"
 }
 
 resource "metal_project_ssh_key" "test" {

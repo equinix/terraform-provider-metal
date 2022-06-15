@@ -473,7 +473,7 @@ func TestAccMetalDevice_importBasic(t *testing.T) {
 func testAccCheckMetalDeviceConfig_no_description(rInt int, projSuffix string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-    name = "tfacc-device-%s"
+    name = "tfacc-pro-device-%s"
 }
 
 resource "metal_device" "test" {
@@ -491,7 +491,7 @@ resource "metal_device" "test" {
 func testAccCheckMetalDeviceConfig_reinstall(rInt int, projSuffix string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-    name = "tfacc-device-%s"
+    name = "tfacc-pro-device-%s"
 }
 
 resource "metal_device" "test" {
@@ -515,7 +515,7 @@ resource "metal_device" "test" {
 func testAccCheckMetalDeviceConfig_varname(rInt int, projSuffix string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-    name = "tfacc-device-%s"
+    name = "tfacc-pro-device-%s"
 }
 
 resource "metal_device" "test" {
@@ -534,7 +534,7 @@ resource "metal_device" "test" {
 func testAccCheckMetalDeviceConfig_varname_pxe(rInt int, projSuffix string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-    name = "tfacc-device-%s"
+    name = "tfacc-pro-device-%s"
 }
 
 resource "metal_device" "test" {
@@ -555,7 +555,7 @@ resource "metal_device" "test" {
 func testAccCheckMetalDeviceConfig_metro(projSuffix string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-    name = "tfacc-device-%s"
+    name = "tfacc-pro-device-%s"
 }
 
 resource "metal_device" "test" {
@@ -571,7 +571,7 @@ resource "metal_device" "test" {
 func testAccCheckMetalDeviceConfig_minimal(projSuffix string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-    name = "tfacc-device-%s"
+    name = "tfacc-pro-device-%s"
 }
 
 resource "metal_device" "test" {
@@ -585,7 +585,7 @@ resource "metal_device" "test" {
 func testAccCheckMetalDeviceConfig_basic(projSuffix string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-    name = "tfacc-device-%s"
+    name = "tfacc-pro-device-%s"
 }
 
 resource "metal_device" "test" {
@@ -601,7 +601,7 @@ resource "metal_device" "test" {
 func testAccCheckMetalDeviceConfig_facility_list(projSuffix string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-  name = "tfacc-device-%s"
+  name = "tfacc-pro-device-%s"
 }
 
 resource "metal_device" "test"  {
@@ -618,7 +618,7 @@ resource "metal_device" "test"  {
 func testAccCheckMetalDeviceConfig_ipxe_script_url(projSuffix, url, pxe string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-  name = "tfacc-device-%s"
+  name = "tfacc-pro-device-%s"
 }
 
 resource "metal_device" "test_ipxe_script_url"  {
@@ -637,7 +637,7 @@ resource "metal_device" "test_ipxe_script_url"  {
 
 var testAccCheckMetalDeviceConfig_ipxe_conflict = `
 resource "metal_project" "test" {
-  name = "tfacc-device-%s"
+  name = "tfacc-pro-device-%s"
 }
 
 resource "metal_device" "test_ipxe_conflict" {
@@ -654,7 +654,7 @@ resource "metal_device" "test_ipxe_conflict" {
 
 var testAccCheckMetalDeviceConfig_ipxe_missing = `
 resource "metal_project" "test" {
-  name = "tfacc-device-%s"
+  name = "tfacc-pro-device-%s"
 }
 
 resource "metal_device" "test_ipxe_missing" {

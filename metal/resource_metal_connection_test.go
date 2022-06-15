@@ -60,7 +60,7 @@ func testAccCheckMetalConnectionDestroy(s *terraform.State) error {
 func testAccMetalConnectionConfig_Shared(randstr string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-	name = "%[1]s-pro-%[2]s"
+	name = "%[1]s-pro-conn-%[2]s"
 }
 
 resource "metal_connection" "test" {
@@ -123,7 +123,7 @@ func TestAccMetalConnection_Shared(t *testing.T) {
 func testAccMetalConnectionConfig_Dedicated(randstr string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-	name = "%[1]s-pro-%[2]s"
+	name = "%[1]s-pro-conn-%[2]s"
 }
 
 // We use the project resource to get organization_id
@@ -188,7 +188,7 @@ func TestAccMetalConnection_Dedicated(t *testing.T) {
 func testAccMetalConnectionConfig_Tunnel(randstr string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-	name = "%[1]s-pro-%[2]s"
+	name = "%[1]s-pro-conn-%[2]s"
 }
 
 // We use the project resource to get organization_id internally

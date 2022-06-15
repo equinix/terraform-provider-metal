@@ -10,7 +10,7 @@ import (
 func testAccDataSourceMetalGatewayConfig_PrivateIPv4() string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-	name = "tfacc-gateway-test"
+	name = "tfacc-pro-gateway-test"
 }
 
 resource "metal_vlan" "test" {

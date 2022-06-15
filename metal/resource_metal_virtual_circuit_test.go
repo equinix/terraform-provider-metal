@@ -83,7 +83,7 @@ data "metal_connection" "test" {
 }
 
 resource "metal_project" "test" {
-	name = "%[4]s-pro-%[2]s"
+	name = "%[4]s-pro-vc-%[2]s"
 }
 
 resource "metal_vlan" "test" {

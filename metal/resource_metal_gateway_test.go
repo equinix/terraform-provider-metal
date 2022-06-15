@@ -12,7 +12,7 @@ import (
 func testAccMetalGatewayConfig_PrivateIPv4() string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-	name = "%[1]s-gateway-test"
+	name = "%[1]s-pro-gateway-test"
 }
 
 resource "metal_vlan" "test" {
@@ -52,7 +52,7 @@ func TestAccMetalGateway_PrivateIPv4(t *testing.T) {
 func testAccMetalGatewayConfig_ExistingReservation() string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-	name = "%[1]s-gateway-test"
+	name = "%[1]s-pro-gateway-test"
 }
 
 resource "metal_vlan" "test" {

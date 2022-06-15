@@ -14,7 +14,7 @@ import (
 func testAccCheckMetalDatasourceVlanConfig_ByVxlanFacility(projSuffix, fac string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "foobar" {
-    name = "%[1]s-pro-%[2]s"
+    name = "%[1]s-pro-vlan-%[2]s"
 }
 
 resource "metal_vlan" "foovlan" {
@@ -60,7 +60,7 @@ func TestAccMetalDatasourceVlan_ByVxlanFacility(t *testing.T) {
 func testAccCheckMetalDatasourceVlanConfig_ByVxlanMetro(projSuffix, metro string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "foobar" {
-    name = "%[1]s-pro-%[2]s"
+    name = "%[1]s-pro-vlan-%[2]s"
 }
 
 resource "metal_vlan" "foovlan" {
@@ -145,7 +145,7 @@ func testAccCheckMetalDatasourceVlanDestroyed(s *terraform.State) error {
 func testAccCheckMetalDatasourceVlanConfig_ByVlanId(projSuffix, metro string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "foobar" {
-    name = "%[1]s-pro-%[2]s"
+    name = "%[1]s-pro-vlan-%[2]s"
 }
 
 resource "metal_vlan" "foovlan" {
@@ -190,7 +190,7 @@ func TestAccMetalDatasourceVlan_ByVlanId(t *testing.T) {
 func testAccCheckMetalDatasourceVlanConfig_ByProjectId(projSuffix, metro string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "foobar" {
-    name = "%[1]s-pro-%[2]s"
+    name = "%[1]s-pro-vlan-%[2]s"
 }
 
 resource "metal_vlan" "foovlan" {

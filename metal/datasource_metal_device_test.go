@@ -40,7 +40,7 @@ func TestAccDataSourceMetalDevice_Basic(t *testing.T) {
 func testDataSourceMetalDeviceConfig_Basic(projSuffix string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-    name = "tfacc-project-%s"
+    name = "tfacc-pro-device-%s"
 }
 
 resource "metal_device" "test" {
@@ -90,7 +90,7 @@ func TestAccDataSourceMetalDevice_ByID(t *testing.T) {
 func testDataSourceMetalDeviceConfig_ByID(projSuffix string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-    name = "tfacc-project-%s"
+    name = "tfacc-pro-device-%s"
 }
 
 resource "metal_device" "test" {

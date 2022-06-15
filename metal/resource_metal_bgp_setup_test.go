@@ -67,7 +67,7 @@ func testAccCheckMetalBGPSetupDestroy(s *terraform.State) error {
 func testAccCheckMetalBGPSetupConfig_basic(name string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-    name = "tfacc-bgp_session-%s"
+    name = "tfacc-pro-bgp_session-%s"
 	bgp_config {
 		deployment_type = "local"
 		md5 = "C179c28c41a85b"

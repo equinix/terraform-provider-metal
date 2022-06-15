@@ -15,7 +15,7 @@ import (
 func testAccCheckMetalPortVlanAttachmentConfig_L2Bonded_1(name string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-    name = "tfacc-port_vlan_attachment-%s"
+    name = "tfacc-pro-port_vlan_attachment-%s"
 }
 
 resource "metal_device" "test" {
@@ -100,7 +100,7 @@ func TestAccMetalPortVlanAttachment_L2Bonded(t *testing.T) {
 func testAccCheckMetalPortVlanAttachmentConfig_L2Individual_1(name string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-    name = "tfacc-port_vlan_attachment-%s"
+    name = "tfacc-pro-port_vlan_attachment-%s"
 }
 
 resource "metal_device" "test" {
@@ -187,7 +187,7 @@ func TestAccMetalPortVlanAttachment_L2Individual(t *testing.T) {
 func testAccCheckMetalPortVlanAttachmentConfig_Hybrid_1(name string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-    name = "tfacc-port_vlan_attachment-%s"
+    name = "tfacc-pro-port_vlan_attachment-%s"
 }
 
 resource "metal_device" "test" {
@@ -258,7 +258,7 @@ func TestAccMetalPortVlanAttachment_HybridBasic(t *testing.T) {
 func testAccCheckMetalPortVlanAttachmentConfig_HybridMultipleVlans_1(name string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-  name = "tfacc-port_vlan_attachment-%s"
+  name = "tfacc-pro-port_vlan_attachment-%s"
 }
 
 resource "metal_device" "test" {
@@ -373,7 +373,7 @@ func testAccCheckMetalPortVlanAttachmentDestroy(s *terraform.State) error {
 func testAccCheckMetalPortVlanAttachmentConfig_L2Native_1(name string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-    name = "tfacc-port_vlan_attachment-%s"
+    name = "tfacc-pro-port_vlan_attachment-%s"
 }
 
 resource "metal_device" "test" {

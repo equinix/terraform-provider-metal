@@ -26,7 +26,7 @@ func testAccMetalProjectAPIKeyConfig_Basic() string {
 	return fmt.Sprintf(`
 
 resource "metal_project" "test" {
-    name = "tfacc-project-key-test"
+    name = "tfacc-pro-key-test"
 }
 
 resource "metal_project_api_key" "test" {
