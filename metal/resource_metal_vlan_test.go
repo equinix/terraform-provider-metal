@@ -112,7 +112,7 @@ func TestAccMetalVlan_Basic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckMetalVlanExists("metal_vlan.foovlan", &vlan),
 					resource.TestCheckResourceAttr(
-						"metal_vlan.foovlan", "description", "testvlan"),
+						"metal_vlan.foovlan", "description", "tfacc-vlan foovlan"),
 					resource.TestCheckResourceAttr(
 						"metal_vlan.foovlan", "facility", fac),
 				),
