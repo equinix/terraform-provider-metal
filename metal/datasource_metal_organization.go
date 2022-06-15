@@ -143,6 +143,7 @@ func dataSourceMetalOrganizationRead(d *schema.ResourceData, meta interface{}) e
 		projectIds = append(projectIds, path.Base(p.URL))
 	}
 
+	d.SetId(org.ID)
 	return setMap(d, map[string]interface{}{
 		"organization_id": org.ID,
 		"name":            org.Name,

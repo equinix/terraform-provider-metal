@@ -150,7 +150,6 @@ func resourceMetalOrganizationRead(d *schema.ResourceData, meta interface{}) err
 	}
 
 	d.SetId(key.ID)
-
 	return setMap(d, map[string]interface{}{
 		"name":        key.Name,
 		"description": key.Description,
