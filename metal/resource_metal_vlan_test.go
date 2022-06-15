@@ -60,19 +60,19 @@ func testSweepVlans(region string) error {
 	return nil
 }
 
-func testAccCheckMetalVlanConfig_metro(projSuffix, metro, desc string) string {
+func testAccCheckMetalVlanConfig_metro(projSuffix, metro string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "foobar" {
-    name = "tfacc-vlan-%s"
+	name = "%[1]s-pro-%[2]s"
 }
 
 resource "metal_vlan" "foovlan" {
     project_id = metal_project.foobar.id
-    metro = "%s"
-    description = "%s"
+    metro = "%[3]s"
+    description = "%[1]s-vlan foovlan"
     vxlan = 5
 }
-`, projSuffix, metro, desc)
+`, tstResourcePrefix, projSuffix, metro)
 }
 
 func TestAccMetalVlan_Metro(t *testing.T) {
@@ -85,7 +85,7 @@ func TestAccMetalVlan_Metro(t *testing.T) {
 		CheckDestroy: testAccCheckMetalVlanDestroyed,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckMetalVlanConfig_metro(rs, metro, "tfacc-vlan"),
+				Config: testAccCheckMetalVlanConfig_metro(rs, metro),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
 						"metal_vlan.foovlan", "metro", metro),
@@ -108,7 +108,7 @@ func TestAccMetalVlan_Basic(t *testing.T) {
 		CheckDestroy: testAccCheckMetalVlanDestroyed,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckMetalVlanConfig_var(rs, fac, "testvlan"),
+				Config: testAccCheckMetalVlanConfig_var(rs, fac),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckMetalVlanExists("metal_vlan.foovlan", &vlan),
 					resource.TestCheckResourceAttr(
@@ -162,18 +162,18 @@ func testAccCheckMetalVlanDestroyed(s *terraform.State) error {
 	return nil
 }
 
-func testAccCheckMetalVlanConfig_var(projSuffix, facility, desc string) string {
+func testAccCheckMetalVlanConfig_var(projSuffix, fac string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "foobar" {
-    name = "tfacc-vlan-%s"
+	name = "%[1]s-pro-%[2]s"
 }
 
 resource "metal_vlan" "foovlan" {
-    project_id = "${metal_project.foobar.id}"
-    facility = "%s"
-    description = "%s"
+    project_id  = "${metal_project.foobar.id}"
+    facility    = "%[3]s"
+    description = "%[1]s-vlan foovlan"
 }
-`, projSuffix, facility, desc)
+`, tstResourcePrefix, projSuffix, fac)
 }
 
 func TestAccMetalVlan_importBasic(t *testing.T) {
@@ -186,7 +186,7 @@ func TestAccMetalVlan_importBasic(t *testing.T) {
 		CheckDestroy: testAccCheckMetalVlanDestroyed,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckMetalVlanConfig_var(rs, fac, "testvlan"),
+				Config: testAccCheckMetalVlanConfig_var(rs, fac),
 			},
 			{
 				ResourceName:      "metal_vlan.foovlan",

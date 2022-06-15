@@ -386,7 +386,7 @@ func testAccMetalVRFConfig_withGateway(r int) string {
 	return testAccMetalVRFConfig_withIPReservations(r) + fmt.Sprintf(`
 
 resource "metal_vlan" "test" {
-	description = "tfacc-vlan-vrf"
+	description = "%s-vlan vrf"
 	metro       = "%s"
 	project_id  = metal_project.test.id
 }
@@ -396,7 +396,7 @@ resource "metal_gateway" "test" {
     vlan_id           = metal_vlan.test.id
     ip_reservation_id = metal_reserved_ip_block.test.id
 }
-`, testMetro)
+`, tstResourcePrefix, testMetro)
 }
 
 func testAccMetalVRFConfig_withVC(r, nniVlan int) string {
@@ -405,23 +405,23 @@ func testAccMetalVRFConfig_withVC(r, nniVlan int) string {
 	return testAccMetalVRFConfig_withIPRanges(r) + fmt.Sprintf(`
 
 	data "metal_connection" "test" {
-		connection_id = "%s"
+		connection_id = "%[1]s"
 	}
 
 	resource "metal_virtual_circuit" "test" {
-		name = "tfacc-vc-%d"
-		description = "tfacc-vc-%d"
+		name = "%[4]s-vc-%[2]d"
+		description = "%[4]s-vc-%[2]d"
 		connection_id = data.metal_connection.test.id
 		project_id = metal_project.test.id
 		port_id = data.metal_connection.test.ports[0].id
-		nni_vlan = %d
+		nni_vlan = %[3]d
 		vrf_id = metal_vrf.test.id
 		peer_asn = 65530
 		subnet = "192.168.100.16/31"
 		metal_ip = "192.168.100.16"
 		customer_ip = "192.168.100.17"
 	}
-	`, testConnection, r, r, nniVlan)
+	`, testConnection, r, nniVlan, tstResourcePrefix)
 }
 
 func testAccMetalVRFConfig_withVCGateway(r, nniVlan int) string {
@@ -433,18 +433,18 @@ func testAccMetalVRFConfig_withVCGateway(r, nniVlan int) string {
 	}
 
 	resource "metal_virtual_circuit" "test" {
-		name = "tfacc-vc-%d"
-		description = "tfacc-vc-%d"
+		name = "%[4]s-vc-%[2]d"
+		description = "%[4]s-vc-%[2]d"
 		connection_id = data.metal_connection.test.id
 		project_id = metal_project.test.id
 		port_id = data.metal_connection.test.ports[0].id
-		nni_vlan = %d
+		nni_vlan = %[3]d
 		vrf_id = metal_vrf.test.id
 		peer_asn = 65530
 		subnet = "192.168.100.16/31"
 		metal_ip = "192.168.100.16"
 		customer_ip = "192.168.100.17"
-	}`, testConnection, r, r, nniVlan)
+	}`, testConnection, r, nniVlan, tstResourcePrefix)
 }
 
 func testAccMetalVRFConfig_withConnection(r int) string {
@@ -452,11 +452,11 @@ func testAccMetalVRFConfig_withConnection(r int) string {
 	return testAccMetalVRFConfig_basic(r) + fmt.Sprintf(`
 
 	resource "metal_connection" "test" {
-		name            = "tfacc-conn-%d"
+		name            = "%s-conn-%d"
 		organization_id = metal_project.foobar.organization_id
 		project_id      = metal_project.foobar.id
 		metro           = "%s"
 		redundancy      = "redundant"
 		type            = "shared"
-	}`, r, testMetro)
+	}`, tstResourcePrefix, r, testMetro)
 }

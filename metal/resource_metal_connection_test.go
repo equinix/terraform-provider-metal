@@ -59,20 +59,20 @@ func testAccCheckMetalConnectionDestroy(s *terraform.State) error {
 
 func testAccMetalConnectionConfig_Shared(randstr string) string {
 	return fmt.Sprintf(`
-        resource "metal_project" "test" {
-            name = "tfacc-conn-pro-%s"
-        }
+resource "metal_project" "test" {
+	name = "%[1]s-pro-%[2]s"
+}
 
-        resource "metal_connection" "test" {
-            name               = "tfacc-conn-%s"
-            project_id         = metal_project.test.id
-            type               = "shared"
-            redundancy         = "redundant"
-            metro              = "sv"
-			speed              = "50Mbps"
-			service_token_type = "a_side"
-        }`,
-		randstr, randstr)
+resource "metal_connection" "test" {
+	name               = "%[1]s-conn-%[2]s"
+	project_id         = metal_project.test.id
+	type               = "shared"
+	redundancy         = "redundant"
+	metro              = "sv"
+	speed              = "50Mbps"
+	service_token_type = "a_side"
+}
+`, tstResourcePrefix, randstr)
 }
 
 func TestAccMetalConnection_Shared(t *testing.T) {
@@ -122,29 +122,30 @@ func TestAccMetalConnection_Shared(t *testing.T) {
 
 func testAccMetalConnectionConfig_Dedicated(randstr string) string {
 	return fmt.Sprintf(`
-        resource "metal_project" "test" {
-            name = "tfacc-conn-pro-%s"
-        }
+resource "metal_project" "test" {
+	name = "%[1]s-pro-%[2]s"
+}
 
-        // We use the project resource to get organization_id
-        resource "metal_connection" "test" {
-            name            = "tfacc-conn-%s"
-            metro           = "sv"
-            organization_id = metal_project.test.organization_id
-            type            = "dedicated"
-            redundancy      = "redundant"
-			tags            = ["tfacc"]
-			speed           = "50Mbps"
-			mode            = "standard"
-        }`,
-		randstr, randstr)
+// We use the project resource to get organization_id
+resource "metal_connection" "test" {
+	name            = "%[1]s-conn-%[2]s"
+	metro           = "sv"
+	organization_id = metal_project.test.organization_id
+	type            = "dedicated"
+	redundancy      = "redundant"
+	tags            = ["%[1]s"]
+	speed           = "50Mbps"
+	mode            = "standard"
+}
+`, tstResourcePrefix, randstr)
 }
 
 func testDataSourceMetalConnectionConfig() string {
 	return `
-		data "metal_connection" "test" {
-            connection_id = metal_connection.test.id
-        }`
+data "metal_connection" "test" {
+	connection_id = metal_connection.test.id
+}
+`
 }
 
 func TestAccMetalConnection_Dedicated(t *testing.T) {
@@ -186,21 +187,21 @@ func TestAccMetalConnection_Dedicated(t *testing.T) {
 
 func testAccMetalConnectionConfig_Tunnel(randstr string) string {
 	return fmt.Sprintf(`
-        resource "metal_project" "test" {
-            name = "tfacc-conn-pro-%s"
-        }
+resource "metal_project" "test" {
+	name = "%[1]s-pro-%[2]s"
+}
 
-		// We use the project resource to get organization_id internally
-        resource "metal_connection" "test" {
-            name            = "tfacc-conn-%s"
-            project_id      = metal_project.test.id
-            metro           = "sv"
-            redundancy      = "redundant"
-            type            = "dedicated"
-            mode            = "tunnel"
-			speed           = "50Mbps"
-        }`,
-		randstr, randstr)
+// We use the project resource to get organization_id internally
+resource "metal_connection" "test" {
+	name            = "%[1]s-conn-%[2]s"
+	project_id      = metal_project.test.id
+	metro           = "sv"
+	redundancy      = "redundant"
+	type            = "dedicated"
+	mode            = "tunnel"
+	speed           = "50Mbps"
+}
+`, tstResourcePrefix, randstr)
 }
 
 func TestAccMetalConnection_Tunnel(t *testing.T) {

@@ -12,21 +12,21 @@ import (
 func testAccMetalGatewayConfig_PrivateIPv4() string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-    name = "tfacc-gateway-test"
+	name = "%[1]s-gateway-test"
 }
 
 resource "metal_vlan" "test" {
-    description = "test VLAN in SV"
-    metro       = "sv"
-    project_id  = metal_project.test.id
+	description = "%[1]s-vlan in SV"
+	metro       = "sv"
+	project_id  = metal_project.test.id
 }
 
 resource "metal_gateway" "test" {
-    project_id               = metal_project.test.id
-    vlan_id                  = metal_vlan.test.id
-    private_ipv4_subnet_size = 8
+	project_id               = metal_project.test.id
+	vlan_id                  = metal_vlan.test.id
+	private_ipv4_subnet_size = 8
 }
-`)
+`, tstResourcePrefix)
 }
 
 func TestAccMetalGateway_PrivateIPv4(t *testing.T) {
@@ -52,28 +52,29 @@ func TestAccMetalGateway_PrivateIPv4(t *testing.T) {
 func testAccMetalGatewayConfig_ExistingReservation() string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-    name = "tfacc-gateway-test"
+	name = "%[1]s-gateway-test"
 }
 
 resource "metal_vlan" "test" {
-    description = "test VLAN in SV"
-    metro       = "sv"
-    project_id  = metal_project.test.id
+	description = "%[1]s-vlan in SV"
+	metro       = "sv"
+	project_id  = metal_project.test.id
 }
 
 resource "metal_reserved_ip_block" "test" {
-    project_id = metal_project.test.id
-    metro      = "sv"
-    quantity   = 8
+	project_id = metal_project.test.id
+	metro      = "sv"
+	quantity   = 8
 }
 
 resource "metal_gateway" "test" {
-    project_id        = metal_project.test.id
-    vlan_id           = metal_vlan.test.id
-    ip_reservation_id = metal_reserved_ip_block.test.id
+	project_id        = metal_project.test.id
+	vlan_id           = metal_vlan.test.id
+	ip_reservation_id = metal_reserved_ip_block.test.id
 }
-`)
+`, tstResourcePrefix)
 }
+
 
 func TestAccMetalGateway_ExistingReservation(t *testing.T) {
 	resource.ParallelTest(t, resource.TestCase{
