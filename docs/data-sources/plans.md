@@ -36,7 +36,7 @@ output "plans" {
 ```
 
 ```hcl
-# Following example will select device plans with class conatining string 'large', are available in metro 'da' (Dallas)
+# Following example will select device plans with class containing string 'large', are available in metro 'da' (Dallas)
 # AND 'sv' (Sillicon Valley), are elegible for spot_market deployments.
 data "metal_plans" "example" {
     filter {
