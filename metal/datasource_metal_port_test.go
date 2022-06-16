@@ -35,7 +35,7 @@ resource "metal_project" "test" {
 }
 
 resource "metal_device" "test" {
-  hostname         = "tfacc-test-device-port"
+  hostname         = "tfacc-device-test-port"
   plan             = "c3.medium.x86"
   metro            = "da"
   operating_system = "ubuntu_20_04"
@@ -78,7 +78,7 @@ resource "metal_project" "test" {
 }
 
 resource "metal_device" "test" {
-  hostname         = "tfacc-test-device-port"
+  hostname         = "tfacc-device-test-port"
   plan             = "c3.medium.x86"
   metro            = "da"
   operating_system = "ubuntu_20_04"

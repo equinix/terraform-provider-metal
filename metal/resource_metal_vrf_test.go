@@ -335,7 +335,7 @@ func testAccMetalVRFConfig_basic(r int) string {
 
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-    name = "tfacc-pro-%d"
+    name = "tfacc-pro-vrf-%d"
 }
 
 resource "metal_vrf" "test" {
@@ -350,7 +350,7 @@ func testAccMetalVRFConfig_withIPRanges(r int) string {
 
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-    name = "tfacc-pro-%d"
+    name = "tfacc-pro-vrf-%d"
 }
 
 resource "metal_vrf" "test" {

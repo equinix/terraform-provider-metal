@@ -20,7 +20,7 @@ func TestAccDataSourceMetalDevice_Basic(t *testing.T) {
 				Config: testDataSourceMetalDeviceConfig_Basic(projectName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
-						"data.metal_device.test", "hostname", "tfacc-test-device"),
+						"data.metal_device.test", "hostname", "tfacc-device-test"),
 					resource.TestCheckResourceAttrPair(
 						"metal_device.test", "id",
 						"data.metal_device.test", "id"),
@@ -44,7 +44,7 @@ resource "metal_project" "test" {
 }
 
 resource "metal_device" "test" {
-  hostname         = "tfacc-test-device"
+  hostname         = "tfacc-device-test"
   plan             = "c3.medium.x86"
   facilities       = ["da11"]
   operating_system = "ubuntu_16_04"
@@ -70,7 +70,7 @@ func TestAccDataSourceMetalDevice_ByID(t *testing.T) {
 				Config: testDataSourceMetalDeviceConfig_ByID(projectName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
-						"data.metal_device.test", "hostname", "tfacc-test-device"),
+						"data.metal_device.test", "hostname", "tfacc-device-test"),
 					resource.TestCheckResourceAttrPair(
 						"metal_device.test", "id",
 						"data.metal_device.test", "id"),
@@ -94,7 +94,7 @@ resource "metal_project" "test" {
 }
 
 resource "metal_device" "test" {
-  hostname         = "tfacc-test-device"
+  hostname         = "tfacc-device-test"
   plan             = "c3.medium.x86"
   facilities       = ["da11"]
   operating_system = "ubuntu_16_04"

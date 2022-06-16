@@ -41,7 +41,7 @@ func TestAccMetalDataSourceProject_Basic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckMetalProjectExists("metal_project.foobar", &project),
 					resource.TestCheckResourceAttr(
-						"metal_project.foobar", "name", fmt.Sprintf("tfacc-project-%s", rn)),
+						"metal_project.foobar", "name", fmt.Sprintf("tfacc-pro-%s", rn)),
 					resource.TestCheckResourceAttr(
 						"metal_project.foobar", "bgp_config.0.md5",
 						"2SFsdfsg43"),

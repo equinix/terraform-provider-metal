@@ -13,7 +13,7 @@ import (
 func testAccCheckMetalSpotMarketRequestConfig_basic(name string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-  name = "tfacc-spot_market_request-%s"
+  name = "tfacc-spot-test_market_request-%s"
 }
 
 data "metal_spot_market_price" "test" {
@@ -34,7 +34,7 @@ resource "metal_spot_market_request" "request" {
   wait_for_devices = true
 
   instance_parameters {
-    hostname         = "tfacc-testspot"
+    hostname         = "tfacc-spot-test"
     billing_cycle    = "hourly"
     operating_system = "ubuntu_18_04"
     plan             = "c3.medium.x86"
@@ -109,7 +109,7 @@ func testAccCheckMetalSpotMarketRequestExists(n string, key *packngo.SpotMarketR
 func testAccCheckMetalSpotMarketRequestConfig_import(name string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-  name = "tfacc-spot_market_request-%s"
+  name = "tfacc-spot-test_market_request-%s"
 }
 
 data "metal_spot_market_price" "test" {
@@ -126,7 +126,7 @@ resource "metal_spot_market_request" "request" {
   wait_for_devices = true
 
   instance_parameters {
-    hostname         = "tfacc-testspot"
+    hostname         = "tfacc-spot-test"
     billing_cycle    = "hourly"
     operating_system = "ubuntu_20_04"
     plan             = "c3.medium.x86"

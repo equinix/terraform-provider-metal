@@ -64,7 +64,7 @@ resource "metal_spot_market_request" "req" {
   wait_for_devices = false
 
   instance_parameters {
-    hostname         = "tfacc-testspot"
+    hostname         = "tfacc-spot-test"
     billing_cycle    = "hourly"
     operating_system = "ubuntu_20_04"
     plan             = "c3.medium.x86"
@@ -93,7 +93,7 @@ resource "metal_spot_market_request" "req" {
   wait_for_devices = false
 
   instance_parameters {
-    hostname         = "tfacc-testspot"
+    hostname         = "tfacc-spot-test"
     billing_cycle    = "hourly"
     operating_system = "ubuntu_20_04"
     plan             = "c3.medium.x86"

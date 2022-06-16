@@ -31,7 +31,7 @@ resource "metal_project" "test" {
 
 resource "metal_project_api_key" "test" {
     project_id  = metal_project.test.id
-    description = "tfacc-project-key"
+    description = "tfacc-pro-key"
     read_only   = true
 }`)
 }

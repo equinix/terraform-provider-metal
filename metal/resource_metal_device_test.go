@@ -187,14 +187,14 @@ func TestAccMetalDevice_Update(t *testing.T) {
 				Config: testAccCheckMetalDeviceConfig_varname(rInt, rs),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckMetalDeviceExists(r, &d1),
-					resource.TestCheckResourceAttr(r, "hostname", fmt.Sprintf("tfacc-test-device-%d", rInt)),
+					resource.TestCheckResourceAttr(r, "hostname", fmt.Sprintf("tfacc-device-test-%d", rInt)),
 				),
 			},
 			{
 				Config: testAccCheckMetalDeviceConfig_varname(rInt+1, rs),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckMetalDeviceExists(r, &d2),
-					resource.TestCheckResourceAttr(r, "hostname", fmt.Sprintf("tfacc-test-device-%d", rInt+1)),
+					resource.TestCheckResourceAttr(r, "hostname", fmt.Sprintf("tfacc-device-test-%d", rInt+1)),
 					testAccCheckMetalSameDevice(t, &d1, &d2),
 				),
 			},
@@ -202,7 +202,7 @@ func TestAccMetalDevice_Update(t *testing.T) {
 				Config: testAccCheckMetalDeviceConfig_varname(rInt+2, rs),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckMetalDeviceExists(r, &d3),
-					resource.TestCheckResourceAttr(r, "hostname", fmt.Sprintf("tfacc-test-device-%d", rInt+2)),
+					resource.TestCheckResourceAttr(r, "hostname", fmt.Sprintf("tfacc-device-test-%d", rInt+2)),
 					resource.TestCheckResourceAttr(r, "description", fmt.Sprintf("test-desc-%d", rInt+2)),
 					resource.TestCheckResourceAttr(r, "tags.0", fmt.Sprintf("%d", rInt+2)),
 					testAccCheckMetalSameDevice(t, &d2, &d3),
@@ -212,7 +212,7 @@ func TestAccMetalDevice_Update(t *testing.T) {
 				Config: testAccCheckMetalDeviceConfig_no_description(rInt+3, rs),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckMetalDeviceExists(r, &d4),
-					resource.TestCheckResourceAttr(r, "hostname", fmt.Sprintf("tfacc-test-device-%d", rInt+3)),
+					resource.TestCheckResourceAttr(r, "hostname", fmt.Sprintf("tfacc-device-test-%d", rInt+3)),
 					resource.TestCheckResourceAttr(r, "tags.0", fmt.Sprintf("%d", rInt+3)),
 					testAccCheckMetalSameDevice(t, &d3, &d4),
 				),
@@ -323,7 +323,7 @@ func testAccCheckMetalDeviceDestroy(s *terraform.State) error {
 
 func testAccCheckMetalDeviceAttributes(device *packngo.Device) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
-		if device.Hostname != "tfacc-test-device" {
+		if device.Hostname != "tfacc-device-test" {
 			return fmt.Errorf("Bad name: %s", device.Hostname)
 		}
 		if device.State != "active" {
@@ -477,7 +477,7 @@ resource "metal_project" "test" {
 }
 
 resource "metal_device" "test" {
-  hostname         = "tfacc-test-device-%d"
+  hostname         = "tfacc-device-test-%d"
   plan             = "c3.medium.x86"
   facilities       = ["da11"]
   operating_system = "ubuntu_16_04"
@@ -495,7 +495,7 @@ resource "metal_project" "test" {
 }
 
 resource "metal_device" "test" {
-  hostname         = "tfacc-test-device-%d"
+  hostname         = "tfacc-device-test-%d"
   plan             = "c3.medium.x86"
   facilities       = ["da11"]
   operating_system = "ubuntu_16_04"
@@ -519,7 +519,7 @@ resource "metal_project" "test" {
 }
 
 resource "metal_device" "test" {
-  hostname         = "tfacc-test-device-%d"
+  hostname         = "tfacc-device-test-%d"
   description      = "test-desc-%d"
   plan             = "c3.medium.x86"
   facilities       = ["da11"]
@@ -538,7 +538,7 @@ resource "metal_project" "test" {
 }
 
 resource "metal_device" "test" {
-  hostname         = "tfacc-test-device-%d"
+  hostname         = "tfacc-device-test-%d"
   description      = "test-desc-%d"
   plan             = "c3.medium.x86"
   facilities       = ["da11"]
@@ -559,7 +559,7 @@ resource "metal_project" "test" {
 }
 
 resource "metal_device" "test" {
-  hostname         = "tfacc-test-device"
+  hostname         = "tfacc-device-test"
   plan             = "c3.medium.x86"
   metro            = "da"
   operating_system = "ubuntu_16_04"
@@ -589,7 +589,7 @@ resource "metal_project" "test" {
 }
 
 resource "metal_device" "test" {
-  hostname         = "tfacc-test-device"
+  hostname         = "tfacc-device-test"
   plan             = "c3.medium.x86"
   facilities       = ["da11"]
   operating_system = "ubuntu_16_04"

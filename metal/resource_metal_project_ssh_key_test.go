@@ -17,13 +17,13 @@ resource "metal_project" "test" {
 }
 
 resource "metal_project_ssh_key" "test" {
-    name = "tfacc-project-key-test"
+    name = "tfacc-pro-key-test"
     public_key = "%s"
     project_id = "${metal_project.test.id}"
 }
 
 resource "metal_device" "test" {
-    hostname            = "tfacc-device-key-test"
+    hostname            = "tfacc-device-test-key"
     plan                = "baremetal_0"
     facilities          = ["ny5", "ny7", "any"]
     operating_system    = "ubuntu_16_04"
