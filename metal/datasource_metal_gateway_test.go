@@ -10,25 +10,25 @@ import (
 func testAccDataSourceMetalGatewayConfig_PrivateIPv4() string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-    name = "tfacc-gateway-test"
+	name = "tfacc-pro-gateway-test"
 }
 
 resource "metal_vlan" "test" {
-    description = "test VLAN in SV"
-    metro       = "sv"
-    project_id  = metal_project.test.id
+	description = "%s-vlan in SV"
+	metro       = "sv"
+	project_id  = metal_project.test.id
 }
 
 resource "metal_gateway" "test" {
-    project_id               = metal_project.test.id
-    vlan_id                  = metal_vlan.test.id
-    private_ipv4_subnet_size = 8
+	project_id               = metal_project.test.id
+	vlan_id                  = metal_vlan.test.id
+	private_ipv4_subnet_size = 8
 }
 
 data "metal_gateway" "test" {
-    gateway_id = metal_gateway.test.id
+	gateway_id = metal_gateway.test.id
 }
-`)
+`, tstResourcePrefix)
 }
 
 func TestAccDataSourceMetalGateway_PrivateIPv4(t *testing.T) {

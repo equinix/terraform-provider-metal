@@ -41,7 +41,7 @@ func testSweepVirtualCircuits(region string) error {
 		for _, conn := range conns {
 			for _, port := range conn.Ports {
 				for _, vc := range port.VirtualCircuits {
-					if strings.HasPrefix(vc.Name, "tfacc-") {
+					if strings.HasPrefix(vc.Name, "tfacc-vc") {
 						vcs[vc.ID] = &vc
 					}
 				}
@@ -77,28 +77,32 @@ func testAccCheckMetalVirtualCircuitDestroy(s *terraform.State) error {
 func testAccMetalVirtualCircuitConfig_Dedicated(randstr string, randint int) string {
 	// Dedicated connection in DA metro
 	testConnection := os.Getenv(metalDedicatedConnIDEnvVar)
+
 	return fmt.Sprintf(`
-        data "metal_connection" "test" {
-			connection_id = "%s"
-		}
+data "metal_connection" "test" {
+	connection_id = "%[1]s"
+}
 
-		resource "metal_project" "test" {
-            name = "tfacc-conn-pro-%s"
-        }
+resource "metal_project" "test" {
+	name = "%[4]s-pro-vc-%[2]s"
+}
 
-        resource "metal_vlan" "test" {
-            project_id = metal_project.test.id
-            metro      = "da"
-        }
+resource "metal_vlan" "test" {
+	project_id  = metal_project.test.id
+	metro       = "da"
+	description = "%[4]s-vlan test"
+}
 
-        resource "metal_virtual_circuit" "test" {
-            connection_id = data.metal_connection.test.id
-            project_id = metal_project.test.id
-            port_id = data.metal_connection.test.ports[0].id
-            vlan_id = metal_vlan.test.id
-            nni_vlan = %d
-        }`,
-		testConnection, randstr, randint)
+resource "metal_virtual_circuit" "test" {
+	name = "%[4]s-vc-%[2]s"
+	description = "%[4]s-vc-%[2]s"
+	connection_id = data.metal_connection.test.id
+	project_id = metal_project.test.id
+	port_id = data.metal_connection.test.ports[0].id
+	vlan_id = metal_vlan.test.id
+	nni_vlan = %[3]d
+}
+`, testConnection, randstr, randint, tstResourcePrefix)
 }
 
 func TestAccMetalVirtualCircuit_Dedicated(t *testing.T) {

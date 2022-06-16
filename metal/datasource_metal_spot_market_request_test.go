@@ -52,7 +52,7 @@ func testDataSourceMetalSpotMarketRequestConfig_Basic(projSuffix string) string 
 	return fmt.Sprintf(`
 
 resource "metal_project" "test" {
-  name = "tfacc-spot_market_request-%s"
+  name = "tfacc-pro-spot_market_request-%s"
 }
 
 resource "metal_spot_market_request" "req" {
@@ -81,7 +81,7 @@ func testDataSourceMetalSpotMarketRequestConfig_Metro(projSuffix string) string 
 	return fmt.Sprintf(`
 
 resource "metal_project" "test" {
-  name = "tfacc-spot_market_request-%s"
+  name = "tfacc-pro-spot_market_request-%s"
 }
 
 resource "metal_spot_market_request" "req" {

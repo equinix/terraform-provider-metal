@@ -11,7 +11,7 @@ import (
 func testAccDataSourceMetalReservedIPBlockConfig_Basic(name string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "foobar" {
-	name = "tfacc-reserved_ip_block-%s"
+	name = "tfacc-pro-reserved_ip_block-%s"
 }
 
 resource "metal_reserved_ip_block" "test" {

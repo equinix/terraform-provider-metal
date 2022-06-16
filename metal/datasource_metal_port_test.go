@@ -31,7 +31,7 @@ func testPortConfig_ByName(name string) string {
 	return fmt.Sprintf(`
 
 resource "metal_project" "test" {
-    name = "tfacc-port-%s"
+    name = "tfacc-pro-port-%s"
 }
 
 resource "metal_device" "test" {
@@ -74,7 +74,7 @@ func testPortConfig_ById(name string) string {
 	return fmt.Sprintf(`
 
 resource "metal_project" "test" {
-    name = "tfacc-port-%s"
+    name = "tfacc-pro-port-%s"
 }
 
 resource "metal_device" "test" {

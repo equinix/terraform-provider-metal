@@ -14,22 +14,22 @@ import (
 func confAccMetalPort_base(name string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "test" {
-    name = "tfacc-port-test-%s"
+    name = "tfacc-pro-port-%s"
 }
 
 resource "metal_device" "test" {
-  hostname         = "tfacc-metal-port-test"
-  plan             = "c3.medium.x86"
-  metro            = "da"
-  operating_system = "ubuntu_16_04"
-  billing_cycle    = "hourly"
-  project_id       = "${metal_project.test.id}"
+	hostname         = "tfacc-metal-port-test"
+	plan             = "c3.medium.x86"
+	metro            = "da"
+	operating_system = "ubuntu_16_04"
+	billing_cycle    = "hourly"
+	project_id       = "${metal_project.test.id}"
 }
 
 locals {
-  bond0_id = [for p in metal_device.test.ports: p.id if p.name == "bond0"][0]
-  eth1_id = [for p in metal_device.test.ports: p.id if p.name == "eth1"][0]
-  eth0_id = [for p in metal_device.test.ports: p.id if p.name == "eth0"][0]
+	bond0_id = [for p in metal_device.test.ports: p.id if p.name == "bond0"][0]
+	eth1_id = [for p in metal_device.test.ports: p.id if p.name == "eth1"][0]
+	eth0_id = [for p in metal_device.test.ports: p.id if p.name == "eth0"][0]
 }
 
 `, name)
@@ -40,11 +40,11 @@ func confAccMetalPort_L3(name string) string {
 %s
 
 resource "metal_port" "bond0" {
-  port_id = local.bond0_id
-  bonded = true
-  depends_on = [
-    metal_port.eth1,
-  ]
+	port_id = local.bond0_id
+	bonded = true
+	depends_on = [
+		metal_port.eth1,
+	]
 }
 
 resource "metal_port" "eth1" {
@@ -60,10 +60,10 @@ func confAccMetalPort_L2Bonded(name string) string {
 %s
 
 resource "metal_port" "bond0" {
-  port_id = local.bond0_id
-  layer2 = true
-  bonded = true
-  reset_on_delete = true
+	port_id = local.bond0_id
+	layer2 = true
+	bonded = true
+	reset_on_delete = true
 }
 
 `, confAccMetalPort_base(name))
@@ -74,10 +74,10 @@ func confAccMetalPort_L2Individual(name string) string {
 %s
 
 resource "metal_port" "bond0" {
-  port_id = local.bond0_id
-  layer2 = true
-  bonded = false
-  reset_on_delete = true
+	port_id = local.bond0_id
+	layer2 = true
+	bonded = false
+	reset_on_delete = true
 }
 
 `, confAccMetalPort_base(name))
@@ -88,18 +88,18 @@ func confAccMetalPort_HybridUnbonded(name string) string {
 %s
 
 resource "metal_port" "bond0" {
-  port_id = local.bond0_id
-  layer2 = false
-  bonded = true
-  depends_on = [
-    metal_port.eth1,
-  ]
+	port_id = local.bond0_id
+	layer2 = false
+	bonded = true
+	depends_on = [
+		metal_port.eth1,
+	]
 }
 
 resource "metal_port" "eth1" {
-  port_id = local.eth1_id
-  bonded = false
-  reset_on_delete = true
+	port_id = local.eth1_id
+	bonded = false
+	reset_on_delete = true
 }
 
 `, confAccMetalPort_base(name))
@@ -110,19 +110,19 @@ func confAccMetalPort_HybridBonded(name string) string {
 %s
 
 resource "metal_port" "bond0" {
-  port_id = local.bond0_id
-  layer2 = false
-  bonded = true
-  vlan_ids = [metal_vlan.test.id]
-  reset_on_delete = true
+	port_id = local.bond0_id
+	layer2 = false
+	bonded = true
+	vlan_ids = [metal_vlan.test.id]
+	reset_on_delete = true
 }
 
 resource "metal_vlan" "test" {
-  description = "test"
-  metro = "ny"
-  project_id = metal_project.test.id
+	description = "%s-vlan test"
+	metro = "ny"
+	project_id = metal_project.test.id
 }
-`, confAccMetalPort_base(name))
+`, confAccMetalPort_base(name), tstResourcePrefix)
 }
 
 func confAccMetalPort_HybridBondedVxlan(name string) string {
@@ -130,27 +130,27 @@ func confAccMetalPort_HybridBondedVxlan(name string) string {
 %s
 
 resource "metal_port" "bond0" {
-  port_id = local.bond0_id
-  layer2 = false
-  bonded = true
-  vxlan_ids = [metal_vlan.test1.vxlan, metal_vlan.test2.vxlan]
-  reset_on_delete = true
+	port_id = local.bond0_id
+	layer2 = false
+	bonded = true
+	vxlan_ids = [metal_vlan.test1.vxlan, metal_vlan.test2.vxlan]
+	reset_on_delete = true
 }
 
 resource "metal_vlan" "test1" {
-  description = "test1"
-  metro = "ny"
-  project_id = metal_project.test.id
-  vxlan = 1001
+	description = "%[2]s-vlan test1"
+	metro = "ny"
+	project_id = metal_project.test.id
+	vxlan = 1001
 }
 
 resource "metal_vlan" "test2" {
-  description = "test2"
-  metro = "ny"
-  project_id = metal_project.test.id
-  vxlan = 1002
+	description = "%[2]s-vlan test2"
+	metro = "ny"
+	project_id = metal_project.test.id
+	vxlan = 1002
 }
-`, confAccMetalPort_base(name))
+`, confAccMetalPort_base(name), tstResourcePrefix)
 }
 
 func TestAccMetalPort_HybridBondedVxlan(t *testing.T) {
