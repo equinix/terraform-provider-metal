@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -40,7 +41,7 @@ func filterSchema(allowedKeys []string) *schema.Schema {
 					Type:         schema.TypeString,
 					Optional:     true,
 					Default:      "exact",
-					ValidateFunc: validation.StringInSlice([]string{"exact", "re", "substring", "less_than", "more_than"}, false),
+					ValidateFunc: validation.StringInSlice([]string{"exact", "re", "substring", "less_than", "less_than_or_equal", "greater_than", "greater_than_or_equal"}, false),
 				},
 			},
 		},
@@ -70,7 +71,7 @@ func expandFilters(recordSchema map[string]*schema.Schema, rawFilters []interfac
 		if err != nil {
 			return nil, err
 		}
-		if matchBy == "less_than" || matchBy == "more_than" {
+		if strings.Contains(matchBy, "less_than") || strings.Contains(matchBy, "greater_than") {
 			if len(expandedFilterValues) != 1 {
 				return nil, fmt.Errorf("field '%s' works with only one value", matchBy)
 			}
