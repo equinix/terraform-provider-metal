@@ -43,7 +43,7 @@ resource "metal_project" "test" {
 }
 
 resource "metal_device" "test" {
-  hostname         = "tfacc-device-ip-test"
+  hostname         = "tfacc-device-test-ip"
   plan             = "c3.medium.x86"
   facilities       = ["da11"]
   operating_system = "ubuntu_16_04"

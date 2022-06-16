@@ -24,12 +24,12 @@ func TestAccOrgDataSource_Basic(t *testing.T) {
 					testAccCheckMetalOrgExists("metal_organization.test", &org),
 					resource.TestCheckResourceAttr(
 						"metal_organization.test", "name",
-						fmt.Sprintf("tfacc-datasource-org-%d", rInt)),
+						fmt.Sprintf("tfacc-org-datasource-%d", rInt)),
 					resource.TestCheckResourceAttr(
 						"metal_organization.test", "description", "quux"),
 					resource.TestCheckResourceAttr(
 						"data.metal_organization.test", "name",
-						fmt.Sprintf("tfacc-datasource-org-%d", rInt)),
+						fmt.Sprintf("tfacc-org-datasource-%d", rInt)),
 					resource.TestCheckResourceAttrPair(
 						"metal_organization.test", "address.0.address",
 						"data.metal_organization.test", "address.0.address",
@@ -55,7 +55,7 @@ func TestAccOrgDataSource_Basic(t *testing.T) {
 func testAccCheckMetalOrgDataSourceConfigBasic(r int) string {
 	return fmt.Sprintf(`
 resource "metal_organization" "test" {
-  name = "tfacc-datasource-org-%d"
+  name = "tfacc-org-datasource-%d"
   description = "quux"
   address {
 	address = "tfacc org street"

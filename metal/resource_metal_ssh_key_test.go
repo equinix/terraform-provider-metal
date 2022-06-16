@@ -236,11 +236,11 @@ func testAccCheckMetalSSHKeyConfig_projectBasic(rInt int, publicSshKey string) s
 	return fmt.Sprintf(`
 
 resource "metal_project" "test" {
-    name = "tfacc-project-key-test-%d"
+    name = "tfacc-pro-key-test-%d"
 }
 
 resource "metal_project_ssh_key" "foobar" {
-    name = "tfacc-project-key-%d"
+    name = "tfacc-pro-key-%d"
     public_key = "%s"
 	project_id = metal_project.test.id
 }`, rInt, rInt, publicSshKey)

@@ -60,7 +60,7 @@ resource "metal_project" "test" {
 }
 
 resource "metal_device" "test" {
-  hostname         = "tfacc-device-ip-attachment-test"
+  hostname         = "tfacc-device-test-ip-attachment"
   plan             = "c3.medium.x86"
   facilities       = ["da11"]
   operating_system = "ubuntu_16_04"
@@ -116,7 +116,7 @@ resource "metal_project" "test" {
 }
 
 resource "metal_device" "test" {
-  hostname         = "tfacc-device-ip-attachment-test"
+  hostname         = "tfacc-device-test-ip-attachment"
   plan             = "c3.medium.x86"
   metro            = "da"
   operating_system = "ubuntu_16_04"

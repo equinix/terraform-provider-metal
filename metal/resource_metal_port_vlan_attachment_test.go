@@ -19,7 +19,7 @@ resource "metal_project" "test" {
 }
 
 resource "metal_device" "test" {
-	hostname         = "tfacc-device-port-vlan-attachment-test"
+	hostname         = "tfacc-device-test-port-vlan-attachment"
 	plan             = "s1.large.x86"
 	facilities       = ["nrt1"]
 	operating_system = "ubuntu_16_04"
@@ -191,7 +191,7 @@ resource "metal_project" "test" {
 }
 
 resource "metal_device" "test" {
-	hostname         = "tfacc-device-hybrid-test"
+	hostname         = "tfacc-device-test-hybrid"
 	plan             = "n2.xlarge.x86"
 	facilities       = ["dfw2"]
 	operating_system = "ubuntu_16_04"
@@ -262,7 +262,7 @@ resource "metal_project" "test" {
 }
 
 resource "metal_device" "test" {
-  hostname         = "tfacc-device-hmv-test"
+  hostname         = "tfacc-device-test-hmv"
   plan             = "s1.large.x86"
   facilities       = ["nrt1"]
   operating_system = "ubuntu_16_04"
@@ -377,7 +377,7 @@ resource "metal_project" "test" {
 }
 
 resource "metal_device" "test" {
-  hostname         = "tfacc-device-l2n-test"
+  hostname         = "tfacc-device-test-l2n"
   plan             = "s1.large.x86"
   facilities       = ["nrt1"]
   operating_system = "ubuntu_16_04"

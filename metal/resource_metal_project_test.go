@@ -65,7 +65,7 @@ func TestAccMetalProject_Basic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckMetalProjectExists("metal_project.foobar", &project),
 					resource.TestCheckResourceAttr(
-						"metal_project.foobar", "name", fmt.Sprintf("tfacc-project-%d", rInt)),
+						"metal_project.foobar", "name", fmt.Sprintf("tfacc-pro-%d", rInt)),
 				),
 			},
 		},
@@ -261,7 +261,7 @@ func TestAccMetalProject_Update(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckMetalProjectExists("metal_project.foobar", &project),
 					resource.TestCheckResourceAttr(
-						"metal_project.foobar", "name", fmt.Sprintf("tfacc-project-%d", rInt)),
+						"metal_project.foobar", "name", fmt.Sprintf("tfacc-pro-%d", rInt)),
 				),
 			},
 			{
@@ -269,7 +269,7 @@ func TestAccMetalProject_Update(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckMetalProjectExists("metal_project.foobar", &project),
 					resource.TestCheckResourceAttr(
-						"metal_project.foobar", "name", fmt.Sprintf("tfacc-project-%d", rInt+1)),
+						"metal_project.foobar", "name", fmt.Sprintf("tfacc-pro-%d", rInt+1)),
 				),
 			},
 		},
@@ -300,7 +300,7 @@ func TestAccMetalProject_BGPUpdate(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckMetalProjectExists(res, &p1),
 					resource.TestCheckResourceAttr(res, "name",
-						fmt.Sprintf("tfacc-project-%d", rInt)),
+						fmt.Sprintf("tfacc-pro-%d", rInt)),
 				),
 			},
 			{
@@ -376,7 +376,7 @@ func testAccCheckMetalProjectExists(n string, project *packngo.Project) resource
 func testAccCheckMetalProjectConfig_BT(r int) string {
 	return fmt.Sprintf(`
 resource "metal_project" "foobar" {
-    name = "tfacc-project-%d"
+    name = "tfacc-pro-%d"
 	backend_transfer = true
 }`, r)
 }
@@ -384,14 +384,14 @@ resource "metal_project" "foobar" {
 func testAccCheckMetalProjectConfig_basic(r int) string {
 	return fmt.Sprintf(`
 resource "metal_project" "foobar" {
-    name = "tfacc-project-%d"
+    name = "tfacc-pro-%d"
 }`, r)
 }
 
 func testAccCheckMetalProjectConfig_BGP(r int, pass string) string {
 	return fmt.Sprintf(`
 resource "metal_project" "foobar" {
-    name = "tfacc-project-%d"
+    name = "tfacc-pro-%d"
 	bgp_config {
 		deployment_type = "local"
 		md5 = "%s"
@@ -403,7 +403,7 @@ resource "metal_project" "foobar" {
 func testAccCheckMetalProjectOrgConfig(r string) string {
 	return fmt.Sprintf(`
 resource "metal_organization" "test" {
-	name = "tfacc-project-%s"
+	name = "tfacc-pro-%s"
 	address {
 		address = "tfacc org street"
 		city = "london"
@@ -413,7 +413,7 @@ resource "metal_organization" "test" {
 }
 
 resource "metal_project" "foobar" {
-	name = "tfacc-project-%s"
+	name = "tfacc-pro-%s"
 	organization_id = "${metal_organization.test.id}"
 }`, r, r)
 }
@@ -432,7 +432,7 @@ func TestAccMetalProjectOrg(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckMetalProjectExists("metal_project.foobar", &project),
 					resource.TestCheckResourceAttr(
-						"metal_project.foobar", "name", fmt.Sprintf("tfacc-project-%s", rn)),
+						"metal_project.foobar", "name", fmt.Sprintf("tfacc-pro-%s", rn)),
 				),
 			},
 			{
