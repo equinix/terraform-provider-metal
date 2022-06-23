@@ -1,7 +1,7 @@
 # Equinix Metal Terraform Provider
 
+[![Deprecated](https://img.shields.io/badge/Stability-Deprecated-black.svg)](deprecated-statement.md#deprecated-statements)
 [![GitHub release](https://img.shields.io/github/release/equinix/terraform-provider-metal/all.svg?style=flat-square)](https://github.com/equinix/terraform-provider-metal/releases)
-![](https://img.shields.io/badge/Stability-Maintained-green.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/equinix/terraform-provider-metal)](https://goreportcard.com/report/github.com/equinix/terraform-provider-metal)
 
 [![Slack](https://slack.equinixmetal.com/badge.svg)](https://slack.equinixmetal.com)
@@ -9,65 +9,14 @@
 
 <img src="https://metal.equinix.com/metal/images/logo/equinix-metal-full.svg" width="600px">
 
-This repository is [Maintained](https://github.com/packethost/standards/blob/master/maintained-statement.md) meaning that this software is supported by Equinix Metal and its community - available to use in production environments.
+> **EOL (End of Life) scheduled for July 1, 2023**
+>
+> This repository is now [Deprecated](https://github.com/equinix-labs/equinix-labs/blob/master/deprecated-statement.md) meaning that this software is only supported or maintained by Equinix Metal and its community in a case-by-case basis.
 
-## Using the provider
+[Please review the Metal to Equinix provider migration guide](https://registry.terraform.io/providers/equinix/equinix/latest/docs/guides/migration_guide_equinix_metal). A guide is also available for [migrating from the Packet provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs/guides/migration_guide_packet).
 
-The Equinix Metal provider will be installed on `terraform init` of a template using any of the `metal_*` resources.
+The [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) has full support for existing Terraform managed Metal resources once Terraform configuration and state are adapted.  The Equinix provider manages resources including Network Edge and Fabric in addition to Metal.
 
-See <https://registry.terraform.io/providers/equinix/metal/latest/docs> for documentation on the resources included in this provider.
+Critical bug fixes will be introduced as needed for one year, ending in July 2023, at which point this repository will be transitioned to [end of life](https://github.com/equinix-labs/equinix-labs/blob/master/end-of-life-statement.md)
 
-### Migrating from Packet
-
-[Packet is now Equinix Metal!](https://blog.equinix.com/blog/2020/10/06/equinix-metal-metal-and-more/) See [Issue #1](https://github.com/equinix/terraform-provider-metal/issues/1) for more details on migrating existing projects.
-## Requirements
-
-- [Terraform 0.12+](https://www.terraform.io/downloads.html) (for v1.0.0 of this provider and newer)
-- [Go](https://golang.org/doc/install) 1.13 (to build the provider plugin)
-
-## Building the provider
-
-Clone the repository, enter the provider directory, and build the provider.
-
-```sh
-git clone git@github.com:equinix/terraform-provider-metal
-cd terraform-provider-metal
-make build
-```
-
-## Developing the provider
-
-If you wish to work on the provider, you'll first need [Go](http://www.golang.org) installed on your machine (version 1.13+ is *required*). You'll also need to correctly setup a [GOPATH](http://golang.org/doc/code.html#GOPATH), as well as adding `$GOPATH/bin` to your `$PATH`.
-
-To compile the provider, run `make build`. This will build the provider and put the provider binary in the `$GOPATH/bin` directory.
-
-```sh
-$ make bin
-...
-$ $GOPATH/bin/terraform-provider-metal
-...
-```
-
-## Testing provider code
-
-We have mostly acceptance tests in the provider. There's no point for you to run them all, but you should run the one covering the functionality which you change. The acceptance test run will cost you some money, so feel free to abstain. The acceptance test suite will be run for your PR during the review process.
-
-To run an acceptance test, find the relevant test function in `*_test.go` (for example TestAccMetalDevice_Basic), and run it as
-
-```sh
-TF_ACC=1 go test -v -timeout=20m ./... -run=TestAccMetalDevice_Basic
-```
-
-If you want to see HTTP traffic, set `TF_LOG=DEBUG`, i.e.
-
-```sh
-TF_LOG=DEBUG TF_ACC=1 go test -v -timeout=20m ./... -run=TestAccMetalDevice_Basic
-```
-
-## Testing the provider with Terraform
-
-Once you've built the plugin binary (see [Developing the provider](#developing-the-provider) above), it can be incorporated within your Terraform environment using the `-plugin-dir` option. Subsequent runs of Terraform will then use the plugin from your development environment.
-
-```sh
-terraform init -plugin-dir $GOPATH/bin
-```
+See <https://registry.terraform.io/providers/equinix/metal/latest/docs> for documentation on the resources included in this deprecated provider.
