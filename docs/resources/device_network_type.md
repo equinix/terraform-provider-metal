@@ -6,7 +6,9 @@ description: |-
   Provides a resource to manage network type of Equinix Metal devices.
 ---
 
-# metal_device_network_type
+# metal_device_network_type (Resource)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_device_network_type`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/equinix_metal_device_network_type) resource from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_device_network_type`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 This resource controls network type of Equinix Metal devices.
 

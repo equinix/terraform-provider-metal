@@ -4,8 +4,9 @@ description: |-
   Use port bonding, address assignments, and VLAN attachments to change the device network type from Layer-3, to Layer-2, to Hybrid.
 ---
 
-
 # Network types
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Server network types, such as Layer-2, Layer-3, and Hybrid may be familiar to users of the Equinix Metal Portal. In the Portal, you can toggle the network type with a click of the UI. To take advantage of these features in Terraform, which closely follows the Equinix Metal API, it is important to understand that the network type is a composite string value determined by one or more port bonding, addressing, and VLAN attachment configurations. To change the network type, you must change these underlying properties of the port(s).
 

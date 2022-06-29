@@ -5,7 +5,9 @@ description: |-
   Retrieve Equinix Metal Hardware Reservation
 ---
 
-# metal_hardware_reservation
+# metal_hardware_reservation (Data Source)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_hardware_reservation`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/data-sources/equinix_metal_hardware_reservation) data source from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_hardware_reservation`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Use this data source to retrieve a [hardware reservation resource from Equinix Metal](https://metal.equinix.com/developers/docs/deploy/reserved/).
 

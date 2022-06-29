@@ -7,7 +7,7 @@ description: |-
 
 # Equinix Metal Provider
 
-[Packet is now Equinix Metal!](https://blog.equinix.com/blog/2020/10/06/equinix-metal-metal-and-more/)
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated (End-of-Life scheduled for July 1, 2023) meaning that this software is only supported or maintained by Equinix Metal and its community in a case-by-case basis. The [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) has full support for existing Terraform managed Metal resources once Terraform configuration and state are adapted. The Equinix provider manages resources including Network Edge and Fabric in addition to Metal. [Please review the Metal to Equinix provider migration guide](https://registry.terraform.io/providers/equinix/equinix/latest/docs/guides/migration_guide_equinix_metal). A guide is also available for [migrating from the Packet provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs/guides/migration_guide_packet).
 
 The Equinix Metal (`metal`) provider is used to interact with the resources supported by [Equinix Metal](https://metal.equinix.com/).
 The provider needs to be configured with the proper credentials before it can be used.

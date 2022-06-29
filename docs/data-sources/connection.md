@@ -5,7 +5,9 @@ description: |-
   Retrieve Equinix Fabric Connection
 ---
 
-# metal\_connection
+# metal_connection (Data Source)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_connection`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/data-sources/equinix_metal_connection) data source from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_connection`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Use this data source to retrieve a connection resource from [Equinix Fabric - software-defined interconnections](https://metal.equinix.com/developers/docs/networking/fabric/)
 
@@ -13,7 +15,7 @@ Use this data source to retrieve a connection resource from [Equinix Fabric - so
 
 ```hcl
 data "metal_connection" "example" {
-  connection_id     = "4347e805-eb46-4699-9eb9-5c116e6a017d"
+  connection_id     = "4347e805-eb46-4699-9eb9-5c116e6a017d" 
 }
 ```
 

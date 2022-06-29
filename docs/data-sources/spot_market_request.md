@@ -5,7 +5,9 @@ description: |-
   Provides a datasource for existing Spot Market Requests in the Equinix Metal host.
 ---
 
-# metal_spot_market_request
+# metal_spot_market_request (Data Source)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_spot_market_request`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/data-sources/equinix_metal_spot_market_request) data source from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_spot_market_request`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Provides an Equinix Metal spot_market_request datasource. The datasource will contain list of device IDs created by referenced Spot Market Request.
 

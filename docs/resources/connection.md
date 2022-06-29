@@ -5,7 +5,9 @@ description: |-
   Request/Create Equinix Fabric Connection
 ---
 
-# metal\_connection
+# metal_connection (Resource)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_connection`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/equinix_metal_connection) resource from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_connection`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Use this resource to request of create an Interconnection from [Equinix Fabric - software-defined interconnections](https://metal.equinix.com/developers/docs/networking/fabric/)
 

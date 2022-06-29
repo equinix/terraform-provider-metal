@@ -5,7 +5,9 @@ description: |-
   Retrieve Equinix Metal Gateways
 ---
 
-# metal\_gateway
+# metal_gateway (Data Source)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_gateway`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/data-sources/equinix_metal_gateway) data source from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_gateway`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Use this datasource to retrieve Metal Gateway resources in Equinix Metal.
 

@@ -5,7 +5,9 @@ description: |-
   Provides an Equinix Metal Project SSH Key datasource.
 ---
 
-# metal\_project\_ssh\_key
+# metal_project_ssh_key (Data Source)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_project_ssh_key`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/data-sources/equinix_metal_project_ssh_key) data source from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_project_ssh_key`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Use this datasource to retrieve attributes of a Project SSH Key API resource.
 

@@ -5,7 +5,9 @@ description: |-
 Look up an IP address block
 ---
 
-# metal\_reserved\_ip\_block
+# metal_reserved_ip_block (Data Source)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_reserved_ip_block`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/data-sources/equinix_metal_reserved_ip_block) data source from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_reserved_ip_block`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Use this data source to find IP address blocks in Equinix Metal. You can use IP address or a block ID for lookup.
 

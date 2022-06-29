@@ -6,6 +6,8 @@ description: |-
 
 # Migrating from packethost/packet to equinix/metal
 
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
+
 Packet is now Equinix Metal, and the name of the Terraform provider changed too. This (terraform-provider-metal, provider equinix/metal) is the current provider for Equinix Metal.
 
 If you've been using terraform-provider-packet, and you want to use a newer provider version to manage resources in Equinix Metal, you will need to change the references in you HCL files. You can just change the names of the resources, e.g. from `packet_device` to `metal_device`. That should work, but it will cause the `packet_device` to be destroyed and new `metal_device` to be created instead. Re-creation of the resources might be undesirable, and this guide shows how to migrate to metal_ resources without the re-creation.

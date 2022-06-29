@@ -5,7 +5,9 @@ description: |-
   Provides an Equinix Metal SSH key resource.
 ---
 
-# metal\_ssh_key
+# metal_ssh_key (Resource)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_ssh_key`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/equinix_metal_ssh_key) resource from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_ssh_key`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Provides a resource to manage User SSH keys on your Equinix Metal user account. If you create a new device in a project, all the keys of the project's collaborators will be injected to the device.
 

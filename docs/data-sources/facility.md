@@ -5,7 +5,9 @@ description: |-
   Provides an Equinix Metal facility datasource. This can be used to read facilities.
 ---
 
-# metal_facility
+# metal_facility (Data Source)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_facility`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/data-sources/equinix_metal_facility) data source from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_facility`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Provides an Equinix Metal facility datasource.
 

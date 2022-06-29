@@ -5,7 +5,9 @@ description: |-
   Provides an Equinix Metal plans datasource. This can be used to find plans that meet a filter criteria.
 ---
 
-# metal_plans
+# metal_plans (Data Source)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_plans`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/data-sources/equinix_metal_plans) data source from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_plans`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Provides an Equinix Metal plans datasource. This can be used to find plans that meet a filter criteria.
 

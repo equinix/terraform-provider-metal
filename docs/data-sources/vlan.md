@@ -5,7 +5,9 @@ description: |-
   Provides an Equinix Metal Virtual Network datasource. This can be used to read the attributes of existing VLANs.
 ---
 
-# metal_vlan
+# metal_vlan (Data Source)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_vlan`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/data-sources/equinix_metal_vlan) data source from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_vlan`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Provides an Equinix Metal Virtual Network datasource. VLANs data sources can be
 searched by VLAN UUID, or project UUID and vxlan number.
