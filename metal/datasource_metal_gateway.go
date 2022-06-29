@@ -8,8 +8,8 @@ import (
 
 func dataSourceMetalGateway() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceMetalGatewayRead,
-
+		DeprecationMessage: deprecatedProviderMsg,
+		Read:               dataSourceMetalGatewayRead,
 		Schema: map[string]*schema.Schema{
 			"gateway_id": {
 				Required:    true,

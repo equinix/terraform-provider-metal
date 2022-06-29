@@ -85,7 +85,8 @@ func bgpRouteSchema() *schema.Resource {
 
 func dataSourceMetalDeviceBGPNeighbors() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceMetalDeviceBGPNeighborsRead,
+		DeprecationMessage: deprecatedProviderMsg,
+		Read:               dataSourceMetalDeviceBGPNeighborsRead,
 		Schema: map[string]*schema.Schema{
 			"device_id": {
 				Type:        schema.TypeString,

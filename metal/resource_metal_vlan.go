@@ -10,9 +10,10 @@ import (
 
 func resourceMetalVlan() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceMetalVlanCreate,
-		Read:   resourceMetalVlanRead,
-		Delete: resourceMetalVlanDelete,
+		DeprecationMessage: deprecatedProviderMsg,
+		Create:             resourceMetalVlanCreate,
+		Read:               resourceMetalVlanRead,
+		Delete:             resourceMetalVlanDelete,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},

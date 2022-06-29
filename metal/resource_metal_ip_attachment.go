@@ -22,9 +22,10 @@ func resourceMetalIPAttachment() *schema.Resource {
 		Required: true,
 	}
 	return &schema.Resource{
-		Create: resourceMetalIPAttachmentCreate,
-		Read:   resourceMetalIPAttachmentRead,
-		Delete: resourceMetalIPAttachmentDelete,
+		DeprecationMessage: deprecatedProviderMsg,
+		Create:             resourceMetalIPAttachmentCreate,
+		Read:               resourceMetalIPAttachmentRead,
+		Delete:             resourceMetalIPAttachmentDelete,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},

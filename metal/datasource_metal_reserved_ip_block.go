@@ -11,7 +11,8 @@ import (
 
 func dataSourceMetalReservedIPBlock() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceMetalReservedIPBlockRead,
+		DeprecationMessage: deprecatedProviderMsg,
+		Read:               dataSourceMetalReservedIPBlockRead,
 		Schema: map[string]*schema.Schema{
 			"id": {
 				Type:          schema.TypeString,

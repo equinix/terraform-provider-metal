@@ -31,9 +31,10 @@ func intInSlice(valid []int) schema.SchemaValidateFunc {
 func resourceMetalGateway() *schema.Resource {
 
 	return &schema.Resource{
-		Read:   resourceMetalGatewayRead,
-		Create: resourceMetalGatewayCreate,
-		Delete: resourceMetalGatewayDelete,
+		DeprecationMessage: deprecatedProviderMsg,
+		Read:               resourceMetalGatewayRead,
+		Create:             resourceMetalGatewayCreate,
+		Delete:             resourceMetalGatewayDelete,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},

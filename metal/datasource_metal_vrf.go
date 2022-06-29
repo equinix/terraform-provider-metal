@@ -6,8 +6,8 @@ import (
 
 func dataSourceMetalVRF() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceMetalVRFRead,
-
+		DeprecationMessage: deprecatedProviderMsg,
+		Read:               dataSourceMetalVRFRead,
 		Schema: map[string]*schema.Schema{
 			"vrf_id": {
 				Required:    true,

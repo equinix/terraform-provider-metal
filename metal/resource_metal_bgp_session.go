@@ -10,9 +10,10 @@ import (
 
 func resourceMetalBGPSession() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceMetalBGPSessionCreate,
-		Read:   resourceMetalBGPSessionRead,
-		Delete: resourceMetalBGPSessionDelete,
+		DeprecationMessage: deprecatedProviderMsg,
+		Create:             resourceMetalBGPSessionCreate,
+		Read:               resourceMetalBGPSessionRead,
+		Delete:             resourceMetalBGPSessionDelete,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},

@@ -8,6 +8,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
+const deprecatedProviderMsg = "Equinix Metal Provider is now Deprecated (End-of-Life scheduled for July 1, 2023) meaning that this software is only supported or maintained by Equinix Metal and its community in a case-by-case basis. The Equinix provider (https://registry.terraform.io/providers/equinix/equinix/latest/docs) has full support for existing Terraform managed Metal resources once Terraform configuration and state are adapted. The Equinix provider manages resources including Network Edge and Fabric in addition to Metal. Please review the Metal to Equinix provider migration guide: https://registry.terraform.io/providers/equinix/equinix/latest/docs/guides/migration_guide_equinix_metal"
+
 var (
 	metalMutexKV         = NewMutexKV()
 	DeviceNetworkTypes   = []string{"layer3", "hybrid", "layer2-individual", "layer2-bonded"}

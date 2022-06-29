@@ -39,10 +39,11 @@ func resourceMetalProjectAPIKey() *schema.Resource {
 		Description: "UUID of project which the new API key is scoped to",
 	}
 	return &schema.Resource{
-		Create: resourceMetalAPIKeyCreate,
-		Read:   resourceMetalAPIKeyRead,
-		Delete: resourceMetalAPIKeyDelete,
-		Schema: projectKeySchema,
+		DeprecationMessage: deprecatedProviderMsg,
+		Create:             resourceMetalAPIKeyCreate,
+		Read:               resourceMetalAPIKeyRead,
+		Delete:             resourceMetalAPIKeyDelete,
+		Schema:             projectKeySchema,
 	}
 }
 

@@ -9,8 +9,8 @@ import (
 
 func dataSourceMetalIPBlockRanges() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceMetalIPBlockRangesRead,
-
+		DeprecationMessage: deprecatedProviderMsg,
+		Read:               dataSourceMetalIPBlockRangesRead,
 		Schema: map[string]*schema.Schema{
 			"project_id": {
 				Type:        schema.TypeString,

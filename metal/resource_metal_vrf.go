@@ -10,6 +10,7 @@ import (
 
 func resourceMetalVRF() *schema.Resource {
 	return &schema.Resource{
+		DeprecationMessage: deprecatedProviderMsg,
 		Timeouts: &schema.ResourceTimeout{
 			Create: schema.DefaultTimeout(20 * time.Minute),
 			Update: schema.DefaultTimeout(20 * time.Minute),

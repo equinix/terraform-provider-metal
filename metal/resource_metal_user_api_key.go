@@ -12,9 +12,10 @@ func resourceMetalUserAPIKey() *schema.Resource {
 		Description: "UUID of user owning this key",
 	}
 	return &schema.Resource{
-		Create: resourceMetalAPIKeyCreate,
-		Read:   resourceMetalAPIKeyRead,
-		Delete: resourceMetalAPIKeyDelete,
+		DeprecationMessage: deprecatedProviderMsg,
+		Create:             resourceMetalAPIKeyCreate,
+		Read:               resourceMetalAPIKeyRead,
+		Delete:             resourceMetalAPIKeyDelete,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},

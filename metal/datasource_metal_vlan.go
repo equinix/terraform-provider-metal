@@ -9,7 +9,8 @@ import (
 
 func dataSourceMetalVlan() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceMetalVlanRead,
+		DeprecationMessage: deprecatedProviderMsg,
+		Read:               dataSourceMetalVlanRead,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},

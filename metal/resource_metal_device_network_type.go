@@ -10,10 +10,11 @@ import (
 
 func resourceMetalDeviceNetworkType() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceMetalDeviceNetworkTypeCreate,
-		Read:   resourceMetalDeviceNetworkTypeRead,
-		Delete: resourceMetalDeviceNetworkTypeDelete,
-		Update: resourceMetalDeviceNetworkTypeUpdate,
+		DeprecationMessage: deprecatedProviderMsg,
+		Create:             resourceMetalDeviceNetworkTypeCreate,
+		Read:               resourceMetalDeviceNetworkTypeRead,
+		Delete:             resourceMetalDeviceNetworkTypeDelete,
+		Update:             resourceMetalDeviceNetworkTypeUpdate,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},

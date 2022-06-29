@@ -9,7 +9,8 @@ import (
 
 func dataSourceSpotMarketPrice() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceMetalSpotMarketPriceRead,
+		DeprecationMessage: deprecatedProviderMsg,
+		Read:               dataSourceMetalSpotMarketPriceRead,
 		Schema: map[string]*schema.Schema{
 			"facility": {
 				Type:          schema.TypeString,

@@ -11,7 +11,8 @@ import (
 
 func dataSourceMetalProject() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceMetalProjectRead,
+		DeprecationMessage: deprecatedProviderMsg,
+		Read:               dataSourceMetalProjectRead,
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:          schema.TypeString,

@@ -13,10 +13,11 @@ func resourceMetalProjectSSHKey() *schema.Resource {
 		Required:    true,
 	}
 	return &schema.Resource{
-		Create: resourceMetalSSHKeyCreate,
-		Read:   resourceMetalSSHKeyRead,
-		Update: resourceMetalSSHKeyUpdate,
-		Delete: resourceMetalSSHKeyDelete,
+		DeprecationMessage: deprecatedProviderMsg,
+		Create:             resourceMetalSSHKeyCreate,
+		Read:               resourceMetalSSHKeyRead,
+		Update:             resourceMetalSSHKeyUpdate,
+		Delete:             resourceMetalSSHKeyDelete,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},

@@ -53,10 +53,11 @@ func resourceMetalConnection() *schema.Resource {
 		speeds = append(speeds, allowedSpeed.Str)
 	}
 	return &schema.Resource{
-		Read:   resourceMetalConnectionRead,
-		Create: resourceMetalConnectionCreate,
-		Delete: resourceMetalConnectionDelete,
-		Update: resourceMetalConnectionUpdate,
+		DeprecationMessage: deprecatedProviderMsg,
+		Read:               resourceMetalConnectionRead,
+		Create:             resourceMetalConnectionCreate,
+		Delete:             resourceMetalConnectionDelete,
+		Update:             resourceMetalConnectionUpdate,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},

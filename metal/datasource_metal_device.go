@@ -14,7 +14,8 @@ import (
 
 func dataSourceMetalDevice() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceMetalDeviceRead,
+		DeprecationMessage: deprecatedProviderMsg,
+		Read:               dataSourceMetalDeviceRead,
 		Schema: map[string]*schema.Schema{
 			"hostname": {
 				Type:          schema.TypeString,
