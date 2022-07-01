@@ -74,39 +74,47 @@ func testAccCheckMetalVirtualCircuitDestroy(s *terraform.State) error {
 	return nil
 }
 
-func testAccMetalVirtualCircuitConfig_Dedicated(randstr string, randint int) string {
+func testAccMetalConnectionConfig_vc(randint int) string {
 	// Dedicated connection in DA metro
 	testConnection := os.Getenv(metalDedicatedConnIDEnvVar)
 
 	return fmt.Sprintf(`
-data "metal_connection" "test" {
-	connection_id = "%[1]s"
+        locals {
+                conn_id = "%s"
+        }
+        data "metal_connection" test {
+            connection_id = local.conn_id
+        }
+        resource "metal_project" "test" {
+            name = "tfacc-conn-pro-%[2]d"
+        }
+        resource "metal_vlan" "test" {
+            project_id = metal_project.test.id
+            metro      = data.metal_connection.test.metro
+			description = "tfacc-vlan test"
+        }
+        resource "metal_virtual_circuit" "test" {
+            name = "tfacc-vc-%[2]d"
+            description = "tfacc-vc-%[2]d"
+            connection_id = data.metal_connection.test.connection_id
+            project_id = metal_project.test.id
+            port_id = data.metal_connection.test.ports[0].id
+            vlan_id = metal_vlan.test.id
+            nni_vlan = %[2]d
+        }
+        `,
+		testConnection, randint)
 }
 
-resource "metal_project" "test" {
-	name = "%[4]s-pro-vc-%[2]s"
-}
-
-resource "metal_vlan" "test" {
-	project_id  = metal_project.test.id
-	metro       = "da"
-	description = "%[4]s-vlan test"
-}
-
-resource "metal_virtual_circuit" "test" {
-	name = "%[4]s-vc-%[2]s"
-	description = "%[4]s-vc-%[2]s"
-	connection_id = data.metal_connection.test.id
-	project_id = metal_project.test.id
-	port_id = data.metal_connection.test.ports[0].id
-	vlan_id = metal_vlan.test.id
-	nni_vlan = %[3]d
-}
-`, testConnection, randstr, randint, tstResourcePrefix)
+func testAccMetalConnectionConfig_vcds(randint int) string {
+	return testAccMetalConnectionConfig_vc(randint) + `
+	datasource "metal_virtual_circuit" "test" {
+		virtual_circuit_id = metal_virtual_circuit.test.id
+	}
+	`
 }
 
 func TestAccMetalVirtualCircuit_Dedicated(t *testing.T) {
-	rs := acctest.RandString(10)
 	ri := acctest.RandIntRange(1024, 1093)
 
 	resource.ParallelTest(t, resource.TestCase{
@@ -115,7 +123,7 @@ func TestAccMetalVirtualCircuit_Dedicated(t *testing.T) {
 		CheckDestroy: testAccCheckMetalVirtualCircuitDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccMetalVirtualCircuitConfig_Dedicated(rs, ri),
+				Config: testAccMetalConnectionConfig_vc(ri),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrPair(
 						"metal_virtual_circuit.test", "vlan_id",
@@ -128,6 +136,32 @@ func TestAccMetalVirtualCircuit_Dedicated(t *testing.T) {
 				ImportState:             true,
 				ImportStateVerify:       true,
 				ImportStateVerifyIgnore: []string{"connection_id"},
+			},
+			{
+				Config: testAccMetalConnectionConfig_vcds(ri),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttrPair(
+						"metal_virtual_circuit.test", "id",
+						"data.metal_virtual_circuit.test", "virtual_circuit_id",
+					),
+					resource.TestCheckResourceAttrPair(
+						"metal_virtual_circuit.test", "speed",
+						"data.metal_virtual_circuit.test", "speed",
+					),
+
+					resource.TestCheckResourceAttrPair(
+						"metal_virtual_circuit.test", "port_id",
+						"data.metal_virtual_circuit.test", "port_id",
+					),
+					resource.TestCheckResourceAttrPair(
+						"metal_virtual_circuit.test", "vlan_id",
+						"data.metal_virtual_circuit.test", "vlan_id",
+					),
+					resource.TestCheckResourceAttrPair(
+						"metal_virtual_circuit.test", "nni_vlan",
+						"data.metal_virtual_circuit.test", "nni_vlan",
+					),
+				),
 			},
 		},
 	})
