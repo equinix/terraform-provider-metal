@@ -1,4 +1,12 @@
-## 3.3.0 (unreleased)
+## 3.3.0 (Jul 1, 2022)
+
+### PROVIDER DEPRECATION
+
+EOL (End of Life) scheduled for July 1, 2023
+
+This repository is now Deprecated meaning that this software is only supported or maintained by Equinix Metal and its community in a case-by-case basis.
+
+([#232](https://github.com/equinix/terraform-provider-metal/issues/232))
 
 ### DEPRECATIONS
 
@@ -7,9 +15,17 @@
 ### Bug Fixes
 
 * `metal_reserved_ip_block` will now block until the IP range is available. This is generally the desired outcome but is a change in behavior. Use `wait_for_state` to achieve the previous behavior, if desired.
+* Fix `wait_for_deprovision` behavior of `metal_device` to detect reservations being repurposed during the wait period ([#217](https://github.com/equinix/terraform-provider-metal/pull/217))
 
 ### Features
 
+* New data source `metal_plans` for querying plans using filters ([#194](https://github.com/equinix/terraform-provider-metal/pull/194))
+* New resource and data source `metal_vrf` ([#224](https://github.com/equinix/terraform-provider-metal/pull/224))
+* Adds `vrf` as a datasource attribute to `metal_gateway` ([#224](https://github.com/equinix/terraform-provider-metal/pull/224))
+* Adds `vrf_id` as a datasource attribute to `metal_gateway` ([#224](https://github.com/equinix/terraform-provider-metal/pull/224))
+* Adds `vrf_id`, `peer_asn`, `subnet`, `metal_ip`, `customer_ip`, `md5` as resource arguments and datasource attributes to `metal_virtual_circuit` ([#224](https://github.com/equinix/terraform-provider-metal/pull/224))
+* Adds `vrf_id`, `network`, `cidr` as resource arguments to `metal_reserved_ip_block` ([#224](https://github.com/equinix/terraform-provider-metal/pull/224))
+* Adds `address` as a datasource attribute and resource argument to `metal_organization` ([#231](https://github.com/equinix/terraform-provider-metal/pull/231))
 * Adds `wait_for_state` as an argument to `metal_reserved_ip_block` ([#209](https://github.com/equinix/terraform-provider-metal/pull/209))
 * Adds `custom_data` as an argument to `metal_reserved_ip_block` ([#209](https://github.com/equinix/terraform-provider-metal/pull/209))
 * Changed `tags` and `description` arguments to updatable in `metal_reserved_ip_block` ([#209](https://github.com/equinix/terraform-provider-metal/pull/209))
@@ -20,11 +36,15 @@
 
 ### Improvements
 
-* packngo version bumped to 0.22.0
-* CI build cleanup (go bumped to 1.17, vendor directory removed)
+* packngo version bumped to 0.25.0
+* CI build cleanup (go bumped to 1.17, vendor directory removed) ([#213](https://github.com/equinix/terraform-provider-metal/pull/213))
 * E2E tests sped up with parallelization and fixing spot market tests
+* E2E tests sweepers will ensure VLAN/projects clean up ([#234](https://github.com/equinix/terraform-provider-metal/pull/234))
+* `organization_id` is now optional in the `metal_connection` resource ([#223](https://github.com/equinix/terraform-provider-metal/pull/223))
+* `ports` attribute in the `metal_connection` data source and resource are sorted by role (primary/secondary) ([#223](https://github.com/equinix/terraform-provider-metal/pull/223))
+* `metal_device` resource will support the Terraform timeout attributes ([#219](https://github.com/equinix/terraform-provider-metal/pull/219))
 
-## 3.2.2 (Feb 18, 2021)
+## 3.2.2 (Feb 18, 2022)
 
 ### Bug Fixes
 
