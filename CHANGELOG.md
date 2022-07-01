@@ -43,6 +43,7 @@ This repository is now Deprecated meaning that this software is only supported o
 * `organization_id` is now optional in the `metal_connection` resource ([#223](https://github.com/equinix/terraform-provider-metal/pull/223))
 * `ports` attribute in the `metal_connection` data source and resource are sorted by role (primary/secondary) ([#223](https://github.com/equinix/terraform-provider-metal/pull/223))
 * `metal_device` resource will support the Terraform timeout attributes ([#219](https://github.com/equinix/terraform-provider-metal/pull/219))
+* `metal_gateway` will wait for the Metal Gateway devices to pass through the "deleting" status  ([#238](https://github.com/equinix/terraform-provider-metal/pull/238))
 
 ## 3.2.2 (Feb 18, 2022)
 
