@@ -7,6 +7,8 @@ description: |-
 
 # metal_virtual_circuit (Data Source)
 
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_virtual_circuit`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/data-sources/equinix_metal_virtual_circuit) data source from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_virtual_circuit`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
+
 Use this data source to retrieve a VRF resource.
 
 ~> VRF features are not generally available. The interfaces related to VRF resources may change ahead of general availability.

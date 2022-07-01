@@ -6,6 +6,8 @@ description: |-
 
 # Metros vs. Facilities
 
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
+
 In April 2021, Equinix Metal rolled out a new location concept - [metros](https://feedback.equinixmetal.com/changelog/new-metros-feature-live). A metro is an Equinix-wide concept for data centers which are grouped together geographically. Data centers within a metro share capacity and networking features. You can read more about metros at https://metal.equinix.com/developers/docs/locations/metros/.
 
 Before the introduction of metros, resources were deployed to a single `facility` location.  When provisioning `metal_device` resources, the facility could be chosen by Equinix Metal with a user-supplied list of `facilities`, or a wildcard `any` facility.  The individual facility locations use a code like "sv15" or "ny5". Metros group facilities. For example, metro "sv" contains the "sv15" facility, among others. If you specify a metro when creating a resource, it will be deployed to one of the facilities in the metro group. You can then find the deployed facility using a read-only attribute of the resource (e.g. `deployed_facility` for `metal_device` resources).

@@ -5,7 +5,9 @@ description: |-
   List IP address ranges allocated to a project
 ---
 
-# metal\_ip\_block\_ranges
+# metal_ip_block_ranges (Data Source)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_ip_block_ranges`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/data-sources/equinix_metal_ip_block_ranges) data source from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_ip_block_ranges`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Use this datasource to get CIDR expressions for allocated IP blocks of all the types in a project, optionally filtered by facility or metro.
 

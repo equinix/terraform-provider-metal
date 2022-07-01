@@ -5,7 +5,9 @@ description: |-
   Create Equinix Metal Gateways
 ---
 
-# metal\_gateway
+# metal_gateway (Resource)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_gateway`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/equinix_metal_gateway) resource from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_gateway`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Use this resource to create Metal Gateway resources in Equinix Metal.
 

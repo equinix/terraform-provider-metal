@@ -44,7 +44,8 @@ func capacitySchema() *schema.Schema {
 
 func dataSourceMetalFacility() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceMetalFacilityRead,
+		DeprecationMessage: deprecatedProviderMsg,
+		Read:               dataSourceMetalFacilityRead,
 		Schema: map[string]*schema.Schema{
 			"code": {
 				Type:        schema.TypeString,

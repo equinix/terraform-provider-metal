@@ -3,9 +3,11 @@ page_title: "Equinix Metal: Metal User API Key"
 subcategory: ""
 description: |-
   Create Equinix Metal User API Keys
-  ---
+---
 
-# metal_user_api_key
+# metal_user_api_key (Resource)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_user_api_key`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/equinix_metal_user_api_key) resource from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_user_api_key`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Use this resource to create Metal User API Key resources in Equinix Metal. Each API key contains a token which can be used for authentication in Equinix Metal HTTP API (in HTTP request header `X-Auth-Token`).
 

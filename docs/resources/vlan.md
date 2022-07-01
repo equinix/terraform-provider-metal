@@ -5,7 +5,9 @@ description: |-
   Provides a resource for Equinix Metal Virtual Network.
 ---
 
-# metal_vlan
+# metal_vlan (Resource)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_vlan`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/equinix_metal_vlan) resource from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_vlan`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Provides a resource to allow users to manage Virtual Networks in their projects.
 

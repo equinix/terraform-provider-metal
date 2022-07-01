@@ -5,7 +5,9 @@ description: |-
   Get an Equinix Metal operating system image
 ---
 
-# metal\_operating\_system
+# metal_operating_system (Data Source)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_operating_system`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/data-sources/equinix_metal_operating_system) data source from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_operating_system`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Use this data source to get Equinix Metal Operating System image.
 

@@ -7,6 +7,8 @@ description: |-
 
 # metal_vrf (Resource)
 
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_vrf`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/equinix_metal_vrf) resource from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_vrf`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
+
 Use this resource to manage a VRF.
 
 ~> VRF features are not generally available. The interfaces related to VRF resources may change ahead of general availability.

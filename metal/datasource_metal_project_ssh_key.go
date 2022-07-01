@@ -12,7 +12,8 @@ import (
 
 func dataSourceMetalProjectSSHKey() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceMetalProjectSSHKeyRead,
+		DeprecationMessage: deprecatedProviderMsg,
+		Read:               dataSourceMetalProjectSSHKeyRead,
 		Schema: map[string]*schema.Schema{
 			"search": {
 				Type:         schema.TypeString,

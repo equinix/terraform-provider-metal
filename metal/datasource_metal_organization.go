@@ -10,8 +10,8 @@ import (
 
 func dataSourceMetalOrganization() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceMetalOrganizationRead,
-
+		DeprecationMessage: deprecatedProviderMsg,
+		Read:               dataSourceMetalOrganizationRead,
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:          schema.TypeString,

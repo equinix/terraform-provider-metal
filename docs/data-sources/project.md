@@ -5,7 +5,9 @@ description: |-
   Provides an Equinix Metal Project datasource.
 ---
 
-# metal\_project
+# metal_project (Data Source)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_project`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/data-sources/equinix_metal_project) data source from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_project`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Use this datasource to retrieve attributes of the Project API resource.
 

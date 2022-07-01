@@ -10,14 +10,14 @@ import (
 
 func resourceMetalPortVlanAttachment() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceMetalPortVlanAttachmentCreate,
-		Read:   resourceMetalPortVlanAttachmentRead,
-		Delete: resourceMetalPortVlanAttachmentDelete,
-		Update: resourceMetalPortVlanAttachmentUpdate,
+		DeprecationMessage: deprecatedProviderMsg,
+		Create:             resourceMetalPortVlanAttachmentCreate,
+		Read:               resourceMetalPortVlanAttachmentRead,
+		Delete:             resourceMetalPortVlanAttachmentDelete,
+		Update:             resourceMetalPortVlanAttachmentUpdate,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
-
 		Schema: map[string]*schema.Schema{
 			"force_bond": {
 				Type:        schema.TypeBool,

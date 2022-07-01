@@ -5,7 +5,9 @@ description: |-
   Retrieve Equinix Fabric Virtual Circuit
 ---
 
-# metal_virtual_circuit
+# metal_virtual_circuit (Data Source)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_virtual_circuit`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/data-sources/equinix_metal_virtual_circuit) data source from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_virtual_circuit`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Use this data source to retrieve a virtual circuit resource from [Equinix Fabric - software-defined interconnections](https://metal.equinix.com/developers/docs/networking/fabric/)
 

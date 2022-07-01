@@ -6,8 +6,8 @@ import (
 
 func dataSourceMetalPort() *schema.Resource {
 	return &schema.Resource{
-		Read: resourceMetalPortRead,
-
+		DeprecationMessage: deprecatedProviderMsg,
+		Read:               resourceMetalPortRead,
 		Schema: map[string]*schema.Schema{
 			"port_id": {
 				Type:          schema.TypeString,

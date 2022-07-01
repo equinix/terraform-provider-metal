@@ -9,7 +9,8 @@ import (
 
 func dataSourceMetalMetro() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceMetalMetroRead,
+		DeprecationMessage: deprecatedProviderMsg,
+		Read:               dataSourceMetalMetroRead,
 		Schema: map[string]*schema.Schema{
 			"id": {
 				Type:        schema.TypeString,

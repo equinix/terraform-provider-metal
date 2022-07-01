@@ -5,7 +5,9 @@ description: |-
   Provides an Equinix Metal Project resource.
 ---
 
-# metal\_project
+# metal_project (Resource)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_project`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/equinix_metal_project) resource from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_project`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Provides an Equinix Metal project resource to allow you manage devices
 in your projects.

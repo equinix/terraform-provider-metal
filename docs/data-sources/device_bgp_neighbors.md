@@ -5,7 +5,9 @@ description: |-
   Provides a datasource for listing BGP neighbors of an Equinix Metal device
 ---
 
-# metal_device_bgp_neighbors
+# metal_device_bgp_neighbors (Data Source)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_device_bgp_neighbors`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/data-sources/equinix_metal_device_bgp_neighbors) data source from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_device_bgp_neighbors`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Use this datasource to retrieve list of BGP neighbors of a device in the Equinix Metal host.
 

@@ -51,10 +51,11 @@ func metalSSHKeyCommonFields() map[string]*schema.Schema {
 
 func resourceMetalSSHKey() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceMetalSSHKeyCreate,
-		Read:   resourceMetalSSHKeyRead,
-		Update: resourceMetalSSHKeyUpdate,
-		Delete: resourceMetalSSHKeyDelete,
+		DeprecationMessage: deprecatedProviderMsg,
+		Create:             resourceMetalSSHKeyCreate,
+		Read:               resourceMetalSSHKeyRead,
+		Update:             resourceMetalSSHKeyUpdate,
+		Delete:             resourceMetalSSHKeyDelete,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},

@@ -5,7 +5,9 @@ description: |-
   Provides an Equinix Metal metro datasource. This can be used to read metros.
 ---
 
-# metal_metro
+# metal_metro (Data Source)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_metro`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/data-sources/equinix_metal_metro) data source from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_metro`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Provides an Equinix Metal metro datasource.
 

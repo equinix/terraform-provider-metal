@@ -5,7 +5,9 @@ description: |-
   Provides a Resource for reserving IP addresses in the Equinix Metal Host
 ---
 
-# metal\_reserved\_ip\_block
+# metal_reserved_ip_block (Resource)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_reserved_ip_block`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/equinix_metal_reserved_ip_block) resource from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_reserved_ip_block`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Provides a resource to create and manage blocks of reserved IP addresses in a project.
 

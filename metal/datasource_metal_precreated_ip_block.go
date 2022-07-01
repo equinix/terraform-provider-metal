@@ -60,8 +60,9 @@ func dataSourceMetalPreCreatedIPBlock() *schema.Resource {
 	}
 
 	return &schema.Resource{
-		Read:   dataSourceMetalPreCreatedIPBlockRead,
-		Schema: s,
+		DeprecationMessage: deprecatedProviderMsg,
+		Read:               dataSourceMetalPreCreatedIPBlockRead,
+		Schema:             s,
 	}
 }
 

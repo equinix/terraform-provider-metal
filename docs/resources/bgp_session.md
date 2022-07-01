@@ -5,7 +5,9 @@ description: |-
   BGP session in Equinix Metal Host
 ---
 
-# metal_bgp_session
+# metal_bgp_session (Resource)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_bgp_session`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/equinix_metal_bgp_session) resource from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_bgp_session`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Provides a resource to manage BGP sessions in Equinix Metal Host. Refer to [Equinix Metal BGP documentation](https://metal.equinix.com/developers/docs/networking/local-global-bgp/) for more details.
 

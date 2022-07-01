@@ -5,7 +5,9 @@ description: |-
   Provides an Equinix Metal device resource. This can be used to create, modify, and delete devices.
 ---
 
-# metal_device
+# metal_device (Resource)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_device`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/equinix_metal_device) resource from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_device`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Provides an Equinix Metal device resource. This can be used to create,
 modify, and delete devices.

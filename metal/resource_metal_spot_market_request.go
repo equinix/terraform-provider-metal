@@ -13,9 +13,10 @@ import (
 
 func resourceMetalSpotMarketRequest() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceMetalSpotMarketRequestCreate,
-		Read:   resourceMetalSpotMarketRequestRead,
-		Delete: resourceMetalSpotMarketRequestDelete,
+		DeprecationMessage: deprecatedProviderMsg,
+		Create:             resourceMetalSpotMarketRequestCreate,
+		Read:               resourceMetalSpotMarketRequestRead,
+		Delete:             resourceMetalSpotMarketRequestDelete,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},

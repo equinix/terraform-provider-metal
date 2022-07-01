@@ -9,8 +9,8 @@ import (
 
 func dataSourceMetalHardwareReservation() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceMetalHardwareReservationRead,
-
+		DeprecationMessage: deprecatedProviderMsg,
+		Read:               dataSourceMetalHardwareReservationRead,
 		Schema: map[string]*schema.Schema{
 			"id": {
 				Type:        schema.TypeString,

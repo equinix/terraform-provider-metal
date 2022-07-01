@@ -5,7 +5,9 @@ description: |-
   Provides a Resource for Attaching IP Subnets from a Reserved Block to a Device
 ---
 
-# metal\_ip\_attachment
+# metal_ip_attachment (Resource)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_ip_attachment`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/equinix_metal_ip_attachment) resource from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_ip_attachment`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Provides a resource to attach elastic IP subnets to devices.
 

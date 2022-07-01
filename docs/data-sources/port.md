@@ -5,7 +5,9 @@ description: |-
   Fetch device ports
 ---
 
-# metal_port
+# metal_port (Data Source)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_port`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/data-sources/equinix_metal_port) data source from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_port`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Use this data source to read ports of existing devices. You can read port by either its UUID, or by a device UUID and port name.
 

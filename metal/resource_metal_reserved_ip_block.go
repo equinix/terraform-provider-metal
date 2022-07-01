@@ -216,10 +216,11 @@ func resourceMetalReservedIPBlock() *schema.Resource {
 	// TODO: add comments field, used for reservations that are not automatically approved
 
 	return &schema.Resource{
-		Create: resourceMetalReservedIPBlockCreate,
-		Read:   resourceMetalReservedIPBlockRead,
-		Update: resourceMetalReservedIPBlockUpdate,
-		Delete: resourceMetalReservedIPBlockDelete,
+		DeprecationMessage: deprecatedProviderMsg,
+		Create:             resourceMetalReservedIPBlockCreate,
+		Read:               resourceMetalReservedIPBlockRead,
+		Update:             resourceMetalReservedIPBlockUpdate,
+		Delete:             resourceMetalReservedIPBlockDelete,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},

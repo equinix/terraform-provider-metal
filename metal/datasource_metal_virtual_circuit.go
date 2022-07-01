@@ -7,8 +7,8 @@ import (
 
 func dataSourceMetalVirtualCircuit() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceMetalVirtualCircuitRead,
-
+		DeprecationMessage: deprecatedProviderMsg,
+		Read:               dataSourceMetalVirtualCircuitRead,
 		Schema: map[string]*schema.Schema{
 			"virtual_circuit_id": {
 				Type:        schema.TypeString,

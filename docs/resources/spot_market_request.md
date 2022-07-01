@@ -5,7 +5,9 @@ description: |-
   Provides an Equinix Metal Spot Market Request Resource.
 ---
 
-# metal\_spot\_market\_request
+# metal_spot_market_request (Resource)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_spot_market_request`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/equinix_metal_spot_market_request) resource from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_spot_market_request`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Provides an Equinix Metal Spot Market Request resource to allow you to
 manage spot market requests on your account. For more detail on Spot Market, see [this article in Equinix Metal documentation](https://metal.equinix.com/developers/docs/deploy/spot-market/).

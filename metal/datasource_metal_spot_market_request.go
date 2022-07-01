@@ -10,8 +10,8 @@ import (
 
 func dataSourceMetalSpotMarketRequest() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceMetalSpotMarketRequestRead,
-
+		DeprecationMessage: deprecatedProviderMsg,
+		Read:               dataSourceMetalSpotMarketRequestRead,
 		Schema: map[string]*schema.Schema{
 			"request_id": {
 				Type:        schema.TypeString,

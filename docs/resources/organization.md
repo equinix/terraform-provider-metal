@@ -5,7 +5,9 @@ description: |-
   Provides an Equinix Metal Organization resource.
 ---
 
-# metal\_organization
+# metal_organization (Resource)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_organization`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/equinix_metal_organization) resource from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_organization`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Provides a resource to manage organization resource in Equinix Metal.
 

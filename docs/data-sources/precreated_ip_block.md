@@ -5,7 +5,9 @@ description: |-
   Load automatically created IP blocks from your Equinix Metal project
 ---
 
-# metal\_precreated\_ip\_block
+# metal_precreated_ip_block (Data Source)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_precreated_ip_block`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/data-sources/equinix_metal_precreated_ip_block) data source from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_precreated_ip_block`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Use this data source to get CIDR expression for precreated IPv6 and IPv4 blocks in Equinix Metal.
 You can then use the cidrsubnet TF builtin function to derive subnets.

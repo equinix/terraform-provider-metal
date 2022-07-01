@@ -15,10 +15,11 @@ var uuidRE = regexp.MustCompile("^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-4[a-fA-F0-9]{3}-
 
 func resourceMetalProject() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceMetalProjectCreate,
-		Read:   resourceMetalProjectRead,
-		Update: resourceMetalProjectUpdate,
-		Delete: resourceMetalProjectDelete,
+		DeprecationMessage: deprecatedProviderMsg,
+		Create:             resourceMetalProjectCreate,
+		Read:               resourceMetalProjectRead,
+		Update:             resourceMetalProjectUpdate,
+		Delete:             resourceMetalProjectDelete,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},

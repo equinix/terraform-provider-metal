@@ -3,15 +3,15 @@ page_title: "Equinix Metal: Metal Project API Key"
 subcategory: ""
 description: |-
   Create Equinix Metal Project API Keys
-  ---
+---
 
-# metal_project_api_key
+# metal_project_api_key (Resource)
+
+!> **PROVIDER DEPRECATED:** Equinix Metal Provider is now Deprecated. Please consider using [`equinix_metal_project_api_key`](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/equinix_metal_project_api_key) resource from the [Equinix provider](https://registry.terraform.io/providers/equinix/equinix/latest/docs) instead of `metal_project_api_key`. [See the Metal provider section for more details](../index.md#equinix-metal-provider) on the new provider and available migration guides.
 
 Use this resource to create Metal Project API Key resources in Equinix Metal. Project API keys can be used to create and read resources in a single project. Each API key contains a token which can be used for authentication in Equinix Metal HTTP API (in HTTP request header `X-Auth-Token`).
 
-
 Read-only keys only allow to list and view existing resources, read-write keys can also be used to create resources.
-
 
 ## Example Usage
 

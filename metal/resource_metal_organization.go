@@ -1,18 +1,20 @@
 package metal
 
 import (
+	"regexp"
+
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 	"github.com/packethost/packngo"
-	"regexp"
 )
 
 func resourceMetalOrganization() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceMetalOrganizationCreate,
-		Read:   resourceMetalOrganizationRead,
-		Update: resourceMetalOrganizationUpdate,
-		Delete: resourceMetalOrganizationDelete,
+		DeprecationMessage: deprecatedProviderMsg,
+		Create:             resourceMetalOrganizationCreate,
+		Read:               resourceMetalOrganizationRead,
+		Update:             resourceMetalOrganizationUpdate,
+		Delete:             resourceMetalOrganizationDelete,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},

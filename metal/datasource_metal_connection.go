@@ -94,8 +94,8 @@ func dataSourceMetalConnection() *schema.Resource {
 		speeds = append(speeds, allowedSpeed.Str)
 	}
 	return &schema.Resource{
-		Read: dataSourceMetalConnectionRead,
-
+		DeprecationMessage: deprecatedProviderMsg,
+		Read:               dataSourceMetalConnectionRead,
 		Schema: map[string]*schema.Schema{
 			"connection_id": {
 				Type:        schema.TypeString,

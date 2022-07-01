@@ -10,7 +10,8 @@ import (
 
 func dataSourceOperatingSystem() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceMetalOperatingSystemRead,
+		DeprecationMessage: deprecatedProviderMsg,
+		Read:               dataSourceMetalOperatingSystemRead,
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:        schema.TypeString,
