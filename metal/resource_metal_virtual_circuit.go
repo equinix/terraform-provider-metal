@@ -344,7 +344,7 @@ func resourceMetalVirtualCircuitDelete(d *schema.ResourceData, meta interface{})
 		return err
 	}
 
-	// then we delete the VC. VRF VCs will be in the "active" state.
+	// We wait until vc status is not deactivating. VRF VCs will be in the "active" state.
 	detachWaiter := getVCStateWaiter(
 		client,
 		d.Id(),
@@ -355,9 +355,10 @@ func resourceMetalVirtualCircuitDelete(d *schema.ResourceData, meta interface{})
 
 	_, err = detachWaiter.WaitForState()
 	if err != nil {
-		return fmt.Errorf("Error deleting virtual circuit %s: %s", d.Id(), err)
+		return fmt.Errorf("Error waiting for virtual circuit %s status is not deactivating before deleting it: %s", d.Id(), err)
 	}
 
+	// then we delete the VC. VRF VCs will be in the "active" state.
 	resp, err := client.VirtualCircuits.Delete(d.Id())
 	if ignoreResponseErrors(httpForbidden, httpNotFound)(resp, err) != nil {
 		return friendlyError(err)
@@ -372,7 +373,7 @@ func resourceMetalVirtualCircuitDelete(d *schema.ResourceData, meta interface{})
 	)
 
 	_, err = deleteWaiter.WaitForState()
-	if ignoreResponseErrors(httpForbidden, httpNotFound)(resp, err) != nil {
+	if ignoreResponseErrors(httpForbidden, httpNotFound)(nil, err) != nil {
 		return fmt.Errorf("Error deleting virtual circuit %s: %s", d.Id(), err)
 	}
 
