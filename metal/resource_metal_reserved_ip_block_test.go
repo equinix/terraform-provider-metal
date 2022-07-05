@@ -226,13 +226,18 @@ func testAccMetalReservedIP_Device(name string) string {
 	return fmt.Sprintf(`
 %s
 
+locals {
+	facility_list     = tolist(local.facilities)
+	selected_facility = local.facility_list[length(local.facility_list) - 1]
+}
+
 resource "metal_project" "foobar" {
 	name = "tfacc-reserved_ip_block-%s"
 }
 
 resource "metal_reserved_ip_block" "test" {
 	project_id  = metal_project.foobar.id
-	facility    = tolist(local.facilities)[0]
+	facility    = local.selected_facility
 	type        = "public_ipv4"
 	quantity    = 2
 }
@@ -240,7 +245,7 @@ resource "metal_reserved_ip_block" "test" {
 resource "metal_device" "test" {
   project_id       = metal_project.foobar.id
   plan             = local.plan
-  facilities       = [tolist(local.facilities)[0]]
+  facilities       = [local.selected_facility]
   operating_system = "ubuntu_16_04"
   hostname         = "tfacc-reserved-ip-device"
   billing_cycle    = "hourly"

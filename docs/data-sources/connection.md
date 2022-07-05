@@ -50,7 +50,7 @@ data "metal_connection" "example" {
   * `id` - Port UUID
   * `role` - Port role - primary or secondary
   * `speed` - Port speed in bits per second
-  * `status` - Port status 
+  * `status` - Port status
   * `link_status` - Port link status
   * `virtual_circuit_ids` - List of IDs of virtual cicruits attached to this port
 * `token` - (Deprecated) Fabric Token from the [Equinix Fabric Portal](https://ecxfabric.equinix.com/dashboard)

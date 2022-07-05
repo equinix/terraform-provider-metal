@@ -98,7 +98,7 @@ data "metal_plans" "test" {
 
 locals {
     plan       = data.metal_plans.test.plans[0].slug
-    metro      = tolist(data.metal_plans.test.plans[0].available_in_metros)[0]
+    metro      = tolist(data.metal_plans.test.plans[0].available_in_metros)[1]
     facilities = tolist(setsubtract(data.metal_plans.test.plans[0].available_in, ["sjc1", "ld7", "sy4"]))
 }
 `, fmt.Sprintf("\"%s\"", strings.Join(plans[:], `","`)), fmt.Sprintf("\"%s\"", strings.Join(metros[:], `","`)))
