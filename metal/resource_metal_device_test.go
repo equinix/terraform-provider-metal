@@ -14,6 +14,10 @@ import (
 	"github.com/packethost/packngo"
 )
 
+// list of plans and metros used as filter criteria to find available hardware to run tests
+var preferable_plans  = []string{"c2.small.x86", "c2.medium.x86","c3.small.x86","c3.medium.x86","m3.small.x86","m3.large.x86"}
+var preferable_metros = []string{"ch","ny","sv","ty","am"}
+
 func init() {
 	resource.AddTestSweepers("metal_device", &resource.Sweeper{
 		Name: "metal_device",
@@ -63,6 +67,42 @@ func testSweepDevices(region string) error {
 // Regexp vars for use with resource.ExpectError
 var matchErrMustBeProvided = regexp.MustCompile(".* must be provided when .*")
 var matchErrShouldNotBeAnIPXE = regexp.MustCompile(`.*"user_data" should not be an iPXE.*`)
+
+// This function should be used to find available plans in all test where a metal_device resource is needed.
+// To prevent unexpected plan changes (i.e. run out of a plan in a metro after first apply)
+// during tests that have several config updates, resource metal_device should include a lifecycle
+// like the one defined below.
+//
+// lifecycle {
+//     ignore_changes = [
+//       plan,
+//     ]
+//   }
+func confAccMetalDevice_base(plans, metros []string) string {
+	return fmt.Sprintf(`
+data "metal_plans" "test" {
+    sort {
+        attribute = "pricing_hour"
+        direction = "asc"
+    }
+    filter {
+        attribute = "name"
+        values    = [%s]
+    }
+    filter {
+        attribute = "available_in_metros"
+        values    = [%s]
+    }
+}
+
+locals {
+    plan       = data.metal_plans.test.plans[0].name
+    metro      = tolist(data.metal_plans.test.plans[0].available_in_metros)[0]
+    facility   = tolist(data.metal_plans.test.plans[0].available_in)[0]
+    facilities = length(data.metal_plans.test.plans[0].available_in) > 3 ? slice(tolist(data.metal_plans.test.plans[0].available_in), 0, 2) : data.metal_plans.test.plans[0].available_in
+}
+`, fmt.Sprintf("\"%s\"", strings.Join(plans[:], `","`)), fmt.Sprintf("\"%s\"", strings.Join(metros[:], `","`)))
+}
 
 func TestAccMetalDevice_FacilityList(t *testing.T) {
 	var device packngo.Device
@@ -276,7 +316,7 @@ func TestAccMetalDevice_IPXEConflictingFields(t *testing.T) {
 		CheckDestroy: testAccCheckMetalDeviceDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: fmt.Sprintf(testAccCheckMetalDeviceConfig_ipxe_conflict, rs),
+				Config: fmt.Sprintf(testAccCheckMetalDeviceConfig_ipxe_conflict, confAccMetalDevice_base(preferable_plans, preferable_metros), rs),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckMetalDeviceExists(r, &device),
 				),
@@ -297,7 +337,7 @@ func TestAccMetalDevice_IPXEConfigMissing(t *testing.T) {
 		CheckDestroy: testAccCheckMetalDeviceDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: fmt.Sprintf(testAccCheckMetalDeviceConfig_ipxe_missing, rs),
+				Config: fmt.Sprintf(testAccCheckMetalDeviceConfig_ipxe_missing, confAccMetalDevice_base(preferable_plans, preferable_metros), rs),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckMetalDeviceExists(r, &device),
 				),
@@ -472,32 +512,41 @@ func TestAccMetalDevice_importBasic(t *testing.T) {
 
 func testAccCheckMetalDeviceConfig_no_description(rInt int, projSuffix string) string {
 	return fmt.Sprintf(`
+%s
+
 resource "metal_project" "test" {
     name = "tfacc-pro-device-%s"
 }
 
 resource "metal_device" "test" {
   hostname         = "tfacc-device-test-%d"
-  plan             = "c3.medium.x86"
-  facilities       = ["da11"]
+  plan             = local.plan
+  facilities       = local.facilities
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
   tags             = ["%d"]
-}
-`, projSuffix, rInt, rInt)
+
+  lifecycle {
+    ignore_changes = [
+      plan,
+    ]
+  }
+}`, confAccMetalDevice_base(preferable_plans, preferable_metros), projSuffix, rInt, rInt)
 }
 
 func testAccCheckMetalDeviceConfig_reinstall(rInt int, projSuffix string) string {
 	return fmt.Sprintf(`
+%s
+
 resource "metal_project" "test" {
     name = "tfacc-pro-device-%s"
 }
 
 resource "metal_device" "test" {
   hostname         = "tfacc-device-test-%d"
-  plan             = "c3.medium.x86"
-  facilities       = ["da11"]
+  plan             = local.plan
+  facilities       = local.facilities
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
@@ -508,12 +557,19 @@ resource "metal_device" "test" {
 	  enabled = true
 	  deprovision_fast = true
   }
-}
-`, projSuffix, rInt, rInt)
+
+  lifecycle {
+    ignore_changes = [
+      plan,
+    ]
+  }
+}`, confAccMetalDevice_base(preferable_plans, preferable_metros), projSuffix, rInt, rInt)
 }
 
 func testAccCheckMetalDeviceConfig_varname(rInt int, projSuffix string) string {
 	return fmt.Sprintf(`
+%s
+
 resource "metal_project" "test" {
     name = "tfacc-pro-device-%s"
 }
@@ -521,18 +577,25 @@ resource "metal_project" "test" {
 resource "metal_device" "test" {
   hostname         = "tfacc-device-test-%d"
   description      = "test-desc-%d"
-  plan             = "c3.medium.x86"
-  facilities       = ["da11"]
+  plan             = local.plan
+  facilities       = local.facilities
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
   tags             = ["%d"]
-}
-`, projSuffix, rInt, rInt, rInt)
+
+  lifecycle {
+    ignore_changes = [
+      plan,
+    ]
+  }
+}`, confAccMetalDevice_base(preferable_plans, preferable_metros), projSuffix, rInt, rInt, rInt)
 }
 
 func testAccCheckMetalDeviceConfig_varname_pxe(rInt int, projSuffix string) string {
 	return fmt.Sprintf(`
+%s
+
 resource "metal_project" "test" {
     name = "tfacc-pro-device-%s"
 }
@@ -540,66 +603,91 @@ resource "metal_project" "test" {
 resource "metal_device" "test" {
   hostname         = "tfacc-device-test-%d"
   description      = "test-desc-%d"
-  plan             = "c3.medium.x86"
-  facilities       = ["da11"]
+  plan             = local.plan
+  facilities       = local.facilities
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
   tags             = ["%d"]
   always_pxe       = true
   ipxe_script_url  = "http://matchbox.foo.wtf:8080/boot.ipxe"
-}
-`, projSuffix, rInt, rInt, rInt)
+
+  lifecycle {
+    ignore_changes = [
+      plan,
+    ]
+  }
+}`, confAccMetalDevice_base(preferable_plans, preferable_metros), projSuffix, rInt, rInt, rInt)
 }
 
 func testAccCheckMetalDeviceConfig_metro(projSuffix string) string {
 	return fmt.Sprintf(`
+%s
+
 resource "metal_project" "test" {
     name = "tfacc-pro-device-%s"
 }
 
 resource "metal_device" "test" {
   hostname         = "tfacc-device-test"
-  plan             = "c3.medium.x86"
-  metro            = "da"
+  plan             = local.plan
+  metro            = local.metro
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
-}`, projSuffix)
+}`, confAccMetalDevice_base(preferable_plans, preferable_metros), projSuffix)
 }
 
 func testAccCheckMetalDeviceConfig_minimal(projSuffix string) string {
 	return fmt.Sprintf(`
+%s
+
 resource "metal_project" "test" {
     name = "tfacc-pro-device-%s"
 }
 
 resource "metal_device" "test" {
-  plan             = "c3.medium.x86"
-  facilities       = ["da11"]
+  plan             = local.plan
+  facilities       = local.facilities
   operating_system = "ubuntu_16_04"
   project_id       = "${metal_project.test.id}"
-}`, projSuffix)
+
+  lifecycle {
+    ignore_changes = [
+      plan,
+    ]
+  }
+}`, confAccMetalDevice_base(preferable_plans, preferable_metros), projSuffix)
 }
 
 func testAccCheckMetalDeviceConfig_basic(projSuffix string) string {
 	return fmt.Sprintf(`
+%s
+
 resource "metal_project" "test" {
     name = "tfacc-pro-device-%s"
 }
 
 resource "metal_device" "test" {
   hostname         = "tfacc-device-test"
-  plan             = "c3.medium.x86"
-  facilities       = ["da11"]
+  plan             = local.plan
+  facilities       = local.facilities
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
-}`, projSuffix)
+
+  lifecycle {
+    ignore_changes = [
+      plan,
+    ]
+  }
+}`, confAccMetalDevice_base(preferable_plans, preferable_metros), projSuffix)
 }
 
 func testAccCheckMetalDeviceConfig_facility_list(projSuffix string) string {
 	return fmt.Sprintf(`
+%s
+
 resource "metal_project" "test" {
   name = "tfacc-pro-device-%s"
 }
@@ -607,16 +695,18 @@ resource "metal_project" "test" {
 resource "metal_device" "test"  {
 
   hostname         = "tfacc-device-test-ipxe-script-url"
-  plan             = "c3.medium.x86"
-  facilities       = ["da11", "any"]
+  plan             = local.plan
+  facilities       = local.facilities
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
-}`, projSuffix)
+}`, confAccMetalDevice_base(preferable_plans, preferable_metros), projSuffix)
 }
 
 func testAccCheckMetalDeviceConfig_ipxe_script_url(projSuffix, url, pxe string) string {
 	return fmt.Sprintf(`
+%s
+
 resource "metal_project" "test" {
   name = "tfacc-pro-device-%s"
 }
@@ -624,26 +714,28 @@ resource "metal_project" "test" {
 resource "metal_device" "test_ipxe_script_url"  {
 
   hostname         = "tfacc-device-test-ipxe-script-url"
-  plan             = "c3.medium.x86"
-  facilities       = ["da11"]
+  plan             = local.plan
+  facilities       = local.facilities
   operating_system = "custom_ipxe"
   user_data        = "#!/bin/sh\ntouch /tmp/test"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
   ipxe_script_url  = "%s"
   always_pxe       = "%s"
-}`, projSuffix, url, pxe)
+}`, confAccMetalDevice_base(preferable_plans, preferable_metros), projSuffix, url, pxe)
 }
 
 var testAccCheckMetalDeviceConfig_ipxe_conflict = `
+%s
+
 resource "metal_project" "test" {
   name = "tfacc-pro-device-%s"
 }
 
 resource "metal_device" "test_ipxe_conflict" {
   hostname         = "tfacc-device-test-ipxe-conflict"
-  plan             = "c3.medium.x86"
-  facilities       = ["da11"]
+  plan             = local.plan
+  facilities       = local.facilities
   operating_system = "custom_ipxe"
   user_data        = "#!ipxe\nset conflict ipxe_script_url"
   billing_cycle    = "hourly"
@@ -653,14 +745,16 @@ resource "metal_device" "test_ipxe_conflict" {
 }`
 
 var testAccCheckMetalDeviceConfig_ipxe_missing = `
+%s
+
 resource "metal_project" "test" {
   name = "tfacc-pro-device-%s"
 }
 
 resource "metal_device" "test_ipxe_missing" {
   hostname         = "tfacc-device-test-ipxe-missing"
-  plan             = "c3.medium.x86"
-  facilities       = ["da11"]
+  plan             = local.plan
+  facilities       = local.facilities
   operating_system = "custom_ipxe"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
