@@ -15,7 +15,7 @@ import (
 )
 
 // list of plans and metros used as filter criteria to find available hardware to run tests
-var preferable_plans = []string{"c2.small.x86", "c2.medium.x86", "c3.small.x86", "c3.medium.x86", "m3.small.x86", "m3.large.x86"}
+var preferable_plans = []string{"x1.small.x86", "t1.small.x86", "c2.small.x86", "c2.medium.x86", "c3.small.x86", "c3.medium.x86", "m3.small.x86", "m3.large.x86"}
 var preferable_metros = []string{"ch", "ny", "sv", "ty", "am"}
 
 func init() {
@@ -97,9 +97,9 @@ data "metal_plans" "test" {
 }
 
 locals {
-    plan       = data.metal_plans.test.plans[0].name
+    plan       = data.metal_plans.test.plans[0].slug
     metro      = tolist(data.metal_plans.test.plans[0].available_in_metros)[0]
-	facilities = tolist(setsubtract(data.metal_plans.test.plans[0].available_in, ["sjc1", "ld7", "sy4"]))
+    facilities = tolist(setsubtract(data.metal_plans.test.plans[0].available_in, ["sjc1", "ld7", "sy4"]))
 }
 `, fmt.Sprintf("\"%s\"", strings.Join(plans[:], `","`)), fmt.Sprintf("\"%s\"", strings.Join(metros[:], `","`)))
 }

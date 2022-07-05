@@ -62,6 +62,49 @@ output "plans" {
 }
 ```
 
+### Ignoring Changes to Plans/Facilities/Metro
+
+Preserve deployed plan, facility and metro when updating a plan. As described in the [`data-resource-behavior`](https://www.terraform.io/language/data-sources#data-resource-behavior), terraform reads data resources during the planning phase in both the terraform plan and terraform apply commands. If the result of the data source has changed since last apply, this will involve changes to other resources where there is a reference to their attributes.
+
+In the case of `metal_plans`, it may happen that a plan is no longer available in a facility/metro because there is no stock at that time, and then returned plans list will be different from last `apply`. Therefore, if a resource such as a `metal_device` uses the output of this data source to select a plan or facility/metro, the plan will report that `metal_device` will be destroyed and recreated.
+
+To prevent that you can take advantage of the [`lifecycle ignore_changes`](https://www.terraform.io/language/meta-arguments/lifecycle#ignore_changes) feature like defined in the example below.
+
+```hcl
+# Following example will use metal_plans to select the cheapest plan available in metro 'sv' (Sillicon Valley)
+data "metal_plans" "example" {
+    sort {
+        attribute = "pricing_hour"
+        direction = "asc"
+    }
+    filter {
+        attribute = "name"
+        values    = ["c3.small.x86", "c3.medium.x86", "m3.large.x86"]
+    }
+    filter {
+        attribute = "available_in_metros"
+        values    = ["sv"]
+    }
+}
+
+# This metal_device will use the first returned plan and the list of facilities
+resource "metal_device" "example" {
+  hostname         = "example"
+  plan             = data.metal_plans.example.plans[0].name
+  facilities       = data.metal_plans.example.plans[0].available_in
+  operating_system = "ubuntu_20_04"
+  billing_cycle    = "hourly"
+  project_id       = var.project_id
+
+  lifecycle {
+    ignore_changes = [
+      plan,
+      facilities,
+    ]
+  }
+}
+```
+
 ## Argument Reference
 
 The following arguments are supported:
