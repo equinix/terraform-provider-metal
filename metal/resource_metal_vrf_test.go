@@ -271,9 +271,10 @@ func TestAccMetalVRFConfig_withConnection(t *testing.T) {
 				),
 			},
 			{
-				ResourceName:      "metal_reserved_ip_block.test",
-				ImportState:       true,
-				ImportStateVerify: true,
+				ResourceName:            "metal_reserved_ip_block.test",
+				ImportState:             true,
+				ImportStateVerify:       true,
+				ImportStateVerifyIgnore: []string{"wait_for_state"},
 			},
 			{
 				ResourceName:      "metal_vlan.test",
