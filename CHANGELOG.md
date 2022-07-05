@@ -1,4 +1,4 @@
-## 3.3.0 (Jul 1, 2022)
+## 3.3.0 (Jul 5, 2022)
 
 ### PROVIDER DEPRECATION
 
@@ -39,6 +39,7 @@ This repository is now Deprecated meaning that this software is only supported o
 * packngo version bumped to 0.25.0
 * CI build cleanup (go bumped to 1.17, vendor directory removed) ([#213](https://github.com/equinix/terraform-provider-metal/pull/213))
 * E2E tests sped up with parallelization and fixing spot market tests
+* E2E tests check plans/facilities to ensure hardware availability ([#239](https://github.com/equinix/terraform-provider-metal/pull/239))
 * E2E tests sweepers will ensure VLAN/projects clean up ([#234](https://github.com/equinix/terraform-provider-metal/pull/234))
 * `organization_id` is now optional in the `metal_connection` resource ([#223](https://github.com/equinix/terraform-provider-metal/pull/223))
 * `ports` attribute in the `metal_connection` data source and resource are sorted by role (primary/secondary) ([#223](https://github.com/equinix/terraform-provider-metal/pull/223))
