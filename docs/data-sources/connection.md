@@ -11,6 +11,8 @@ description: |-
 
 Use this data source to retrieve a connection resource from [Equinix Fabric - software-defined interconnections](https://metal.equinix.com/developers/docs/networking/fabric/)
 
+~> Equinix Metal connection with service_token_type `a_side` is not generally available and may not be enabled yet for your organization.
+
 ## Example Usage
 
 ```hcl
