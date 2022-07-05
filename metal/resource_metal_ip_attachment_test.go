@@ -55,14 +55,16 @@ func testAccCheckMetalIPAttachmentDestroy(s *terraform.State) error {
 
 func testAccCheckMetalIPAttachmentConfig_Basic(name string) string {
 	return fmt.Sprintf(`
+%s
+
 resource "metal_project" "test" {
     name = "tfacc-pro-ipattach-%s"
 }
 
 resource "metal_device" "test" {
   hostname         = "tfacc-device-test-ip-attachment"
-  plan             = "c3.medium.x86"
-  facilities       = ["da11"]
+  plan             = local.plan
+  facilities       = local.facilities
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = metal_project.test.id
@@ -70,15 +72,14 @@ resource "metal_device" "test" {
 
 resource "metal_reserved_ip_block" "test" {
     project_id = metal_project.test.id
-    facility = "da11"
-	quantity = 2
+    facility   = metal_device.test.deployed_facility
+    quantity   = 2
 }
-
 
 resource "metal_ip_attachment" "test" {
 	device_id = metal_device.test.id
 	cidr_notation = "${cidrhost(metal_reserved_ip_block.test.cidr_notation,0)}/32"
-}`, name)
+}`, confAccMetalDevice_base(preferable_plans, preferable_metros), name)
 }
 
 func TestAccMetalIPAttachment_Metro(t *testing.T) {
@@ -111,14 +112,16 @@ func TestAccMetalIPAttachment_Metro(t *testing.T) {
 
 func testAccCheckMetalIPAttachmentConfig_Metro(name string) string {
 	return fmt.Sprintf(`
+%s
+
 resource "metal_project" "test" {
     name = "tfacc-pro-ipattach-%s"
 }
 
 resource "metal_device" "test" {
   hostname         = "tfacc-device-test-ip-attachment"
-  plan             = "c3.medium.x86"
-  metro            = "da"
+  plan             = local.plan
+  metro            = local.metro
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = metal_project.test.id
@@ -126,13 +129,12 @@ resource "metal_device" "test" {
 
 resource "metal_reserved_ip_block" "test" {
     project_id = metal_project.test.id
-    metro      = "da"
+    metro      = metal_device.test.metro
 	quantity   = 2
 }
-
 
 resource "metal_ip_attachment" "test" {
 	device_id = metal_device.test.id
 	cidr_notation = "${cidrhost(metal_reserved_ip_block.test.cidr_notation,0)}/32"
-}`, name)
+}`, confAccMetalDevice_base(preferable_plans, preferable_metros), name)
 }

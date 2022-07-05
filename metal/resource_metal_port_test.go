@@ -13,26 +13,34 @@ import (
 
 func confAccMetalPort_base(name string) string {
 	return fmt.Sprintf(`
+%s
+
 resource "metal_project" "test" {
     name = "tfacc-pro-port-%s"
 }
 
 resource "metal_device" "test" {
 	hostname         = "tfacc-metal-port-test"
-	plan             = "c3.medium.x86"
-	metro            = "da"
+	plan             = local.plan
+	metro            = local.metro
 	operating_system = "ubuntu_16_04"
 	billing_cycle    = "hourly"
 	project_id       = "${metal_project.test.id}"
+
+	lifecycle {
+		ignore_changes = [
+		  plan,
+		]
+	}
 }
 
 locals {
 	bond0_id = [for p in metal_device.test.ports: p.id if p.name == "bond0"][0]
-	eth1_id = [for p in metal_device.test.ports: p.id if p.name == "eth1"][0]
-	eth0_id = [for p in metal_device.test.ports: p.id if p.name == "eth0"][0]
+	eth1_id  = [for p in metal_device.test.ports: p.id if p.name == "eth1"][0]
+	eth0_id  = [for p in metal_device.test.ports: p.id if p.name == "eth0"][0]
 }
 
-`, name)
+`, confAccMetalDevice_base(preferable_plans, preferable_metros), name)
 }
 
 func confAccMetalPort_L3(name string) string {
@@ -110,17 +118,17 @@ func confAccMetalPort_HybridBonded(name string) string {
 %s
 
 resource "metal_port" "bond0" {
-	port_id = local.bond0_id
-	layer2 = false
-	bonded = true
-	vlan_ids = [metal_vlan.test.id]
+	port_id         = local.bond0_id
+	layer2          = false
+	bonded          = true
+	vlan_ids        = [metal_vlan.test.id]
 	reset_on_delete = true
 }
 
 resource "metal_vlan" "test" {
 	description = "%s-vlan test"
-	metro = "ny"
-	project_id = metal_project.test.id
+	metro       = metal_device.test.metro
+	project_id  = metal_project.test.id
 }
 `, confAccMetalPort_base(name), tstResourcePrefix)
 }
@@ -139,16 +147,16 @@ resource "metal_port" "bond0" {
 
 resource "metal_vlan" "test1" {
 	description = "%[2]s-vlan test1"
-	metro = "ny"
-	project_id = metal_project.test.id
-	vxlan = 1001
+	metro       = metal_device.test.metro
+	project_id  = metal_project.test.id
+	vxlan       = 1001
 }
 
 resource "metal_vlan" "test2" {
 	description = "%[2]s-vlan test2"
-	metro = "ny"
-	project_id = metal_project.test.id
-	vxlan = 1002
+	metro       = metal_device.test.metro
+	project_id  = metal_project.test.id
+	vxlan       = 1002
 }
 `, confAccMetalPort_base(name), tstResourcePrefix)
 }

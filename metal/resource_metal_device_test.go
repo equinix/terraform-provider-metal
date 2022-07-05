@@ -15,8 +15,8 @@ import (
 )
 
 // list of plans and metros used as filter criteria to find available hardware to run tests
-var preferable_plans  = []string{"c2.small.x86", "c2.medium.x86","c3.small.x86","c3.medium.x86","m3.small.x86","m3.large.x86"}
-var preferable_metros = []string{"ch","ny","sv","ty","am"}
+var preferable_plans = []string{"c2.small.x86", "c2.medium.x86", "c3.small.x86", "c3.medium.x86", "m3.small.x86", "m3.large.x86"}
+var preferable_metros = []string{"ch", "ny", "sv", "ty", "am"}
 
 func init() {
 	resource.AddTestSweepers("metal_device", &resource.Sweeper{
@@ -69,13 +69,14 @@ var matchErrMustBeProvided = regexp.MustCompile(".* must be provided when .*")
 var matchErrShouldNotBeAnIPXE = regexp.MustCompile(`.*"user_data" should not be an iPXE.*`)
 
 // This function should be used to find available plans in all test where a metal_device resource is needed.
-// To prevent unexpected plan changes (i.e. run out of a plan in a metro after first apply)
+// To prevent unexpected plan/facilities changes (i.e. run out of a plan in a metro after first apply)
 // during tests that have several config updates, resource metal_device should include a lifecycle
 // like the one defined below.
 //
 // lifecycle {
 //     ignore_changes = [
 //       plan,
+//       facilities,
 //     ]
 //   }
 func confAccMetalDevice_base(plans, metros []string) string {
@@ -98,8 +99,7 @@ data "metal_plans" "test" {
 locals {
     plan       = data.metal_plans.test.plans[0].name
     metro      = tolist(data.metal_plans.test.plans[0].available_in_metros)[0]
-    facility   = tolist(data.metal_plans.test.plans[0].available_in)[0]
-    facilities = length(data.metal_plans.test.plans[0].available_in) > 3 ? slice(tolist(data.metal_plans.test.plans[0].available_in), 0, 2) : data.metal_plans.test.plans[0].available_in
+	facilities = tolist(setsubtract(data.metal_plans.test.plans[0].available_in, ["sjc1", "ld7", "sy4"]))
 }
 `, fmt.Sprintf("\"%s\"", strings.Join(plans[:], `","`)), fmt.Sprintf("\"%s\"", strings.Join(metros[:], `","`)))
 }
@@ -530,6 +530,7 @@ resource "metal_device" "test" {
   lifecycle {
     ignore_changes = [
       plan,
+      facilities,
     ]
   }
 }`, confAccMetalDevice_base(preferable_plans, preferable_metros), projSuffix, rInt, rInt)
@@ -561,6 +562,7 @@ resource "metal_device" "test" {
   lifecycle {
     ignore_changes = [
       plan,
+      facilities,
     ]
   }
 }`, confAccMetalDevice_base(preferable_plans, preferable_metros), projSuffix, rInt, rInt)
@@ -587,6 +589,7 @@ resource "metal_device" "test" {
   lifecycle {
     ignore_changes = [
       plan,
+      facilities,
     ]
   }
 }`, confAccMetalDevice_base(preferable_plans, preferable_metros), projSuffix, rInt, rInt, rInt)
@@ -615,6 +618,7 @@ resource "metal_device" "test" {
   lifecycle {
     ignore_changes = [
       plan,
+      facilities,
     ]
   }
 }`, confAccMetalDevice_base(preferable_plans, preferable_metros), projSuffix, rInt, rInt, rInt)
@@ -635,6 +639,13 @@ resource "metal_device" "test" {
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
+
+  lifecycle {
+    ignore_changes = [
+      plan,
+      facilities,
+    ]
+  }
 }`, confAccMetalDevice_base(preferable_plans, preferable_metros), projSuffix)
 }
 
@@ -655,6 +666,7 @@ resource "metal_device" "test" {
   lifecycle {
     ignore_changes = [
       plan,
+      facilities,
     ]
   }
 }`, confAccMetalDevice_base(preferable_plans, preferable_metros), projSuffix)
@@ -679,6 +691,7 @@ resource "metal_device" "test" {
   lifecycle {
     ignore_changes = [
       plan,
+      facilities,
     ]
   }
 }`, confAccMetalDevice_base(preferable_plans, preferable_metros), projSuffix)
@@ -700,6 +713,13 @@ resource "metal_device" "test"  {
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
+
+  lifecycle {
+    ignore_changes = [
+      plan,
+      facilities,
+    ]
+  }
 }`, confAccMetalDevice_base(preferable_plans, preferable_metros), projSuffix)
 }
 
@@ -722,6 +742,13 @@ resource "metal_device" "test_ipxe_script_url"  {
   project_id       = "${metal_project.test.id}"
   ipxe_script_url  = "%s"
   always_pxe       = "%s"
+
+  lifecycle {
+    ignore_changes = [
+      plan,
+      facilities,
+    ]
+  }
 }`, confAccMetalDevice_base(preferable_plans, preferable_metros), projSuffix, url, pxe)
 }
 
@@ -742,6 +769,13 @@ resource "metal_device" "test_ipxe_conflict" {
   project_id       = "${metal_project.test.id}"
   ipxe_script_url  = "https://boot.netboot.xyz"
   always_pxe       = true
+
+  lifecycle {
+    ignore_changes = [
+      plan,
+      facilities,
+    ]
+  }
 }`
 
 var testAccCheckMetalDeviceConfig_ipxe_missing = `
@@ -759,4 +793,11 @@ resource "metal_device" "test_ipxe_missing" {
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
   always_pxe       = true
+
+  lifecycle {
+    ignore_changes = [
+      plan,
+      facilities,
+    ]
+  }
 }`

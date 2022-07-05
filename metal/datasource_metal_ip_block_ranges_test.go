@@ -37,6 +37,7 @@ func TestAccMetalIPBlockRanges_Basic(t *testing.T) {
 
 func testIPBlockRangesConfig_Basic(name string) string {
 	return fmt.Sprintf(`
+%s
 
 resource "metal_project" "test" {
     name = "tfacc-pro-precreated_ip_block-%s"
@@ -44,21 +45,20 @@ resource "metal_project" "test" {
 
 resource "metal_device" "test" {
   hostname         = "tfacc-device-test-ip"
-  plan             = "c3.medium.x86"
-  facilities       = ["da11"]
+  plan             = local.plan
+  facilities       = local.facilities
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = metal_project.test.id
 }
 
 data "metal_ip_block_ranges" "test" {
-    facility         = "da11"
+    facility         = metal_device.test.deployed_facility
     project_id       = metal_device.test.project_id
 }
 
 resource "metal_ip_attachment" "test" {
     device_id = metal_device.test.id
     cidr_notation = cidrsubnet(data.metal_ip_block_ranges.test.ipv6.0, 8,2)
-}
-`, name)
+}`, confAccMetalDevice_base(preferable_plans, preferable_metros), name)
 }

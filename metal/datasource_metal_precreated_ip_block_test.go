@@ -37,6 +37,7 @@ func TestAccMetalDatasourcePreCreatedIPBlock_Basic(t *testing.T) {
 
 func testDatasourcePreCreatedIPBlockConfig_Basic(name string) string {
 	return fmt.Sprintf(`
+%s
 
 resource "metal_project" "test" {
     name = "tfacc-pro-recreated_ip_block-%s"
@@ -44,8 +45,8 @@ resource "metal_project" "test" {
 
 resource "metal_device" "test" {
   hostname         = "tfacc-device-test-ip-blockt"
-  plan             = "c3.medium.x86"
-  metro            = "da"
+  plan             = local.plan
+  metro            = local.metro
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = metal_project.test.id
@@ -62,5 +63,5 @@ resource "metal_ip_attachment" "test" {
     device_id = metal_device.test.id
     cidr_notation = cidrsubnet(data.metal_precreated_ip_block.test.cidr_notation,8,2)
 }
-`, name)
+`, confAccMetalDevice_base(preferable_plans, preferable_metros), name)
 }

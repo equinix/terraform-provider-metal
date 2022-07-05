@@ -66,6 +66,8 @@ func testAccCheckMetalBGPSetupDestroy(s *terraform.State) error {
 
 func testAccCheckMetalBGPSetupConfig_basic(name string) string {
 	return fmt.Sprintf(`
+%s
+
 resource "metal_project" "test" {
     name = "tfacc-pro-bgp_session-%s"
 	bgp_config {
@@ -77,8 +79,8 @@ resource "metal_project" "test" {
 
 resource "metal_device" "test" {
     hostname         = "tfacc-test-bgp-sesh"
-    plan             = "c3.medium.x86"
-    facilities       = ["da11", "ny7", "any"]
+    plan             = local.plan
+    facilities       = local.facilities
     operating_system = "ubuntu_16_04"
     billing_cycle    = "hourly"
     project_id       = "${metal_project.test.id}"
@@ -99,5 +101,5 @@ resource "metal_bgp_session" "test6" {
 data "metal_device_bgp_neighbors" "test" {
   device_id  = metal_bgp_session.test4.device_id
 }
-`, name)
+`, confAccMetalDevice_base(preferable_plans, preferable_metros), name)
 }
