@@ -42,6 +42,13 @@ resource "metal_device" "test" {
   operating_system = "ubuntu_20_04"
   billing_cycle    = "hourly"
   project_id       = metal_project.test.id
+
+  lifecycle {
+    ignore_changes = [
+      plan,
+      metro,
+    ]
+  }
 }
 
 data "metal_port" "test" {
@@ -84,6 +91,13 @@ resource "metal_device" "test" {
   operating_system = "ubuntu_20_04"
   billing_cycle    = "hourly"
   project_id       = metal_project.test.id
+
+  lifecycle {
+    ignore_changes = [
+      plan,
+      metro,
+    ]
+  }
 }
 
 data "metal_port" "test" {

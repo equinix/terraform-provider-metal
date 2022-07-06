@@ -32,6 +32,13 @@ resource "metal_device" "test" {
     billing_cycle       = "hourly"
     project_ssh_key_ids = ["${metal_project_ssh_key.test.id}"]
     project_id          = "${metal_project.test.id}"
+
+	lifecycle {
+		ignore_changes = [
+		  plan,
+		  facilities,
+		]
+	}
 }
 
 `, confAccMetalDevice_base(preferable_plans, preferable_metros), name, publicSshKey)

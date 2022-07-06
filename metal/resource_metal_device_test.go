@@ -643,7 +643,7 @@ resource "metal_device" "test" {
   lifecycle {
     ignore_changes = [
       plan,
-      facilities,
+      metro,
     ]
   }
 }`, confAccMetalDevice_base(preferable_plans, preferable_metros), projSuffix)
@@ -706,7 +706,6 @@ resource "metal_project" "test" {
 }
 
 resource "metal_device" "test"  {
-
   hostname         = "tfacc-device-test-ipxe-script-url"
   plan             = local.plan
   facilities       = local.facilities
@@ -732,7 +731,6 @@ resource "metal_project" "test" {
 }
 
 resource "metal_device" "test_ipxe_script_url"  {
-
   hostname         = "tfacc-device-test-ipxe-script-url"
   plan             = local.plan
   facilities       = local.facilities

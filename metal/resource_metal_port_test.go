@@ -30,6 +30,7 @@ resource "metal_device" "test" {
 	lifecycle {
 		ignore_changes = [
 		  plan,
+		  metro,
 		]
 	}
 }

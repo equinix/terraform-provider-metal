@@ -50,6 +50,13 @@ resource "metal_device" "test" {
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = metal_project.test.id
+
+  lifecycle {
+    ignore_changes = [
+      plan,
+      facilities,
+    ]
+  }
 }
 
 data "metal_ip_block_ranges" "test" {

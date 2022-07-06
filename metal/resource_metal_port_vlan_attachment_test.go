@@ -31,6 +31,7 @@ resource "metal_device" "test" {
 	lifecycle {
 		ignore_changes = [
 		  plan,
+		  metro,
 		]
 	}
 }
@@ -124,6 +125,7 @@ resource "metal_device" "test" {
 	lifecycle {
 		ignore_changes = [
 		  plan,
+		  metro,
 		]
 	}
 }
@@ -219,6 +221,7 @@ resource "metal_device" "test" {
 	lifecycle {
 		ignore_changes = [
 		  plan,
+		  metro,
 		]
 	}
 }`, confAccMetalDevice_base(preferable_plans, preferable_metros), name)
@@ -298,6 +301,7 @@ resource "metal_device" "test" {
   lifecycle {
     ignore_changes = [
       plan,
+	  metro,
     ]
   }
 }`, confAccMetalDevice_base(preferable_plans, preferable_metros), name)
@@ -417,6 +421,13 @@ resource "metal_device" "test" {
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = metal_project.test.id
+
+  lifecycle {
+    ignore_changes = [
+      plan,
+      metro,
+    ]
+  }
 }`, confAccMetalDevice_base(preferable_plans, preferable_metros), name)
 }
 

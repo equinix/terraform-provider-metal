@@ -257,6 +257,13 @@ resource "metal_device" "test" {
   ip_address {
 	 type = "private_ipv4"
   }
+
+  lifecycle {
+    ignore_changes = [
+      plan,
+      facilities,
+    ]
+  }
 }
 `, confAccMetalDevice_base(preferable_plans, preferable_metros), name)
 }
