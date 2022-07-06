@@ -11,6 +11,8 @@ description: |-
 
 Use this data source to retrieve a connection resource from [Equinix Fabric - software-defined interconnections](https://metal.equinix.com/developers/docs/networking/fabric/)
 
+~> Equinix Metal connection with service_token_type `a_side` is not generally available and may not be enabled yet for your organization.
+
 ## Example Usage
 
 ```hcl
@@ -50,7 +52,7 @@ data "metal_connection" "example" {
   * `id` - Port UUID
   * `role` - Port role - primary or secondary
   * `speed` - Port speed in bits per second
-  * `status` - Port status 
+  * `status` - Port status
   * `link_status` - Port link status
   * `virtual_circuit_ids` - List of IDs of virtual cicruits attached to this port
 * `token` - (Deprecated) Fabric Token from the [Equinix Fabric Portal](https://ecxfabric.equinix.com/dashboard)

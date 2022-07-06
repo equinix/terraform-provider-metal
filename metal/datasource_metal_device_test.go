@@ -39,23 +39,32 @@ func TestAccDataSourceMetalDevice_Basic(t *testing.T) {
 
 func testDataSourceMetalDeviceConfig_Basic(projSuffix string) string {
 	return fmt.Sprintf(`
+%s
+
 resource "metal_project" "test" {
     name = "tfacc-pro-device-%s"
 }
 
 resource "metal_device" "test" {
   hostname         = "tfacc-device-test"
-  plan             = "c3.medium.x86"
-  facilities       = ["da11"]
+  plan             = local.plan
+  facilities       = local.facilities
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
+
+  lifecycle {
+    ignore_changes = [
+      plan,
+      facilities,
+    ]
+  }
 }
 
 data "metal_device" "test" {
   project_id       = metal_project.test.id
   hostname         = metal_device.test.hostname
-}`, projSuffix)
+}`, confAccMetalDevice_base(preferable_plans, preferable_metros), projSuffix)
 }
 
 func TestAccDataSourceMetalDevice_ByID(t *testing.T) {
@@ -89,20 +98,29 @@ func TestAccDataSourceMetalDevice_ByID(t *testing.T) {
 
 func testDataSourceMetalDeviceConfig_ByID(projSuffix string) string {
 	return fmt.Sprintf(`
+%s
+
 resource "metal_project" "test" {
     name = "tfacc-pro-device-%s"
 }
 
 resource "metal_device" "test" {
   hostname         = "tfacc-device-test"
-  plan             = "c3.medium.x86"
-  facilities       = ["da11"]
+  plan             = local.plan
+  facilities       = local.facilities
   operating_system = "ubuntu_16_04"
   billing_cycle    = "hourly"
   project_id       = "${metal_project.test.id}"
+
+  lifecycle {
+    ignore_changes = [
+      plan,
+      facilities,
+    ]
+  }
 }
 
 data "metal_device" "test" {
   device_id       = metal_device.test.id
-}`, projSuffix)
+}`, confAccMetalDevice_base(preferable_plans, preferable_metros), projSuffix)
 }

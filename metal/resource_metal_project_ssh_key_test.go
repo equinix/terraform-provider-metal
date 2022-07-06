@@ -12,6 +12,8 @@ import (
 
 func metalProjectSSHKeyConfig_Basic(name, publicSshKey string) string {
 	return fmt.Sprintf(`
+%s
+
 resource "metal_project" "test" {
     name = "tfacc-pro-project_ssh_key-%s"
 }
@@ -24,15 +26,22 @@ resource "metal_project_ssh_key" "test" {
 
 resource "metal_device" "test" {
     hostname            = "tfacc-device-test-key"
-    plan                = "baremetal_0"
-    facilities          = ["ny5", "ny7", "any"]
+    plan                = local.plan
+    facilities          = local.facilities
     operating_system    = "ubuntu_16_04"
     billing_cycle       = "hourly"
     project_ssh_key_ids = ["${metal_project_ssh_key.test.id}"]
     project_id          = "${metal_project.test.id}"
+
+	lifecycle {
+		ignore_changes = [
+		  plan,
+		  facilities,
+		]
+	}
 }
 
-`, name, publicSshKey)
+`, confAccMetalDevice_base(preferable_plans, preferable_metros), name, publicSshKey)
 }
 
 func TestAccMetalProjectSSHKey_Basic(t *testing.T) {

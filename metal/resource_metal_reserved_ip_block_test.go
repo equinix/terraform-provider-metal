@@ -224,21 +224,28 @@ func TestAccMetalReservedIPBlock_FacilityToMetro(t *testing.T) {
 
 func testAccMetalReservedIP_Device(name string) string {
 	return fmt.Sprintf(`
+%s
+
+locals {
+	facility_list     = tolist(local.facilities)
+	selected_facility = local.facility_list[length(local.facility_list) - 1]
+}
+
 resource "metal_project" "foobar" {
 	name = "tfacc-reserved_ip_block-%s"
 }
 
 resource "metal_reserved_ip_block" "test" {
 	project_id  = metal_project.foobar.id
-	facility    = "da11"
+	facility    = local.selected_facility
 	type        = "public_ipv4"
 	quantity    = 2
 }
 
 resource "metal_device" "test" {
   project_id       = metal_project.foobar.id
-  facilities       = ["da11"]
-  plan             = "c3.medium.x86"
+  plan             = local.plan
+  facilities       = [local.selected_facility]
   operating_system = "ubuntu_16_04"
   hostname         = "tfacc-reserved-ip-device"
   billing_cycle    = "hourly"
@@ -250,8 +257,15 @@ resource "metal_device" "test" {
   ip_address {
 	 type = "private_ipv4"
   }
+
+  lifecycle {
+    ignore_changes = [
+      plan,
+      facilities,
+    ]
+  }
 }
-`, name)
+`, confAccMetalDevice_base(preferable_plans, preferable_metros), name)
 }
 
 func TestAccMetalReservedIPBlock_Device(t *testing.T) {
