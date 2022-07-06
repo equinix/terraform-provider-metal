@@ -64,11 +64,13 @@ output "plans" {
 
 ### Ignoring Changes to Plans/Facilities/Metro
 
-Preserve deployed plan, facility and metro when updating a plan. As described in the [`data-resource-behavior`](https://www.terraform.io/language/data-sources#data-resource-behavior), terraform reads data resources during the planning phase in both the terraform plan and terraform apply commands. If the result of the data source has changed since last apply, this will involve changes to other resources where there is a reference to their attributes.
+Preserve deployed device plan, facility and metro when creating a new execution plan.
 
-In the case of `metal_plans`, it may happen that a plan is no longer available in a facility/metro because there is no stock at that time, and then returned plans list will be different from last `apply`. Therefore, if a resource such as a `metal_device` uses the output of this data source to select a plan or facility/metro, the plan will report that `metal_device` will be destroyed and recreated.
+As described in the [`data-resource-behavior`](https://www.terraform.io/language/data-sources#data-resource-behavior), terraform reads data resources during the planning phase in both the terraform plan and terraform apply commands. If the output from the data source is different to the prior state, it will propose changes to resources where there is a reference to their attributes.
 
-To prevent that you can take advantage of the [`lifecycle ignore_changes`](https://www.terraform.io/language/meta-arguments/lifecycle#ignore_changes) feature like defined in the example below.
+For `metal_plans`, it may happen that a device plan is no longer available in a facility/metro because there is no stock at that time or you were using a legacy server plan, and thus the returned list of plans matching your search criteria will be different from last `plan`/`apply`. Therefore, if a resource such as a `metal_device` uses the output of this data source to select a device plan or facility/metro, the Terraform plan will report that the `metal_device` needs to be recreated.
+
+To prevent that you can take advantage of the Terraform [`lifecycle ignore_changes`](https://www.terraform.io/language/meta-arguments/lifecycle#ignore_changes) feature as shown in the example below.
 
 ```hcl
 # Following example will use metal_plans to select the cheapest plan available in metro 'sv' (Sillicon Valley)
@@ -88,6 +90,7 @@ data "metal_plans" "example" {
 }
 
 # This metal_device will use the first returned plan and the list of facilities
+# It will ignore future changes on plan and facilities
 resource "metal_device" "example" {
   hostname         = "example"
   plan             = data.metal_plans.example.plans[0].name
@@ -98,9 +101,35 @@ resource "metal_device" "example" {
 
   lifecycle {
     ignore_changes = [
-      plan,
-      facilities,
+        plan,
+        facilities,
     ]
+  }
+}
+```
+
+If your use case requires dynamic changes of a device plan or metro/facility you can define the lifecycle with a condition.
+
+```hcl
+# Following example uses a boolean variable that may eventually be set to you false when you update your metal_plans filter criteria because you need a device plan with a new feature.
+variable "ignore_plans_facilities_changes" {
+  type = bool
+  description = "If set to true, it will ignore plans or facilities changes"
+  default = false
+}
+
+data "metal_plans" "example" {
+  // new search criteria
+}
+
+resource "metal_device" "example" {
+  // required device arguments
+
+  lifecycle {
+    ignore_changes = var.ignore_plans_facilities_changes ? [
+        plan,
+        facilities,
+    ] : []
   }
 }
 ```
