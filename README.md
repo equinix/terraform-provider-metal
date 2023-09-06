@@ -1,6 +1,6 @@
 # Equinix Metal Terraform Provider
 
-[![Deprecated](https://img.shields.io/badge/Stability-Deprecated-black.svg)](deprecated-statement.md#deprecated-statements)
+[![End of Life](https://img.shields.io/badge/Stability-EndOfLife-black.svg)](end-of-life-statement.md#end-of-life-statements)
 [![GitHub release](https://img.shields.io/github/release/equinix/terraform-provider-metal/all.svg?style=flat-square)](https://github.com/equinix/terraform-provider-metal/releases)
 [![Go Report Card](https://goreportcard.com/badge/github.com/equinix/terraform-provider-metal)](https://goreportcard.com/report/github.com/equinix/terraform-provider-metal)
 
